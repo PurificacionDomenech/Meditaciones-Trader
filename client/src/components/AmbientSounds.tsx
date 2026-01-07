@@ -11,7 +11,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Heart, Trash2, Waves, Wind, CloudRain, Bird, Flame, Music, Bell, Sparkles } from "lucide-react";
+import { Heart, Trash2, Waves, Wind, CloudRain, Bird, Flame, Music, Bell, Sparkles, Volume2 } from "lucide-react";
 import type { SoundPreset, AmbientSound } from "@shared/schema";
 
 const ambientSounds: AmbientSound[] = [
