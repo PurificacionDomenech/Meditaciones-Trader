@@ -407,6 +407,36 @@ export default function Home() {
                 <SkipForward className="h-8 w-8" />
               </Button>
             </div>
+
+            {/* Controles integrados de Voz y Sonido */}
+            <div className="w-full space-y-4 pt-4 px-4">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-medium text-amber-400/80 uppercase tracking-wider">Sonidos Ambientales</span>
+                  {Object.values(ambientSoundsRef.current?.getSounds?.() || {}).some((s: any) => s.active) && (
+                    <span className="audio-indicator animate-pulse">Sonando...</span>
+                  )}
+                </div>
+                <AmbientSounds ref={ambientSoundsRef} compact />
+              </div>
+
+              <div className="space-y-2">
+                <span className="text-xs font-medium text-amber-400/80 uppercase tracking-wider">Configuración de Voz</span>
+                <VoiceControls
+                  speed={speed}
+                  setSpeed={setSpeed}
+                  pitch={pitch}
+                  setPitch={setPitch}
+                  volume={volume}
+                  setVolume={setVolume}
+                  pauseBetweenPhrases={pauseBetweenPhrases}
+                  setPauseBetweenPhrases={setPauseBetweenPhrases}
+                  selectedVoice={selectedVoice}
+                  setSelectedVoice={setSelectedVoice}
+                  compact
+                />
+              </div>
+            </div>
           </div>
         </div>
 
@@ -436,32 +466,6 @@ export default function Home() {
             </div>
             <h4 className="font-semibold text-white">Mis Guardadas</h4>
             <p className="text-xs text-white/50 mt-0.5">Tu librería personal</p>
-          </button>
-        </div>
-
-        <div className="grid grid-cols-2 gap-4">
-          <button
-            onClick={() => setShowVoiceSettings(true)}
-            className="p-4 rounded-xl glass-dark hover-elevate active-elevate-2 text-left"
-            data-testid="button-voice-settings"
-          >
-            <div className="w-10 h-10 rounded-lg bg-amber-500/20 flex items-center justify-center mb-3">
-              <Mic className="h-5 w-5 text-amber-400" />
-            </div>
-            <h4 className="font-semibold text-white">Voz</h4>
-            <p className="text-xs text-white/50 mt-0.5">Ajustar narración</p>
-          </button>
-
-          <button
-            onClick={() => setShowAmbientSounds(true)}
-            className="p-4 rounded-xl glass-dark hover-elevate active-elevate-2 text-left"
-            data-testid="button-ambient-sounds"
-          >
-            <div className="w-10 h-10 rounded-lg bg-amber-500/20 flex items-center justify-center mb-3">
-              <Volume2 className="h-5 w-5 text-amber-400" />
-            </div>
-            <h4 className="font-semibold text-white">Sonidos</h4>
-            <p className="text-xs text-white/50 mt-0.5">Ambiente relajante</p>
           </button>
         </div>
 
