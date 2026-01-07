@@ -70,9 +70,14 @@ export default function Home() {
 
     const loadVoice = () => {
       const voices = window.speechSynthesis.getVoices();
-      const spanishVoice = voices.find(v => v.lang.toLowerCase().startsWith("es"));
-      if (spanishVoice && !selectedVoice) {
-        setSelectedVoice(spanishVoice.voiceURI);
+      if (voices.length === 0) return;
+      
+      const spanishVoice = voices.find(v => v.lang.toLowerCase().includes("es"));
+      const googleSpanish = voices.find(v => v.name.includes("Google") && v.lang.includes("es"));
+      const finalVoice = googleSpanish || spanishVoice || voices[0];
+      
+      if (finalVoice && !selectedVoice) {
+        setSelectedVoice(finalVoice.voiceURI);
       }
     };
 
@@ -161,18 +166,22 @@ export default function Home() {
     utterance.onerror = (event) => {
       if (event.error !== "canceled" && event.error !== "interrupted") {
         console.error("Speech error:", event.error);
+        // If it's not a cancellation, try to recover
         setTimeout(() => {
-          if (!isStoppedRef.current) {
+          if (!isStoppedRef.current && isPlaying) {
             speakSegment(index);
           }
         }, 500);
       }
     };
 
-    window.speechSynthesis.cancel();
+    if (index === 0) {
+      window.speechSynthesis.cancel();
+    }
+    
     setTimeout(() => {
       window.speechSynthesis.speak(utterance);
-    }, 50);
+    }, index === 0 ? 100 : 0);
   }, [speed, pitch, volume, pauseBetweenPhrases, selectedVoice]);
 
   const handlePlay = useCallback(() => {
