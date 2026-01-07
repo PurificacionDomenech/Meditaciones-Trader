@@ -347,9 +347,29 @@ export default function Home() {
               <h2 className="text-lg font-semibold text-white">Hola, Trader</h2>
             </div>
           </div>
-          <Button size="icon" variant="ghost" className="text-amber-400/70" data-testid="button-notifications">
-            <Bell className="h-5 w-5" />
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button 
+              size="icon" 
+              variant="ghost" 
+              className="text-amber-400/70"
+              onClick={() => setShowVoiceSettings(true)}
+              data-testid="button-voice-settings"
+            >
+              <Mic className="h-5 w-5" />
+            </Button>
+            <Button 
+              size="icon" 
+              variant="ghost" 
+              className="text-amber-400/70"
+              onClick={() => setShowAmbientSounds(true)}
+              data-testid="button-ambient-sounds"
+            >
+              <Volume2 className="h-5 w-5" />
+            </Button>
+            <Button size="icon" variant="ghost" className="text-amber-400/70" data-testid="button-notifications">
+              <Bell className="h-5 w-5" />
+            </Button>
+          </div>
         </div>
 
         <div className="relative rounded-2xl overflow-hidden glass-dark" data-testid="card-now-playing">
@@ -510,7 +530,12 @@ export default function Home() {
       <div className="p-4 space-y-6">
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-semibold text-white">Explorar</h2>
-          <Button size="icon" variant="ghost" className="text-amber-400/70">
+          <Button 
+            size="icon" 
+            variant="ghost" 
+            className="text-amber-400/70"
+            onClick={() => setShowVoiceSettings(true)}
+          >
             <Settings className="h-5 w-5" />
           </Button>
         </div>
@@ -631,46 +656,25 @@ export default function Home() {
           <div className="glass-dark rounded-xl overflow-hidden">
             <button 
               className="w-full p-4 flex items-center justify-between text-white hover:bg-white/5 transition-colors"
-              onClick={() => setShowVoiceSettings(!showVoiceSettings)}
+              onClick={() => setShowVoiceSettings(true)}
             >
               <div className="flex items-center gap-3">
                 <Mic className="h-5 w-5 text-amber-400" />
                 <span>Voz y Narración</span>
               </div>
-              <ChevronRight className={cn("h-4 w-4 text-white/30 transition-transform", showVoiceSettings && "rotate-90")} />
+              <ChevronRight className="h-4 w-4 text-white/30" />
             </button>
-            {showVoiceSettings && (
-              <div className="p-4 border-t border-white/5 bg-black/20">
-                <VoiceControls
-                  speed={speed}
-                  onSpeedChange={setSpeed}
-                  pitch={pitch}
-                  onPitchChange={setPitch}
-                  volume={volume}
-                  onVolumeChange={setVolume}
-                  pauseBetweenPhrases={pauseBetweenPhrases}
-                  onPauseChange={setPauseBetweenPhrases}
-                  selectedVoice={selectedVoice}
-                  onVoiceChange={setSelectedVoice}
-                />
-              </div>
-            )}
             
             <button 
               className="w-full p-4 flex items-center justify-between text-white hover:bg-white/5 transition-colors border-t border-white/5"
-              onClick={() => setShowAmbientSounds(!showAmbientSounds)}
+              onClick={() => setShowAmbientSounds(true)}
             >
               <div className="flex items-center gap-3">
                 <Volume2 className="h-5 w-5 text-amber-400" />
                 <span>Sonidos de Fondo</span>
               </div>
-              <ChevronRight className={cn("h-4 w-4 text-white/30 transition-transform", showAmbientSounds && "rotate-90")} />
+              <ChevronRight className="h-4 w-4 text-white/30" />
             </button>
-            {showAmbientSounds && (
-              <div className="p-4 border-t border-white/5 bg-black/20">
-                <AmbientSounds ref={ambientSoundsRef} />
-              </div>
-            )}
           </div>
         </div>
       </div>
