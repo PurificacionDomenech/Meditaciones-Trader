@@ -15,15 +15,15 @@ import { Heart, Trash2, Waves, Wind, CloudRain, Bird, Flame, Music, Bell, Sparkl
 import type { SoundPreset, AmbientSound } from "@shared/schema";
 
 const ambientSounds: AmbientSound[] = [
-  { id: "custom-campanilla", nombre: "Campanilla", icon: "Bell", category: "oriental", url: "/attached_assets/custom_sounds/campanilla.mp3" },
-  { id: "custom-campanillas", nombre: "Campanillas", icon: "Bell", category: "oriental", url: "/attached_assets/custom_sounds/campanillas.mp3" },
-  { id: "custom-gong", nombre: "Gong Personalizado", icon: "Music", category: "oriental", url: "/attached_assets/custom_sounds/Gong.mp3" },
-  { id: "custom-lluvia", nombre: "Lluvia Real", icon: "CloudRain", category: "natural", url: "/attached_assets/custom_sounds/lluvia.mp3" },
-  { id: "custom-pajaros", nombre: "Pájaros Bosque", icon: "Bird", category: "natural", url: "/attached_assets/custom_sounds/pajaros.mp3" },
+  { id: "custom-campanilla", nombre: "Campanilla", icon: "Bell", category: "oriental", url: "/src/assets/custom_sounds/campanilla.mp3" },
+  { id: "custom-campanillas", nombre: "Campanillas", icon: "Bell", category: "oriental", url: "/src/assets/custom_sounds/campanillas.mp3" },
+  { id: "custom-gong", nombre: "Gong Personalizado", icon: "Music", category: "oriental", url: "/src/assets/custom_sounds/Gong.mp3" },
+  { id: "custom-lluvia", nombre: "Lluvia Real", icon: "CloudRain", category: "natural", url: "/src/assets/custom_sounds/lluvia.mp3" },
+  { id: "custom-pajaros", nombre: "Pájaros Bosque", icon: "Bird", category: "natural", url: "/src/assets/custom_sounds/pajaros.mp3" },
   { id: "metronome", nombre: "Metrónomo", icon: "Music", category: "rhythm" },
-  { id: "music-333", nombre: "333 Hz Healing", icon: "Music", category: "relaxing", url: "/attached_assets/custom_sounds/Musica/333-hz.mp3" },
-  { id: "music-alpha", nombre: "Alpha Waves", icon: "Music", category: "relaxing", url: "/attached_assets/custom_sounds/Musica/alpha-8-to-12-hz-healing-frequencies-222945.mp3" },
-  { id: "music-meditation", nombre: "Meditación Zen", icon: "Music", category: "relaxing", url: "/attached_assets/custom_sounds/Musica/meditation.mp3" },
+  { id: "music-333", nombre: "333 Hz Healing", icon: "Music", category: "relaxing", url: "/src/assets/custom_sounds/Musica/333-hz.mp3" },
+  { id: "music-alpha", nombre: "Alpha Waves", icon: "Music", category: "relaxing", url: "/src/assets/custom_sounds/Musica/alpha-8-to-12-hz-healing-frequencies-222945.mp3" },
+  { id: "music-meditation", nombre: "Meditación Zen", icon: "Music", category: "relaxing", url: "/src/assets/custom_sounds/Musica/meditation.mp3" },
 ];
 
 const iconMap: Record<string, typeof Bell> = {
@@ -379,7 +379,10 @@ class AudioGenerator {
     const soundData = ambientSounds.find(s => s.id === id);
     if (soundData?.url) {
       const ctx = this.getContext();
-      const audio = new Audio(soundData.url);
+      const audio = new Audio();
+      audio.src = soundData.url;
+      audio.crossOrigin = "anonymous";
+      
       const source = ctx.createMediaElementSource(audio);
       const gainNode = ctx.createGain();
       
@@ -391,7 +394,7 @@ class AudioGenerator {
       gainNode.connect(ctx.destination);
       
       audio.loop = true;
-      audio.play();
+      audio.play().catch(err => console.error("Error playing audio:", err));
       
       this.oscillators.set(id, { nodes: [source as any], gainNode, audio } as any);
       return;

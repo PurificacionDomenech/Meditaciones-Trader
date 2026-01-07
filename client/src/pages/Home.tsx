@@ -315,12 +315,12 @@ export default function Home() {
   };
 
   const meditationImages: Record<string, string> = {
-    "estres": "/attached_assets/meditation_backgrounds/aa.png",
-    "concentracion": "/attached_assets/meditation_backgrounds/arbol.png",
-    "impulsos": "/attached_assets/meditation_backgrounds/Captura de pantalla 2025-12-17 202508.png",
-    "resiliencia": "/attached_assets/meditation_backgrounds/Captura de pantalla 2026-01-07 190813.png",
-    "visualizacion": "/attached_assets/meditation_backgrounds/Captura de pantalla 2026-01-07 190844.png",
-    "intuicion": "/attached_assets/meditation_backgrounds/Captura de pantalla 2026-01-07 191053.png",
+    "estres": "/src/assets/meditation_backgrounds/aa.png",
+    "concentracion": "/src/assets/meditation_backgrounds/arbol.png",
+    "impulsos": "/src/assets/meditation_backgrounds/Captura de pantalla 2025-12-17 202508.png",
+    "resiliencia": "/src/assets/meditation_backgrounds/Captura de pantalla 2026-01-07 190813.png",
+    "visualizacion": "/src/assets/meditation_backgrounds/Captura de pantalla 2026-01-07 190844.png",
+    "intuicion": "/src/assets/meditation_backgrounds/Captura de pantalla 2026-01-07 191053.png",
   };
 
   const currentBgImage = selectedMeditation 

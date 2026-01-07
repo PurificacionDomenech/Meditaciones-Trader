@@ -1,0 +1,182 @@
+00:00
+15:00
+
+
+
+
+Crear Nueva
+Con IA Personalizada
+
+
+Mis Guardadas
+Tu librería personal
+
+
+Voz
+Ajustar narración
+
+
+Sonidos
+Ambiente relajante
+
+Manejo del Estrés y la Ansiedad
+Ver todo
+
+5m
+Antes de la Sesión
+Manejo del Estrés y la Ansiedad
+
+
+3m
+Durante la Sesión (Malas Noticias)
+Manejo del Estrés y la Ansiedad
+
+
+7m
+Después de la Sesión (Pérdida)
+Manejo del Estrés y la Ansiedad
+
+
+5 minm
+Antes del Mercado (Noche Anterior)
+Manejo del Estrés y la Ansiedad
+
+Enfoque y Concentración
+Ver todo
+
+5m
+Preparación para la Sesión
+Enfoque y Concentración
+
+
+3m
+Manteniendo la Concentración
+Enfoque y Concentración
+
+
+7m
+Enfrentando el Ruido
+Enfoque y Concentración
+
+Control de Impulsos y Toma de Decisiones
+Ver todo
+
+4m
+Antes de Operar
+Control de Impulsos y Toma de Decisiones
+
+
+5m
+Resistencia a la Impulsividad
+Control de Impulsos y Toma de Decisiones
+
+
+7m
+Después de Ejecutar (Ganancia/Pérdida)
+Control de Impulsos y Toma de Decisiones
+
+Resiliencia y Mentalidad de Crecimiento
+Ver todo
+
+8m
+Aprendiendo de las Pérdidas
+Resiliencia y Mentalidad de Crecimiento
+
+
+5m
+Celebrando los Éxitos
+Resiliencia y Mentalidad de Crecimiento
+
+
+6m
+Aceptando la Volatilidad
+Resiliencia y Mentalidad de Crecimiento
+
+Visualización del Futuro
+Ver todo
+
+8m
+Creando el Futuro Deseado
+Visualización del Futuro
+
+
+6m
+El Futuro desde Diferentes Ángulos
+Visualización del Futuro
+
+
+10m
+Yo Soy: Escenarios Hipotéticos
+Visualización del Futuro
+
+Conexión con la Intuición
+Ver todo
+
+7m
+Espacio para la Intuición
+Conexión con la Intuición
+
+
+5m
+Validando la Intuición
+Conexión con la Intuición
+
+
+Inicio
+
+Explorar
+
+
+Progreso
+
+Perfil
+Sonidos Ambiente
+
+Sonidos Ambientales
+
+Sonidos Ambientales
+
+Campanilla
+
+Campanillas
+
+Gong Personalizado
+
+Lluvia Real
+
+Pájaros Bosque
+
+Metrónomo
+
+Música Relajante
+
+333 Hz Healing
+
+Alpha Waves
+
+Meditación Zen
+Guardar Combinación
+Nombre del preset
+
+[plugin:runtime-error-plugin] Failed to load because no supported source was found.
+    at <anonymous> (/home/runner/workspace/node_modules/@replit/vite-plugin-runtime-error-modal/src/index.ts:29:37)
+    at emitCustomEvent (/home/runner/workspace/node_modules/vite/dist/node/chunks/config.js:20442:39)
+    at WebSocket$2.<anonymous> (/home/runner/workspace/node_modules/vite/dist/node/chunks/config.js:20452:4)
+    at WebSocket$2.emit (node:events:524:28)
+    at Receiver$2.receiverOnMessage (/home/runner/workspace/node_modules/vite/dist/node/chunks/config.js:19600:22)
+    at Receiver$2.emit (node:events:524:28)
+    at Receiver$2.dataMessage (/home/runner/workspace/node_modules/vite/dist/node/chunks/config.js:17811:11)
+    at Receiver$2.getData (/home/runner/workspace/node_modules/vite/dist/node/chunks/config.js:17746:9)
+    at Receiver$2.startLoop (/home/runner/workspace/node_modules/vite/dist/node/chunks/config.js:17571:12)
+    at Receiver$2._write (/home/runner/workspace/node_modules/vite/dist/node/chunks/config.js:17518:9)
+    at writeOrBuffer (node:internal/streams/writable:572:12)
+    at _write (node:internal/streams/writable:501:10)
+    at Writable.write (node:internal/streams/writable:510:10)
+    at Socket.socketOnData (/home/runner/workspace/node_modules/vite/dist/node/chunks/config.js:19688:37)
+    at Socket.emit (node:events:524:28)
+    at addChunk (node:internal/streams/readable:561:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+    at Readable.push (node:internal/streams/readable:392:5)
+    at TCP.onStreamRead (node:internal/stream_base_commons:191:23)
+Click outside, press Esc key, or fix the code to dismiss.
+You can also disable this overlay by setting server.hmr.overlay to false in vite.config.js.
