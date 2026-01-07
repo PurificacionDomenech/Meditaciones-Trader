@@ -709,6 +709,20 @@ export default function Home() {
         </div>
       </nav>
 
+      <a 
+        href="https://www.skool.com/signup?ref=5410d87590444ff6a99c244493fe47cd"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="fixed bottom-20 left-0 right-0 z-40 flex justify-center px-4 py-1 bg-black/90"
+        data-testid="banner-trading-desde-cero"
+      >
+        <img 
+          src={tradingDesdeCeroImg} 
+          alt="Trading Desde Cero" 
+          className="h-10 object-contain rounded-md"
+        />
+      </a>
+
       <CreateMeditationDialog
         open={dialogOpen}
         onOpenChange={setDialogOpen}
