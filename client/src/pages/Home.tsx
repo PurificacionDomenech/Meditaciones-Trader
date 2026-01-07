@@ -159,7 +159,7 @@ export default function Home() {
     };
 
     utterance.onerror = (event) => {
-      if (event.error !== "canceled") {
+      if (event.error !== "canceled" && event.error !== "interrupted") {
         console.error("Speech error:", event.error);
         setTimeout(() => {
           if (!isStoppedRef.current) {
