@@ -1,0 +1,206 @@
+MEDITACIONES
+Objetivo: Crear una aplicación web completa de meditaciones guiadas con narración por voz, sonidos ambientales y controles personalizables.
+
+🎯 FUNCIONALIDADES PRINCIPALES
+1. Sistema de Meditaciones Guiadas
+Meditaciones Predefinidas:
+
+Categoría "Viajes Místicos" con múltiples meditaciones
+Cada meditación incluye: título, descripción, duración, categoría y texto completo
+Ejemplos: "Semilla del Todo" (12 min), "Atención Plena" (10 min)
+Meditaciones Personalizadas:
+
+Los usuarios pueden crear, editar y eliminar sus propias meditaciones
+Formulario con campos: título, descripción, duración estimada, texto
+Almacenamiento en localStorage
+Interfaz con botones de editar/eliminar por meditación
+2. Motor de Narración por Voz (Speech Synthesis)
+Características del narrador:
+
+Usa Web Speech API (window.speechSynthesis)
+División inteligente del texto por líneas y oraciones
+Sistema de pausas configurables entre frases (1-10 segundos)
+Pausas extra (+2 seg) en saltos de línea dobles
+Limpieza automática de texto (elimina corchetes [] y paréntesis ())
+Controles de voz personalizables:
+
+Velocidad: 0.5x - 1.5x (default: 0.75x)
+Tono: 0.5 - 2.0 (default: 1.0)
+Volumen: 0% - 100% (default: 90%)
+Pausa entre frases: 1-10 segundos (default: 3s)
+Selector de voces:
+
+Filtrar voces en español disponibles en el navegador
+Agrupar por género: ♀ Femeninas, ♂ Masculinas, ⚬ Otras
+Mostrar nombre limpio y país de cada voz (ej: "Laura - España")
+Detección automática de género por nombres conocidos
+3. Sistema de Sonidos Ambientales
+Categorías de sonidos (organizados en acordeones):
+
+Orientales: campanas tibetanas (3 variantes), cuencos cantores (3 variantes), gong (2 variantes)
+Naturales: agua, naturaleza, viento, lluvia, pájaros, fuego, océano
+Ritmo: metrónomo
+Generación de audio sintético:
+
+Usar Web Audio API (AudioContext, OscillatorNode, BiquadFilterNode)
+Sonidos continuos: ruido blanco filtrado con LFO para variación
+Sonidos periódicos: osciladores con envolvente de volumen
+Control de volumen individual por sonido (slider 0-100%)
+Sistema de Favoritos de sonidos:
+
+Guardar combinaciones de sonidos activos con sus volúmenes
+Cargar/eliminar presets guardados
+Almacenamiento en localStorage
+4. Controles de Reproducción
+Botones principales:
+"Iniciar Meditación" / "Pausar" / "Reanudar"
+"Detener" (cancela y resetea todo)
+Estados visuales:
+Indicador de meditación activa
+Tarjetas con efecto glass y sombras doradas
+Resaltado de la meditación seleccionada
+5. Sistema de Favoritos de Narración
+Guardar configuraciones completas: velocidad, tono, volumen, voz seleccionada, pausas
+Interfaz para cargar/eliminar favoritos
+Almacenamiento persistente en localStorage
+6. Compatibilidad Android/Móvil
+Fixes específicos:
+Cancelar síntesis previa antes de nueva reproducción
+Timeout de seguridad (15s) por segmento de voz
+Delay de 50ms antes de speechSynthesis.speak()
+Manejo de errores con reintento automático
+🎨 DISEÑO UI/UX
+Layout Principal:
+┌─────────────────────────────────────────┐
+│           Header (navegación)           │
+├─────────────────┬───────────────────────┤
+│ COLUMNA IZQ     │   COLUMNA DERECHA     │
+│ (420px fijo)    │   (flexible)          │
+│                 │                       │
+│ • Meditación    │ • Controles Narración │
+│   Actual        │ • Sonidos Ambientales │
+│ • Botones Play  │                       │
+│ • Lista Predef. │                       │
+│ • Crear Nueva   │                       │
+│ • Mis Guardadas │                       │
+└─────────────────┴───────────────────────┘
+Estilos Temáticos:
+Fondo: Gradiente violeta/púrpura con overlay semitransparente
+Tarjetas: Efecto glass (backdrop-blur, fondo rgba con alpha)
+Textos dorados: Clase .gold-text con gradiente lineal
+Sombras: Sombras doradas en hover (box-shadow con rgba oro)
+Tipografía:
+Títulos: 'Cinzel', serif (uppercase, tracking amplio)
+Cuerpo: Sans-serif, tamaños pequeños (text-xs, text-sm)
+🛠️ STACK TÉCNICO
+Frontend:
+
+React 18+ con TypeScript
+shadcn/ui components: Dialog, Button, Input, Textarea, Slider, Switch, Select, Accordion
+Wouter para routing
+Lucide React para iconos
+APIs del Navegador:
+
+Web Speech API: SpeechSynthesisUtterance, speechSynthesis
+Web Audio API: AudioContext, OscillatorNode, GainNode, BiquadFilterNode
+Estado:
+
+useState para controles locales
+useRef para referencias de audio y síntesis
+useCallback para optimizar renders
+useImperativeHandle para exponer métodos del componente de sonidos
+Persistencia:
+
+localStorage para meditaciones personalizadas
+localStorage para favoritos de narración
+localStorage para presets de sonidos
+📋 ESTRUCTURA DE DATOS
+interface Meditacion {
+  titulo: string;
+  categoria: string;
+  duracion: string;
+  descripcion: string;
+  texto: string;
+}
+interface MeditacionPersonalizada extends Meditacion {
+  id: string;
+}
+interface NarrationPreset {
+  id: string;
+  nombre: string;
+  speed: number;
+  pitch: number;
+  volume: number;
+  voiceURI: string;
+  pauseBetweenPhrases: number;
+  createdAt: number;
+}
+interface AmbientSound {
+  id: string;
+  nombre: string;
+  icon: string;
+  category: 'oriental' | 'natural' | 'rhythm';
+}
+interface SoundPreset {
+  id: string;
+  nombre: string;
+  sounds: Record<string, { active: boolean; volume: number }>;
+  createdAt: number;
+}
+⚙️ FUNCIONES CLAVE
+Narración:
+cleanText(): Elimina [] y () del texto
+speakMeditation():
+Divide texto en segmentos (por líneas y oraciones)
+Crea utterances con parámetros actuales
+Aplica pausas configurables
+Maneja ciclo de reproducción recursivo
+togglePlayPause(): Inicia/pausa/reanuda
+stopMeditation(): Cancela todo y resetea
+Sonidos:
+OscillatorSound class:
+Métodos: start(), stop(), setVolume()
+Sonidos específicos: createWaterSound(), createBellsSound(), etc.
+toggleSound(): Activa/desactiva sonido
+changeVolume(): Ajusta volumen de sonido activo
+Voces:
+getVoiceGender(): Detecta género por nombre
+getVoiceCountry(): Extrae país de voz
+getCleanVoiceName(): Limpia nombre técnico
+🔧 DETALLES DE IMPLEMENTACIÓN
+Segmentación de texto:
+
+// Dividir por líneas
+const lines = cleanedText.split('\n');
+// Por cada línea, dividir en oraciones
+sentences = line.split(/(?<=[.!?…])\s+/);
+// Detectar saltos de línea para pausas extra
+hasLineBreakAfter = (última oración de línea) && (no última línea)
+Pausas dinámicas:
+
+const pauseDuration = segment.hasLineBreakAfter 
+  ? (pauseBetweenPhrases + 2) * 1000 
+  : pauseBetweenPhrases * 1000;
+await new Promise(resolve => setTimeout(resolve, pauseDuration));
+Generación de sonido de agua (ejemplo):
+
+// Ruido blanco
+const noiseBuffer = createNoiseBuffer();
+noiseNode.buffer = noiseBuffer;
+// Filtro pasabajos
+filterNode.type = 'lowpass';
+filterNode.frequency.value = 800;
+// LFO para variación
+lfo.frequency.value = 0.3;
+lfo.connect(lfoGain).connect(filterNode.frequency);
+📱 RESPONSIVE
+Desktop: Grid de 2 columnas (420px fija + flexible)
+Tablet/Mobile: Columnas apiladas verticalmente
+Scrollbars personalizados en listas
+Controles táctiles optimizados
+✨ EXTRAS
+Toast notifications para feedback de usuario
+Validaciones de campos requeridos
+Manejo de errores robusto (fallbacks, reintentos)
+Accesibilidad: labels, ARIA attributes, keyboard navigation
+Animaciones suaves en transiciones de estado
