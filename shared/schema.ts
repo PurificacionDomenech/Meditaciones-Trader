@@ -72,10 +72,30 @@ export const insertSoundPresetSchema = z.object({
 
 export type InsertSoundPreset = z.infer<typeof insertSoundPresetSchema>;
 
-export const users = null;
-export const insertUserSchema = z.object({
-  username: z.string(),
-  password: z.string(),
+export interface TraderMission {
+  id: string;
+  dia: number;
+  titulo: string;
+  descripcion: string;
+  accionDestruir: string;
+  accionConstruir: string;
+  afirmacion: string;
+}
+
+export interface TraderEntry {
+  id: string;
+  missionId: string;
+  date: string;
+  content: string;
+  completed: boolean;
+  createdAt: number;
+}
+
+export const insertTraderEntrySchema = z.object({
+  missionId: z.string(),
+  date: z.string(),
+  content: z.string().min(1, "El contenido es requerido"),
+  completed: z.boolean().default(true),
 });
-export type InsertUser = z.infer<typeof insertUserSchema>;
-export type User = { id: string; username: string; password: string };
+
+export type InsertTraderEntry = z.infer<typeof insertTraderEntrySchema>;

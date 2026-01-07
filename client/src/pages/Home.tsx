@@ -28,6 +28,8 @@ import { meditacionesPredefinidas, categorias } from "@/lib/meditationData";
 import type { Meditacion, MeditacionPersonalizada, InsertMeditacion } from "@shared/schema";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
+import { TraderMissions } from "@/components/TraderMissions";
+
 function cleanText(text: string): string {
   return text.replace(/\[.*?\]/g, "").replace(/\(.*?\)/g, "").trim();
 }
