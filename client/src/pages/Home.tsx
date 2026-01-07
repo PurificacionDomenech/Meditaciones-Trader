@@ -59,6 +59,7 @@ export default function Home() {
   const segmentsRef = useRef<{ text: string; hasLineBreakAfter: boolean }[]>([]);
   const currentIndexRef = useRef(0);
   const isStoppedRef = useRef(false);
+  const isPlayingRef = useRef(false);
   const ambientSoundsRef = useRef<AmbientSoundsRef>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -132,12 +133,10 @@ export default function Home() {
   const speakSegment = useCallback((index: number) => {
     if (isStoppedRef.current || index >= segmentsRef.current.length) {
       setIsPlaying(false);
+      isPlayingRef.current = false;
       setIsPaused(false);
       return;
     }
-
-    // Cancel any ongoing speech before starting new one
-    window.speechSynthesis.cancel();
 
     const segment = segmentsRef.current[index];
     const utterance = new SpeechSynthesisUtterance(segment.text);
@@ -159,7 +158,7 @@ export default function Home() {
         : pauseBetweenPhrases * 1000;
 
       setTimeout(() => {
-        if (!isStoppedRef.current && isPlaying) {
+        if (!isStoppedRef.current && isPlayingRef.current) {
           currentIndexRef.current = index + 1;
           speakSegment(index + 1);
         }
@@ -167,24 +166,19 @@ export default function Home() {
     };
 
     utterance.onerror = (event) => {
-      // Chrome/Safari often "cancel" when we call cancel() above, which is fine
       if (event.error !== "canceled" && event.error !== "interrupted") {
         console.error("Speech error:", event.error);
         setTimeout(() => {
-          if (!isStoppedRef.current && isPlaying) {
+          if (!isStoppedRef.current && isPlayingRef.current) {
             speakSegment(index);
           }
         }, 500);
       }
     };
 
-    // Small delay to ensure cancel() has taken effect
-    setTimeout(() => {
-      if (!isStoppedRef.current && isPlaying) {
-        window.speechSynthesis.speak(utterance);
-      }
-    }, 100);
-  }, [speed, pitch, volume, pauseBetweenPhrases, selectedVoice, isPlaying]);
+    // Speak immediately
+    window.speechSynthesis.speak(utterance);
+  }, [speed, pitch, volume, pauseBetweenPhrases, selectedVoice]);
 
   const handlePlay = useCallback(() => {
     let currentMeditation = selectedMeditation;
@@ -198,25 +192,35 @@ export default function Home() {
       }
     }
 
+    // Cancel any existing speech
+    window.speechSynthesis.cancel();
+    
+    // Set refs immediately before calling speakSegment
+    isStoppedRef.current = false;
+    isPlayingRef.current = true;
+
     if (isPaused) {
       setIsPaused(false);
       setIsPlaying(true);
-      isStoppedRef.current = false;
       speakSegment(currentIndexRef.current);
     } else {
       segmentsRef.current = parseTextIntoSegments(currentMeditation.texto);
       currentIndexRef.current = 0;
-      isStoppedRef.current = false;
       setIsPlaying(true);
       setIsPaused(false);
       setCurrentTime(0);
-      speakSegment(0);
+      
+      // Small delay after cancel to ensure it takes effect
+      setTimeout(() => {
+        speakSegment(0);
+      }, 50);
     }
   }, [selectedMeditation, isPaused, parseTextIntoSegments, speakSegment]);
 
   const handlePause = useCallback(() => {
     if (window.speechSynthesis.speaking) {
       window.speechSynthesis.pause();
+      isPlayingRef.current = false;
       setIsPaused(true);
       setIsPlaying(false);
     }
@@ -235,6 +239,7 @@ export default function Home() {
 
   const handleStop = useCallback(() => {
     isStoppedRef.current = true;
+    isPlayingRef.current = false;
     window.speechSynthesis.cancel();
     currentIndexRef.current = 0;
     segmentsRef.current = [];
