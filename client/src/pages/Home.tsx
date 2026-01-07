@@ -485,6 +485,24 @@ export default function Home() {
     </div>
   );
 
+  const handleEditMeditation = useCallback((med: MeditacionPersonalizada) => {
+    setEditingMeditation(med);
+    setDialogOpen(true);
+  }, []);
+
+  const handleDeleteMeditation = useCallback((id: string) => {
+    const updated = customMeditations.filter(m => m.id !== id);
+    setCustomMeditations(updated);
+    localStorage.setItem("customMeditations", JSON.stringify(updated));
+    if (selectedMeditation?.id === id) {
+      setSelectedMeditation(null);
+    }
+    toast({
+      title: "Meditación eliminada",
+      description: "La meditación ha sido eliminada de tu librería.",
+    });
+  }, [customMeditations, selectedMeditation, toast]);
+
   const renderExploreTab = () => (
     <div className="flex-1 overflow-y-auto pb-24 scrollbar-hide">
       <div className="p-4 space-y-6">
@@ -534,23 +552,48 @@ export default function Home() {
             <h3 className="font-semibold text-white">Mis Meditaciones</h3>
             <div className="space-y-2">
               {customMeditations.map(med => (
-                <button
-                  key={med.id}
-                  onClick={() => {
-                    handleSelectMeditation(med);
-                    setActiveTab("inicio");
-                  }}
-                  className="w-full p-4 rounded-xl glass-dark hover-elevate active-elevate-2 text-left flex items-center gap-4"
-                  data-testid={`custom-meditation-${med.id}`}
-                >
-                  <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-amber-500 to-amber-700 flex items-center justify-center flex-shrink-0">
-                    <Play className="h-5 w-5 text-white" />
+                <div key={med.id} className="group relative">
+                  <button
+                    onClick={() => {
+                      handleSelectMeditation(med);
+                      setActiveTab("inicio");
+                    }}
+                    className="w-full p-4 rounded-xl glass-dark hover-elevate active-elevate-2 text-left flex items-center gap-4"
+                    data-testid={`custom-meditation-${med.id}`}
+                  >
+                    <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-amber-500 to-amber-700 flex items-center justify-center flex-shrink-0">
+                      <Play className="h-5 w-5 text-white" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h4 className="font-medium text-white truncate">{med.titulo}</h4>
+                      <p className="text-sm text-white/50 truncate">{med.duracion}</p>
+                    </div>
+                  </button>
+                  <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      className="h-8 w-8 text-amber-400 hover:text-amber-300 hover:bg-white/10"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleEditMeditation(med);
+                      }}
+                    >
+                      <Settings className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      className="h-8 w-8 text-red-400 hover:text-red-300 hover:bg-white/10"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDeleteMeditation(med.id);
+                      }}
+                    >
+                      <Plus className="h-4 w-4 rotate-45" />
+                    </Button>
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <h4 className="font-medium text-white truncate">{med.titulo}</h4>
-                    <p className="text-sm text-white/50 truncate">{med.duracion}</p>
-                  </div>
-                </button>
+                </div>
               ))}
             </div>
           </div>
