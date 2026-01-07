@@ -577,7 +577,7 @@ export const AmbientSounds = forwardRef<AmbientSoundsRef>((_, ref) => {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        <Accordion type="multiple" defaultValue={["ambient", "relaxing"]} className="space-y-2">
+        <Accordion type="multiple" className="space-y-2">
           <AccordionItem value="ambient" className="border-white/10">
             <AccordionTrigger className="text-sm hover:no-underline py-2">
               <div className="flex items-center gap-2">
