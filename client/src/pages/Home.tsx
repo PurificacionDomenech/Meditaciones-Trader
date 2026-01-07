@@ -136,6 +136,9 @@ export default function Home() {
       return;
     }
 
+    // Cancel any ongoing speech before starting new one
+    window.speechSynthesis.cancel();
+
     const segment = segmentsRef.current[index];
     const utterance = new SpeechSynthesisUtterance(segment.text);
     utteranceRef.current = utterance;
@@ -156,7 +159,7 @@ export default function Home() {
         : pauseBetweenPhrases * 1000;
 
       setTimeout(() => {
-        if (!isStoppedRef.current) {
+        if (!isStoppedRef.current && isPlaying) {
           currentIndexRef.current = index + 1;
           speakSegment(index + 1);
         }
@@ -164,9 +167,9 @@ export default function Home() {
     };
 
     utterance.onerror = (event) => {
+      // Chrome/Safari often "cancel" when we call cancel() above, which is fine
       if (event.error !== "canceled" && event.error !== "interrupted") {
         console.error("Speech error:", event.error);
-        // If it's not a cancellation, try to recover
         setTimeout(() => {
           if (!isStoppedRef.current && isPlaying) {
             speakSegment(index);
@@ -175,14 +178,13 @@ export default function Home() {
       }
     };
 
-    if (index === 0) {
-      window.speechSynthesis.cancel();
-    }
-    
+    // Small delay to ensure cancel() has taken effect
     setTimeout(() => {
-      window.speechSynthesis.speak(utterance);
-    }, index === 0 ? 100 : 0);
-  }, [speed, pitch, volume, pauseBetweenPhrases, selectedVoice]);
+      if (!isStoppedRef.current && isPlaying) {
+        window.speechSynthesis.speak(utterance);
+      }
+    }, 100);
+  }, [speed, pitch, volume, pauseBetweenPhrases, selectedVoice, isPlaying]);
 
   const handlePlay = useCallback(() => {
     let currentMeditation = selectedMeditation;
