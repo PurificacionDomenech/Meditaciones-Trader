@@ -199,10 +199,23 @@ export default function Home() {
   }, [selectedMeditation, isPaused, parseTextIntoSegments, speakSegment]);
 
   const handlePause = useCallback(() => {
-    window.speechSynthesis.cancel();
-    setIsPaused(true);
-    setIsPlaying(false);
+    if (window.speechSynthesis.speaking) {
+      window.speechSynthesis.pause();
+      setIsPaused(true);
+      setIsPlaying(false);
+    }
   }, []);
+
+  const handleResume = useCallback(() => {
+    if (window.speechSynthesis.paused) {
+      window.speechSynthesis.resume();
+      setIsPaused(false);
+      setIsPlaying(true);
+    } else {
+      // Fallback if resume doesn't work or it wasn't really paused
+      handlePlay();
+    }
+  }, [handlePlay]);
 
   const handleStop = useCallback(() => {
     isStoppedRef.current = true;
@@ -304,58 +317,62 @@ export default function Home() {
         <div className="relative rounded-2xl overflow-hidden" data-testid="card-now-playing">
           <div className="absolute inset-0 wave-background" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-          <div className="relative p-5 space-y-4">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/30 backdrop-blur-sm border border-purple-400/20">
-              <div className="w-2 h-2 rounded-full bg-purple-400 animate-pulse" />
-              <span className="text-xs text-purple-200 uppercase tracking-wider">Meditación Actual</span>
+          <div className="relative p-5 space-y-6 flex flex-col items-center text-center">
+            <div className="w-64 h-64 rounded-full border-4 border-white/10 overflow-hidden shadow-2xl mb-4">
+              <img 
+                src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80&w=1000" 
+                alt="Meditation" 
+                className="w-full h-full object-cover"
+              />
             </div>
             
-            <div>
-              <h3 className="text-2xl font-serif font-bold text-white">
-                {selectedMeditation?.titulo || "Creando el Futuro Deseado"}
+            <div className="space-y-2">
+              <h3 className="text-3xl font-bold text-white tracking-tight">
+                {selectedMeditation?.titulo || "Deep Sleep Journey"}
               </h3>
-              <p className="text-sm text-purple-200/80 mt-1">
-                {selectedMeditation?.categoria || "Visualización para Traders"}
+              <p className="text-lg text-white/60">
+                {selectedMeditation?.descripcion || "Relax your mind and body for a restful night."}
               </p>
             </div>
 
-            <div className="space-y-2">
+            <div className="w-full space-y-2 px-4">
               <div className="flex items-center gap-3">
-                <span className="text-amber-400 text-sm font-medium">{formatTime(currentTime)}</span>
-                <div className="flex-1 h-1 bg-purple-900/50 rounded-full overflow-hidden">
+                <span className="text-white/60 text-xs font-medium">{formatTime(currentTime)}</span>
+                <div className="flex-1 h-1 bg-white/10 rounded-full overflow-hidden">
                   <div 
-                    className="h-full bg-gradient-to-r from-amber-400 to-amber-500 rounded-full transition-all duration-1000"
+                    className="h-full bg-amber-500 rounded-full transition-all duration-1000"
                     style={{ width: `${(currentTime / totalDuration) * 100}%` }}
                   />
                 </div>
-                <span className="text-purple-300 text-sm">{formatTime(totalDuration)}</span>
+                <span className="text-white/60 text-xs">{formatTime(totalDuration)}</span>
               </div>
             </div>
 
-            <div className="flex items-center justify-center gap-8 pt-2">
+            <div className="flex items-center justify-center gap-8 pt-4">
               <Button 
                 size="icon" 
                 variant="ghost" 
-                className="text-white h-12 w-12"
-                data-testid="button-previous"
+                className="text-white/60 hover:text-white h-12 w-12"
+                onClick={handleStop}
+                data-testid="button-stop"
               >
-                <SkipBack className="h-6 w-6" />
+                <div className="h-6 w-6 bg-current rounded-sm" />
               </Button>
               <Button
                 size="icon"
-                className="h-16 w-16 rounded-full bg-amber-400 hover:bg-amber-500 text-black shadow-lg shadow-amber-500/30"
-                onClick={isPlaying ? handlePause : handlePlay}
+                className="h-20 w-20 rounded-full border-2 border-amber-500/30 bg-transparent hover:bg-amber-500/10 text-amber-500 shadow-xl"
+                onClick={isPlaying ? handlePause : (isPaused ? handleResume : handlePlay)}
                 data-testid="button-play-pause"
               >
-                {isPlaying ? <Pause className="h-8 w-8" /> : <Play className="h-8 w-8 ml-1" />}
+                {isPlaying ? <Pause className="h-10 w-10 fill-current" /> : <Play className="h-10 w-10 ml-1 fill-current" />}
               </Button>
               <Button 
                 size="icon" 
                 variant="ghost" 
-                className="text-white h-12 w-12"
+                className="text-white/60 hover:text-white h-12 w-12"
                 data-testid="button-next"
               >
-                <SkipForward className="h-6 w-6" />
+                <SkipForward className="h-8 w-8" />
               </Button>
             </div>
           </div>
