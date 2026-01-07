@@ -27,6 +27,7 @@ import { useToast } from "@/hooks/use-toast";
 import { meditacionesPredefinidas, categorias } from "@/lib/meditationData";
 import type { Meditacion, MeditacionPersonalizada, InsertMeditacion } from "@shared/schema";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { cn } from "@/lib/utils";
 
 import { TraderMissions } from "@/components/TraderMissions";
 import tradingDesdeCeroImg from "@assets/meditation_backgrounds/tradingDesdeCero.png";
@@ -626,18 +627,51 @@ export default function Home() {
         </div>
 
         <div className="space-y-2">
-          <button className="w-full p-4 rounded-xl glass-dark hover-elevate active-elevate-2 text-left flex items-center justify-between">
-            <span className="text-white">Configuración de Voz</span>
-            <ChevronRight className="h-5 w-5 text-amber-400/70" />
-          </button>
-          <button className="w-full p-4 rounded-xl glass-dark hover-elevate active-elevate-2 text-left flex items-center justify-between">
-            <span className="text-white">Sonidos Guardados</span>
-            <ChevronRight className="h-5 w-5 text-amber-400/70" />
-          </button>
-          <button className="w-full p-4 rounded-xl glass-dark hover-elevate active-elevate-2 text-left flex items-center justify-between">
-            <span className="text-white">Preferencias</span>
-            <ChevronRight className="h-5 w-5 text-amber-400/70" />
-          </button>
+          <h3 className="text-sm font-semibold text-white/70 uppercase tracking-widest px-2">Ajustes</h3>
+          <div className="glass-dark rounded-xl overflow-hidden">
+            <button 
+              className="w-full p-4 flex items-center justify-between text-white hover:bg-white/5 transition-colors"
+              onClick={() => setShowVoiceSettings(!showVoiceSettings)}
+            >
+              <div className="flex items-center gap-3">
+                <Mic className="h-5 w-5 text-amber-400" />
+                <span>Voz y Narración</span>
+              </div>
+              <ChevronRight className={cn("h-4 w-4 text-white/30 transition-transform", showVoiceSettings && "rotate-90")} />
+            </button>
+            {showVoiceSettings && (
+              <div className="p-4 border-t border-white/5 bg-black/20">
+                <VoiceControls
+                  speed={speed}
+                  onSpeedChange={setSpeed}
+                  pitch={pitch}
+                  onPitchChange={setPitch}
+                  volume={volume}
+                  onVolumeChange={setVolume}
+                  pauseBetweenPhrases={pauseBetweenPhrases}
+                  onPauseChange={setPauseBetweenPhrases}
+                  selectedVoice={selectedVoice}
+                  onVoiceChange={setSelectedVoice}
+                />
+              </div>
+            )}
+            
+            <button 
+              className="w-full p-4 flex items-center justify-between text-white hover:bg-white/5 transition-colors border-t border-white/5"
+              onClick={() => setShowAmbientSounds(!showAmbientSounds)}
+            >
+              <div className="flex items-center gap-3">
+                <Volume2 className="h-5 w-5 text-amber-400" />
+                <span>Sonidos de Fondo</span>
+              </div>
+              <ChevronRight className={cn("h-4 w-4 text-white/30 transition-transform", showAmbientSounds && "rotate-90")} />
+            </button>
+            {showAmbientSounds && (
+              <div className="p-4 border-t border-white/5 bg-black/20">
+                <AmbientSounds ref={ambientSoundsRef} />
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
