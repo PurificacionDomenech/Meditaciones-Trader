@@ -333,7 +333,7 @@ export default function Home() {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Avatar className="h-12 w-12 border-2 border-amber-500/30">
-              <AvatarImage src="" />
+              <AvatarImage src="/favicon.png" />
               <AvatarFallback className="bg-gradient-to-br from-amber-600 to-amber-800 text-white">
                 <User className="h-6 w-6" />
               </AvatarFallback>
