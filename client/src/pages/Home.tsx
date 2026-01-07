@@ -176,7 +176,16 @@ export default function Home() {
   }, [speed, pitch, volume, pauseBetweenPhrases, selectedVoice]);
 
   const handlePlay = useCallback(() => {
-    if (!selectedMeditation) return;
+    let currentMeditation = selectedMeditation;
+    
+    if (!currentMeditation) {
+      currentMeditation = meditacionesPredefinidas[0];
+      setSelectedMeditation(currentMeditation);
+      const durationMatch = currentMeditation.duracion.match(/(\d+)/);
+      if (durationMatch) {
+        setTotalDuration(parseInt(durationMatch[1]) * 60);
+      }
+    }
 
     if (isPaused) {
       setIsPaused(false);
@@ -184,16 +193,12 @@ export default function Home() {
       isStoppedRef.current = false;
       speakSegment(currentIndexRef.current);
     } else {
-      segmentsRef.current = parseTextIntoSegments(selectedMeditation.texto);
+      segmentsRef.current = parseTextIntoSegments(currentMeditation.texto);
       currentIndexRef.current = 0;
       isStoppedRef.current = false;
       setIsPlaying(true);
       setIsPaused(false);
       setCurrentTime(0);
-      const durationMatch = selectedMeditation.duracion.match(/(\d+)/);
-      if (durationMatch) {
-        setTotalDuration(parseInt(durationMatch[1]) * 60);
-      }
       speakSegment(0);
     }
   }, [selectedMeditation, isPaused, parseTextIntoSegments, speakSegment]);
