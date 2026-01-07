@@ -347,29 +347,6 @@ export default function Home() {
               <h2 className="text-lg font-semibold text-white">Hola, Trader</h2>
             </div>
           </div>
-          <div className="flex items-center gap-2">
-            <Button 
-              size="icon" 
-              variant="ghost" 
-              className="text-amber-400/70"
-              onClick={() => setShowVoiceSettings(true)}
-              data-testid="button-voice-settings"
-            >
-              <Mic className="h-5 w-5" />
-            </Button>
-            <Button 
-              size="icon" 
-              variant="ghost" 
-              className="text-amber-400/70"
-              onClick={() => setShowAmbientSounds(true)}
-              data-testid="button-ambient-sounds"
-            >
-              <Volume2 className="h-5 w-5" />
-            </Button>
-            <Button size="icon" variant="ghost" className="text-amber-400/70" data-testid="button-notifications">
-              <Bell className="h-5 w-5" />
-            </Button>
-          </div>
         </div>
 
         <div className="relative rounded-2xl overflow-hidden glass-dark" data-testid="card-now-playing">
@@ -429,6 +406,27 @@ export default function Home() {
                 data-testid="button-next"
               >
                 <SkipForward className="h-8 w-8" />
+              </Button>
+            </div>
+
+            <div className="flex items-center gap-4 pt-2">
+              <Button 
+                size="icon" 
+                variant="ghost" 
+                className="text-amber-400/50 hover:text-amber-400"
+                onClick={() => setShowVoiceSettings(true)}
+                data-testid="button-voice-settings-home"
+              >
+                <Mic className="h-5 w-5" />
+              </Button>
+              <Button 
+                size="icon" 
+                variant="ghost" 
+                className="text-amber-400/50 hover:text-amber-400"
+                onClick={() => setShowAmbientSounds(true)}
+                data-testid="button-ambient-sounds-home"
+              >
+                <Volume2 className="h-5 w-5" />
               </Button>
             </div>
 
@@ -768,54 +766,50 @@ export default function Home() {
         editingMeditation={editingMeditation}
       />
 
-      {showVoiceSettings && (
-        <div className="fixed inset-0 z-50 bg-black/80 flex items-end">
-          <div className="w-full max-h-[80vh] overflow-y-auto bg-neutral-900 border-t border-amber-500/20 rounded-t-3xl p-4 space-y-4">
-            <div className="flex items-center justify-between mb-2">
-              <h3 className="text-lg font-semibold text-white">Configuración de Voz</h3>
-              <Button 
-                size="icon" 
-                variant="ghost" 
-                onClick={() => setShowVoiceSettings(false)}
-                className="text-amber-400/70"
-              >
-                <ChevronRight className="h-5 w-5 rotate-90" />
-              </Button>
-            </div>
-            <VoiceControls
-              speed={speed}
-              pitch={pitch}
-              volume={volume}
-              pauseBetweenPhrases={pauseBetweenPhrases}
-              selectedVoice={selectedVoice}
-              onSpeedChange={setSpeed}
-              onPitchChange={setPitch}
-              onVolumeChange={setVolume}
-              onPauseChange={setPauseBetweenPhrases}
-              onVoiceChange={setSelectedVoice}
-            />
+      <div className={cn("fixed inset-0 z-50 bg-black/80 flex items-end transition-opacity duration-300", showVoiceSettings ? "opacity-100" : "opacity-0 pointer-events-none")}>
+        <div className={cn("w-full max-h-[80vh] overflow-y-auto bg-neutral-900 border-t border-amber-500/20 rounded-t-3xl p-4 space-y-4 transition-transform duration-300 transform", showVoiceSettings ? "translate-y-0" : "translate-y-full")}>
+          <div className="flex items-center justify-between mb-2">
+            <h3 className="text-lg font-semibold text-white">Configuración de Voz</h3>
+            <Button 
+              size="icon" 
+              variant="ghost" 
+              onClick={() => setShowVoiceSettings(false)}
+              className="text-amber-400/70"
+            >
+              <ChevronRight className="h-5 w-5 rotate-90" />
+            </Button>
           </div>
+          <VoiceControls
+            speed={speed}
+            pitch={pitch}
+            volume={volume}
+            pauseBetweenPhrases={pauseBetweenPhrases}
+            selectedVoice={selectedVoice}
+            onSpeedChange={setSpeed}
+            onPitchChange={setPitch}
+            onVolumeChange={setVolume}
+            onPauseChange={setPauseBetweenPhrases}
+            onVoiceChange={setSelectedVoice}
+          />
         </div>
-      )}
+      </div>
 
-      {showAmbientSounds && (
-        <div className="fixed inset-0 z-50 bg-black/80 flex items-end">
-          <div className="w-full max-h-[80vh] overflow-y-auto bg-neutral-900 border-t border-amber-500/20 rounded-t-3xl p-4 space-y-4">
-            <div className="flex items-center justify-between mb-2">
-              <h3 className="text-lg font-semibold text-white">Sonidos Ambiente</h3>
-              <Button 
-                size="icon" 
-                variant="ghost" 
-                onClick={() => setShowAmbientSounds(false)}
-                className="text-amber-400/70"
-              >
-                <ChevronRight className="h-5 w-5 rotate-90" />
-              </Button>
-            </div>
-            <AmbientSounds ref={ambientSoundsRef} />
+      <div className={cn("fixed inset-0 z-50 bg-black/80 flex items-end transition-opacity duration-300", showAmbientSounds ? "opacity-100" : "opacity-0 pointer-events-none")}>
+        <div className={cn("w-full max-h-[80vh] overflow-y-auto bg-neutral-900 border-t border-amber-500/20 rounded-t-3xl p-4 space-y-4 transition-transform duration-300 transform", showAmbientSounds ? "translate-y-0" : "translate-y-full")}>
+          <div className="flex items-center justify-between mb-2">
+            <h3 className="text-lg font-semibold text-white">Sonidos Ambiente</h3>
+            <Button 
+              size="icon" 
+              variant="ghost" 
+              onClick={() => setShowAmbientSounds(false)}
+              className="text-amber-400/70"
+            >
+              <ChevronRight className="h-5 w-5 rotate-90" />
+            </Button>
           </div>
+          <AmbientSounds ref={ambientSoundsRef} />
         </div>
-      )}
+      </div>
     </div>
   );
 }
