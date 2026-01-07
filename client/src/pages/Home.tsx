@@ -410,35 +410,6 @@ export default function Home() {
               </Button>
             </div>
 
-            {/* Controles integrados de Voz y Sonido */}
-            <div className="w-full space-y-4 pt-4 px-4">
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-medium text-amber-400/80 uppercase tracking-wider">Sonidos Ambientales</span>
-                  {Object.values(ambientSoundsRef.current?.getSounds?.() || {}).some((s: any) => s.active) && (
-                    <span className="audio-indicator animate-pulse">Sonando...</span>
-                  )}
-                </div>
-                <AmbientSounds ref={ambientSoundsRef} compact />
-              </div>
-
-              <div className="space-y-2">
-                <span className="text-xs font-medium text-amber-400/80 uppercase tracking-wider">Configuración de Voz</span>
-                <VoiceControls
-                  speed={speed}
-                  setSpeed={setSpeed}
-                  pitch={pitch}
-                  setPitch={setPitch}
-                  volume={volume}
-                  setVolume={setVolume}
-                  pauseBetweenPhrases={pauseBetweenPhrases}
-                  setPauseBetweenPhrases={setPauseBetweenPhrases}
-                  selectedVoice={selectedVoice}
-                  setSelectedVoice={setSelectedVoice}
-                  compact
-                />
-              </div>
-            </div>
           </div>
         </div>
 
@@ -590,34 +561,8 @@ export default function Home() {
 
   const renderProgressTab = () => (
     <div className="flex-1 overflow-y-auto pb-24">
-      <div className="p-4 space-y-6">
-        <h2 className="text-xl font-semibold text-white">Tu Progreso</h2>
-        
-        <div className="grid grid-cols-2 gap-4">
-          <div className="p-4 rounded-xl glass-dark">
-            <p className="text-3xl font-bold text-amber-400">12</p>
-            <p className="text-sm text-white/50">Sesiones esta semana</p>
-          </div>
-          <div className="p-4 rounded-xl glass-dark">
-            <p className="text-3xl font-bold text-amber-500">5h 30m</p>
-            <p className="text-sm text-white/50">Tiempo total</p>
-          </div>
-        </div>
-
-        <div className="p-4 rounded-xl glass-dark space-y-3">
-          <h3 className="font-semibold text-white">Racha Actual</h3>
-          <div className="flex items-center gap-2">
-            <div className="flex-1 h-2 bg-white/10 rounded-full overflow-hidden">
-              <div className="h-full w-3/4 bg-gradient-to-r from-amber-400 to-amber-500 rounded-full" />
-            </div>
-            <span className="text-amber-400 font-semibold">7 días</span>
-          </div>
-        </div>
-
-        <div className="p-6 rounded-xl glass-dark text-center">
-          <BarChart3 className="h-12 w-12 text-amber-400/60 mx-auto mb-3" />
-          <p className="text-white/50">Más estadísticas próximamente</p>
-        </div>
+      <div className="p-4">
+        <TraderMissions />
       </div>
     </div>
   );
