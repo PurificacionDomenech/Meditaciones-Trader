@@ -221,22 +221,29 @@
   }
 
   .app-background {
-    background: #121212;
+    background: linear-gradient(180deg, #0a0a0a 0%, #111111 50%, #0d0d0d 100%);
   }
 
   .wave-background {
-    background: 
-      linear-gradient(180deg, rgba(18,18,18,0.8) 0%, rgba(18,18,18,0.95) 100%),
-      url("https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80&w=1000");
-    background-size: cover;
-    background-position: center;
+    background: linear-gradient(180deg, rgba(10,10,10,0.9) 0%, rgba(15,15,15,0.95) 100%);
   }
 
   .wave-card-bg {
-    background: 
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 100'%3E%3Cpath fill='rgba(255,255,255,0.05)' d='M0,50 Q50,30 100,50 T200,50 L200,100 L0,100 Z'/%3E%3Cpath fill='rgba(255,255,255,0.03)' d='M0,60 Q50,40 100,60 T200,60 L200,100 L0,100 Z'/%3E%3C/svg%3E");
-    background-size: cover;
-    background-position: bottom;
+    background: rgba(255,255,255,0.03);
+  }
+
+  .glass-dark {
+    background: rgba(20, 20, 20, 0.6);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(212, 175, 55, 0.15);
+  }
+
+  .glass-gold {
+    background: rgba(212, 175, 55, 0.08);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(212, 175, 55, 0.2);
   }
 
   .scrollbar-hide {
