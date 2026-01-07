@@ -30,6 +30,7 @@ export interface AmbientSound {
   nombre: string;
   icon: string;
   category: 'oriental' | 'natural' | 'rhythm' | 'relaxing';
+  url?: string;
 }
 
 export interface SoundPreset {

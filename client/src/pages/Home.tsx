@@ -314,6 +314,19 @@ export default function Home() {
     "intuicion": "from-amber-900/40 via-amber-800/30 to-yellow-950/40",
   };
 
+  const meditationImages: Record<string, string> = {
+    "estres": "/attached_assets/meditation_backgrounds/aa.png",
+    "concentracion": "/attached_assets/meditation_backgrounds/arbol.png",
+    "impulsos": "/attached_assets/meditation_backgrounds/Captura de pantalla 2025-12-17 202508.png",
+    "resiliencia": "/attached_assets/meditation_backgrounds/Captura de pantalla 2026-01-07 190813.png",
+    "visualizacion": "/attached_assets/meditation_backgrounds/Captura de pantalla 2026-01-07 190844.png",
+    "intuicion": "/attached_assets/meditation_backgrounds/Captura de pantalla 2026-01-07 191053.png",
+  };
+
+  const currentBgImage = selectedMeditation 
+    ? (meditationImages[selectedMeditation.categoriaId] || meditationImages["estres"])
+    : "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80&w=1000";
+
   const renderHomeTab = () => (
     <div className="flex-1 overflow-y-auto pb-24">
       <div className="p-4 space-y-6">
@@ -339,7 +352,7 @@ export default function Home() {
           <div className="relative p-6 space-y-6 flex flex-col items-center text-center">
             <div className="w-48 h-48 rounded-full border-2 border-amber-500/20 overflow-hidden shadow-2xl shadow-amber-500/10">
               <img 
-                src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80&w=1000" 
+                src={currentBgImage} 
                 alt="Meditation" 
                 className="w-full h-full object-cover"
               />
