@@ -11,7 +11,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Heart, Trash2, Waves, Wind, CloudRain, Bird, Flame, Music, Bell } from "lucide-react";
+import { Heart, Trash2, Waves, Wind, CloudRain, Bird, Flame, Music, Bell, Sparkles } from "lucide-react";
 import type { SoundPreset, AmbientSound } from "@shared/schema";
 
 const ambientSounds: AmbientSound[] = [
@@ -28,6 +28,9 @@ const ambientSounds: AmbientSound[] = [
   { id: "fire", nombre: "Fuego", icon: "Flame", category: "natural" },
   { id: "ocean", nombre: "Océano", icon: "Waves", category: "natural" },
   { id: "metronome", nombre: "Metrónomo", icon: "Music", category: "rhythm" },
+  { id: "music-zen", nombre: "Zen Garden", icon: "Music", category: "relaxing" },
+  { id: "music-space", nombre: "Deep Space", icon: "Music", category: "relaxing" },
+  { id: "music-piano", nombre: "Soft Piano", icon: "Music", category: "relaxing" },
 ];
 
 const iconMap: Record<string, typeof Bell> = {
@@ -347,9 +350,44 @@ class AudioGenerator {
     (this.oscillators.get("metronome") as any).interval = interval;
   }
 
+  createRelaxingMusic(id: string, volume: number): void {
+    const ctx = this.getContext();
+    const frequencies = id === "music-zen" ? [220, 277.18, 329.63] : id === "music-space" ? [110, 164.81, 220] : [261.63, 329.63, 392];
+    
+    const oscillators: OscillatorNode[] = [];
+    const mainGain = ctx.createGain();
+    mainGain.gain.value = volume * 0.15;
+
+    frequencies.forEach(freq => {
+      const osc = ctx.createOscillator();
+      osc.type = "sine";
+      osc.frequency.value = freq;
+      
+      const lfo = ctx.createOscillator();
+      lfo.frequency.value = 0.1 + Math.random() * 0.1;
+      const lfoGain = ctx.createGain();
+      lfoGain.gain.value = 2;
+      lfo.connect(lfoGain);
+      lfoGain.connect(osc.frequency);
+      
+      osc.connect(mainGain);
+      osc.start();
+      lfo.start();
+      oscillators.push(osc, lfo);
+    });
+
+    mainGain.connect(ctx.destination);
+    this.oscillators.set(id, { nodes: oscillators, gainNode: mainGain });
+  }
+
   startSound(id: string, volume: number): void {
     this.stopSound(id);
     
+    if (id.startsWith("music-")) {
+      this.createRelaxingMusic(id, volume);
+      return;
+    }
+
     switch (id) {
       case "water":
         this.createWaterSound(volume);
@@ -408,7 +446,18 @@ class AudioGenerator {
   setVolume(id: string, volume: number): void {
     const sound = this.oscillators.get(id);
     if (sound) {
-      sound.gainNode.gain.value = volume * 0.3;
+      // Adjusted scaling to match the specific sound multipliers
+      let multiplier = 0.3;
+      if (id === "water") multiplier = 0.3;
+      else if (id === "wind") multiplier = 0.25;
+      else if (id === "rain") multiplier = 0.2;
+      else if (id === "ocean") multiplier = 0.35;
+      else if (id === "fire") multiplier = 0.15;
+      else if (id === "nature" || id === "birds") multiplier = 0.1;
+      else if (id.startsWith("music-")) multiplier = 0.15;
+      else if (id === "gong") multiplier = 0.5;
+      
+      sound.gainNode.gain.setTargetAtTime(volume * multiplier, this.getContext().currentTime, 0.1);
     }
   }
 
@@ -501,6 +550,7 @@ export const AmbientSounds = forwardRef<AmbientSoundsRef>((_, ref) => {
   const orientalSounds = ambientSounds.filter(s => s.category === "oriental");
   const naturalSounds = ambientSounds.filter(s => s.category === "natural");
   const rhythmSounds = ambientSounds.filter(s => s.category === "rhythm");
+  const relaxingMusic = ambientSounds.filter(s => s.category === "relaxing");
 
   const renderSoundItem = (sound: AmbientSound) => {
     const Icon = iconMap[sound.icon] || Music;
@@ -578,6 +628,18 @@ export const AmbientSounds = forwardRef<AmbientSoundsRef>((_, ref) => {
             </AccordionTrigger>
             <AccordionContent className="pt-2">
               {rhythmSounds.map(renderSoundItem)}
+            </AccordionContent>
+          </AccordionItem>
+
+          <AccordionItem value="relaxing" className="border-white/10">
+            <AccordionTrigger className="text-sm hover:no-underline py-2">
+              <div className="flex items-center gap-2">
+                <Sparkles className="h-4 w-4 text-emerald-400" />
+                <span>Música Relajante</span>
+              </div>
+            </AccordionTrigger>
+            <AccordionContent className="pt-2">
+              {relaxingMusic.map(renderSoundItem)}
             </AccordionContent>
           </AccordionItem>
         </Accordion>
