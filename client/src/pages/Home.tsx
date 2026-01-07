@@ -29,6 +29,7 @@ import type { Meditacion, MeditacionPersonalizada, InsertMeditacion } from "@sha
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import { TraderMissions } from "@/components/TraderMissions";
+import tradingDesdeCeroImg from "@assets/meditation_backgrounds/tradingDesdeCero.png";
 
 function cleanText(text: string): string {
   return text.replace(/\[.*?\]/g, "").replace(/\(.*?\)/g, "").trim();
