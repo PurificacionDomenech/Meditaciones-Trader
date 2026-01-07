@@ -560,7 +560,7 @@ export default function Home() {
   );
 
   const renderProgressTab = () => (
-    <div className="flex-1 overflow-y-auto pb-24">
+    <div className="flex-1 overflow-y-auto pb-24 scrollbar-hide">
       <div className="p-4">
         <TraderMissions />
       </div>
