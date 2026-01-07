@@ -29,7 +29,7 @@ export interface AmbientSound {
   id: string;
   nombre: string;
   icon: string;
-  category: 'oriental' | 'natural' | 'rhythm';
+  category: 'oriental' | 'natural' | 'rhythm' | 'relaxing';
 }
 
 export interface SoundPreset {
