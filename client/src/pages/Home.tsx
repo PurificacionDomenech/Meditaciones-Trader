@@ -333,22 +333,21 @@ export default function Home() {
 
   const renderHomeTab = () => (
     <div className="flex-1 overflow-y-auto pb-24 scrollbar-hide">
-      <div className="p-4 space-y-6">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Avatar className="h-12 w-12 border-2 border-amber-500/30">
-              <AvatarImage src="/favicon.png" />
-              <AvatarFallback className="bg-gradient-to-br from-amber-600 to-amber-800 text-white">
-                <User className="h-6 w-6" />
-              </AvatarFallback>
-            </Avatar>
-            <div>
-              <p className="text-xs text-amber-400/80 uppercase tracking-wider">Bienvenido de nuevo</p>
-              <h2 className="text-lg font-semibold text-white">Hola, Trader</h2>
-            </div>
+      <div className="sticky top-0 z-40 bg-black/80 backdrop-blur-md px-4 py-4 flex items-center justify-between border-b border-white/5">
+        <div className="flex items-center gap-3">
+          <Avatar className="h-12 w-12 border-2 border-amber-500/30">
+            <AvatarImage src="/favicon.png" />
+            <AvatarFallback className="bg-gradient-to-br from-amber-600 to-amber-800 text-white">
+              <User className="h-6 w-6" />
+            </AvatarFallback>
+          </Avatar>
+          <div>
+            <p className="text-xs text-amber-400/80 uppercase tracking-wider">Bienvenido de nuevo</p>
+            <h2 className="text-lg font-semibold text-white">Hola, Trader</h2>
           </div>
         </div>
-
+      </div>
+      <div className="p-4 space-y-6">
         <div className="relative rounded-2xl overflow-hidden glass-dark" data-testid="card-now-playing">
           <div className="relative p-6 space-y-6 flex flex-col items-center text-center">
             <div className="w-48 h-48 rounded-full border-2 border-amber-500/20 overflow-hidden shadow-2xl shadow-amber-500/10">
@@ -525,19 +524,18 @@ export default function Home() {
 
   const renderExploreTab = () => (
     <div className="flex-1 overflow-y-auto pb-24 scrollbar-hide">
+      <div className="sticky top-0 z-40 bg-black/80 backdrop-blur-md px-4 py-4 flex items-center justify-between border-b border-white/5">
+        <h2 className="text-xl font-semibold text-white">Explorar</h2>
+        <Button 
+          size="icon" 
+          variant="ghost" 
+          className="text-amber-400/70"
+          onClick={() => setShowVoiceSettings(true)}
+        >
+          <Settings className="h-5 w-5" />
+        </Button>
+      </div>
       <div className="p-4 space-y-6">
-        <div className="flex items-center justify-between">
-          <h2 className="text-xl font-semibold text-white">Explorar</h2>
-          <Button 
-            size="icon" 
-            variant="ghost" 
-            className="text-amber-400/70"
-            onClick={() => setShowVoiceSettings(true)}
-          >
-            <Settings className="h-5 w-5" />
-          </Button>
-        </div>
-
         {categorias.map(cat => {
           const meditations = getMeditationsByCategory(cat.id);
           if (meditations.length === 0) return null;
@@ -629,6 +627,9 @@ export default function Home() {
 
   const renderMisionesTab = () => (
     <div className="flex-1 overflow-y-auto pb-24 scrollbar-hide">
+      <div className="sticky top-0 z-40 bg-black/80 backdrop-blur-md px-4 py-4 border-b border-white/5">
+        <h2 className="text-xl font-semibold text-white">Misiones Trader</h2>
+      </div>
       <div className="p-4">
         <TraderMissions />
       </div>
@@ -637,6 +638,9 @@ export default function Home() {
 
   const renderProfileTab = () => (
     <div className="flex-1 overflow-y-auto pb-24 scrollbar-hide">
+      <div className="sticky top-0 z-40 bg-black/80 backdrop-blur-md px-4 py-4 border-b border-white/5">
+        <h2 className="text-xl font-semibold text-white">Perfil</h2>
+      </div>
       <div className="p-4 space-y-6">
         <div className="flex flex-col items-center text-center py-6">
           <Avatar className="h-20 w-20 border-4 border-amber-500/30 mb-4">
