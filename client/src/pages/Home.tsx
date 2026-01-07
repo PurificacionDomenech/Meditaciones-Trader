@@ -330,7 +330,7 @@ export default function Home() {
     : "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80&w=1000";
 
   const renderHomeTab = () => (
-    <div className="flex-1 overflow-y-auto pb-24">
+    <div className="flex-1 overflow-y-auto pb-24 scrollbar-hide">
       <div className="p-4 space-y-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -486,7 +486,7 @@ export default function Home() {
   );
 
   const renderExploreTab = () => (
-    <div className="flex-1 overflow-y-auto pb-24">
+    <div className="flex-1 overflow-y-auto pb-24 scrollbar-hide">
       <div className="p-4 space-y-6">
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-semibold text-white">Explorar</h2>
@@ -568,7 +568,7 @@ export default function Home() {
   );
 
   const renderProfileTab = () => (
-    <div className="flex-1 overflow-y-auto pb-24">
+    <div className="flex-1 overflow-y-auto pb-24 scrollbar-hide">
       <div className="p-4 space-y-6">
         <div className="flex flex-col items-center text-center py-6">
           <Avatar className="h-20 w-20 border-4 border-amber-500/30 mb-4">
