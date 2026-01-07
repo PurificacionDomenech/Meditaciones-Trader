@@ -5,7 +5,7 @@ import {
   Home as HomeIcon, 
   Compass, 
   Plus, 
-  BarChart3, 
+  Trophy, 
   User, 
   Play, 
   Pause,
@@ -34,7 +34,7 @@ function cleanText(text: string): string {
   return text.replace(/\[.*?\]/g, "").replace(/\(.*?\)/g, "").trim();
 }
 
-type TabType = "inicio" | "explorar" | "progreso" | "perfil";
+type TabType = "inicio" | "explorar" | "misiones" | "perfil";
 
 export default function Home() {
   const { toast } = useToast();
@@ -559,7 +559,7 @@ export default function Home() {
     </div>
   );
 
-  const renderProgressTab = () => (
+  const renderMisionesTab = () => (
     <div className="flex-1 overflow-y-auto pb-24 scrollbar-hide">
       <div className="p-4">
         <TraderMissions />
@@ -603,7 +603,7 @@ export default function Home() {
     <div className="min-h-screen h-screen flex flex-col app-background">
       {activeTab === "inicio" && renderHomeTab()}
       {activeTab === "explorar" && renderExploreTab()}
-      {activeTab === "progreso" && renderProgressTab()}
+      {activeTab === "misiones" && renderMisionesTab()}
       {activeTab === "perfil" && renderProfileTab()}
 
       <nav className="fixed bottom-0 left-0 right-0 bg-black/95 backdrop-blur-lg border-t border-amber-500/10 z-50">
@@ -642,14 +642,14 @@ export default function Home() {
           </button>
 
           <button
-            onClick={() => setActiveTab("progreso")}
+            onClick={() => setActiveTab("misiones")}
             className={`flex flex-col items-center gap-1 p-2 rounded-lg transition-colors ${
-              activeTab === "progreso" ? "text-amber-400" : "text-white/40"
+              activeTab === "misiones" ? "text-amber-400" : "text-white/40"
             }`}
-            data-testid="nav-progreso"
+            data-testid="nav-misiones"
           >
-            <BarChart3 className="h-6 w-6" />
-            <span className="text-xs">Progreso</span>
+            <Trophy className="h-6 w-6" />
+            <span className="text-xs">Misiones</span>
           </button>
 
           <button
