@@ -11,23 +11,19 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Heart, Trash2, Waves, Wind, CloudRain, Bird, Flame, Music, Bell } from "lucide-react";
+import { Heart, Trash2, Waves, Wind, CloudRain, Bird, Flame, Music, Bell, Sparkles, Volume2 } from "lucide-react";
 import type { SoundPreset, AmbientSound } from "@shared/schema";
 
 const ambientSounds: AmbientSound[] = [
-  { id: "tibetan-bells-1", nombre: "Campanas Tibetanas 1", icon: "Bell", category: "oriental" },
-  { id: "tibetan-bells-2", nombre: "Campanas Tibetanas 2", icon: "Bell", category: "oriental" },
-  { id: "singing-bowls-1", nombre: "Cuencos Cantores 1", icon: "Music", category: "oriental" },
-  { id: "singing-bowls-2", nombre: "Cuencos Cantores 2", icon: "Music", category: "oriental" },
-  { id: "gong", nombre: "Gong", icon: "Music", category: "oriental" },
-  { id: "water", nombre: "Agua Fluyendo", icon: "Waves", category: "natural" },
-  { id: "nature", nombre: "Naturaleza", icon: "Bird", category: "natural" },
-  { id: "wind", nombre: "Viento", icon: "Wind", category: "natural" },
-  { id: "rain", nombre: "Lluvia", icon: "CloudRain", category: "natural" },
-  { id: "birds", nombre: "Pájaros", icon: "Bird", category: "natural" },
-  { id: "fire", nombre: "Fuego", icon: "Flame", category: "natural" },
-  { id: "ocean", nombre: "Océano", icon: "Waves", category: "natural" },
+  { id: "custom-campanilla", nombre: "Campanilla", icon: "Bell", category: "oriental", url: "/src/assets/custom_sounds/campanilla.mp3" },
+  { id: "custom-campanillas", nombre: "Campanillas", icon: "Bell", category: "oriental", url: "/src/assets/custom_sounds/campanillas.mp3" },
+  { id: "custom-gong", nombre: "Gong Personalizado", icon: "Music", category: "oriental", url: "/src/assets/custom_sounds/Gong.mp3" },
+  { id: "custom-lluvia", nombre: "Lluvia Real", icon: "CloudRain", category: "natural", url: "/src/assets/custom_sounds/lluvia.mp3" },
+  { id: "custom-pajaros", nombre: "Pájaros Bosque", icon: "Bird", category: "natural", url: "/src/assets/custom_sounds/pajaros.mp3" },
   { id: "metronome", nombre: "Metrónomo", icon: "Music", category: "rhythm" },
+  { id: "music-333", nombre: "333 Hz Healing", icon: "Music", category: "relaxing", url: "/src/assets/custom_sounds/Musica/333-hz.mp3" },
+  { id: "music-alpha", nombre: "Alpha Waves", icon: "Music", category: "relaxing", url: "/src/assets/custom_sounds/Musica/alpha-8-to-12-hz-healing-frequencies-222945.mp3" },
+  { id: "music-meditation", nombre: "Meditación Zen", icon: "Music", category: "relaxing", url: "/src/assets/custom_sounds/Musica/meditation.mp3" },
 ];
 
 const iconMap: Record<string, typeof Bell> = {
@@ -347,42 +343,64 @@ class AudioGenerator {
     (this.oscillators.get("metronome") as any).interval = interval;
   }
 
+  createRelaxingMusic(id: string, volume: number): void {
+    const ctx = this.getContext();
+    const frequencies = id === "music-zen" ? [220, 277.18, 329.63] : id === "music-space" ? [110, 164.81, 220] : [261.63, 329.63, 392];
+    
+    const oscillators: OscillatorNode[] = [];
+    const mainGain = ctx.createGain();
+    mainGain.gain.value = volume * 0.15;
+
+    frequencies.forEach(freq => {
+      const osc = ctx.createOscillator();
+      osc.type = "sine";
+      osc.frequency.value = freq;
+      
+      const lfo = ctx.createOscillator();
+      lfo.frequency.value = 0.1 + Math.random() * 0.1;
+      const lfoGain = ctx.createGain();
+      lfoGain.gain.value = 2;
+      lfo.connect(lfoGain);
+      lfoGain.connect(osc.frequency);
+      
+      osc.connect(mainGain);
+      osc.start();
+      lfo.start();
+      oscillators.push(osc, lfo);
+    });
+
+    mainGain.connect(ctx.destination);
+    this.oscillators.set(id, { nodes: oscillators, gainNode: mainGain });
+  }
+
   startSound(id: string, volume: number): void {
     this.stopSound(id);
     
+    const soundData = ambientSounds.find(s => s.id === id);
+    if (soundData?.url) {
+      const ctx = this.getContext();
+      const audio = new Audio();
+      audio.src = soundData.url;
+      audio.crossOrigin = "anonymous";
+      
+      const source = ctx.createMediaElementSource(audio);
+      const gainNode = ctx.createGain();
+      
+      let multiplier = 0.3;
+      if (id.startsWith("music-")) multiplier = 0.15;
+      
+      gainNode.gain.value = volume * multiplier;
+      source.connect(gainNode);
+      gainNode.connect(ctx.destination);
+      
+      audio.loop = true;
+      audio.play().catch(err => console.error("Error playing audio:", err));
+      
+      this.oscillators.set(id, { nodes: [source as any], gainNode, audio } as any);
+      return;
+    }
+
     switch (id) {
-      case "water":
-        this.createWaterSound(volume);
-        break;
-      case "wind":
-        this.createWindSound(volume);
-        break;
-      case "rain":
-        this.createRainSound(volume);
-        break;
-      case "ocean":
-        this.createOceanSound(volume);
-        break;
-      case "fire":
-        this.createFireSound(volume);
-        break;
-      case "nature":
-        this.createNatureSound(volume);
-        break;
-      case "birds":
-        this.createBirdsSound(volume);
-        break;
-      case "tibetan-bells-1":
-      case "tibetan-bells-2":
-        this.createBellSound(id, volume);
-        break;
-      case "singing-bowls-1":
-      case "singing-bowls-2":
-        this.createSingingBowlSound(id, volume);
-        break;
-      case "gong":
-        this.createGongSound(volume);
-        break;
       case "metronome":
         this.createMetronomeSound(volume);
         break;
@@ -392,6 +410,10 @@ class AudioGenerator {
   stopSound(id: string): void {
     const sound = this.oscillators.get(id);
     if (sound) {
+      if ((sound as any).audio) {
+        (sound as any).audio.pause();
+        (sound as any).audio.src = "";
+      }
       sound.nodes.forEach(node => {
         try {
           if ((node as any).stop) (node as any).stop();
@@ -408,7 +430,18 @@ class AudioGenerator {
   setVolume(id: string, volume: number): void {
     const sound = this.oscillators.get(id);
     if (sound) {
-      sound.gainNode.gain.value = volume * 0.3;
+      // Adjusted scaling to match the specific sound multipliers
+      let multiplier = 0.3;
+      if (id === "water") multiplier = 0.3;
+      else if (id === "wind") multiplier = 0.25;
+      else if (id === "rain") multiplier = 0.2;
+      else if (id === "ocean") multiplier = 0.35;
+      else if (id === "fire") multiplier = 0.15;
+      else if (id === "nature" || id === "birds") multiplier = 0.1;
+      else if (id.startsWith("music-")) multiplier = 0.15;
+      else if (id === "gong") multiplier = 0.5;
+      
+      sound.gainNode.gain.setTargetAtTime(volume * multiplier, this.getContext().currentTime, 0.1);
     }
   }
 
@@ -500,7 +533,7 @@ export const AmbientSounds = forwardRef<AmbientSoundsRef>((_, ref) => {
 
   const orientalSounds = ambientSounds.filter(s => s.category === "oriental");
   const naturalSounds = ambientSounds.filter(s => s.category === "natural");
-  const rhythmSounds = ambientSounds.filter(s => s.category === "rhythm");
+  const relaxingMusic = ambientSounds.filter(s => s.category === "relaxing");
 
   const renderSoundItem = (sound: AmbientSound) => {
     const Icon = iconMap[sound.icon] || Music;
@@ -545,39 +578,27 @@ export const AmbientSounds = forwardRef<AmbientSoundsRef>((_, ref) => {
       </CardHeader>
       <CardContent className="space-y-4">
         <Accordion type="multiple" className="space-y-2">
-          <AccordionItem value="oriental" className="border-white/10">
+          <AccordionItem value="ambient" className="border-white/10">
             <AccordionTrigger className="text-sm hover:no-underline py-2">
               <div className="flex items-center gap-2">
-                <Bell className="h-4 w-4 text-amber-400" />
-                <span>Orientales</span>
+                <Volume2 className="h-4 w-4 text-amber-400" />
+                <span>Sonidos Ambientales</span>
               </div>
             </AccordionTrigger>
             <AccordionContent className="pt-2">
-              {orientalSounds.map(renderSoundItem)}
+              {[...orientalSounds, ...naturalSounds, ambientSounds.find(s => s.id === "metronome")].filter(Boolean).map(s => renderSoundItem(s!))}
             </AccordionContent>
           </AccordionItem>
 
-          <AccordionItem value="natural" className="border-white/10">
+          <AccordionItem value="relaxing" className="border-white/10">
             <AccordionTrigger className="text-sm hover:no-underline py-2">
               <div className="flex items-center gap-2">
-                <Waves className="h-4 w-4 text-blue-400" />
-                <span>Naturales</span>
+                <Sparkles className="h-4 w-4 text-emerald-400" />
+                <span>Música Relajante</span>
               </div>
             </AccordionTrigger>
             <AccordionContent className="pt-2">
-              {naturalSounds.map(renderSoundItem)}
-            </AccordionContent>
-          </AccordionItem>
-
-          <AccordionItem value="rhythm" className="border-white/10">
-            <AccordionTrigger className="text-sm hover:no-underline py-2">
-              <div className="flex items-center gap-2">
-                <Music className="h-4 w-4 text-purple-400" />
-                <span>Ritmo</span>
-              </div>
-            </AccordionTrigger>
-            <AccordionContent className="pt-2">
-              {rhythmSounds.map(renderSoundItem)}
+              {relaxingMusic.map(renderSoundItem)}
             </AccordionContent>
           </AccordionItem>
         </Accordion>

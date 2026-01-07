@@ -56,7 +56,7 @@ export function CreateMeditationDialog({
         categoria: editingMeditation.categoria,
         categoriaId: editingMeditation.categoriaId,
       });
-    } else {
+    } else if (open) {
       form.reset({
         titulo: "",
         descripcion: "",
@@ -70,7 +70,6 @@ export function CreateMeditationDialog({
 
   const handleSubmit = (data: InsertMeditacion) => {
     onSubmit(data);
-    form.reset();
     onOpenChange(false);
   };
 
