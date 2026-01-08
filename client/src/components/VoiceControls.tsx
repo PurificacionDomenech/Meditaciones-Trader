@@ -92,6 +92,7 @@ export function VoiceControls({
 
   useEffect(() => {
     const loadVoices = () => {
+      if (!window.speechSynthesis) return;
       const allVoices = window.speechSynthesis.getVoices();
       const spanishVoices = allVoices.filter(v => 
         v.lang.toLowerCase().startsWith("es")
@@ -99,14 +100,18 @@ export function VoiceControls({
       setVoices(spanishVoices.length > 0 ? spanishVoices : allVoices.slice(0, 10));
     };
 
-    loadVoices();
-    window.speechSynthesis.onvoiceschanged = loadVoices;
+    if (window.speechSynthesis) {
+      loadVoices();
+      window.speechSynthesis.onvoiceschanged = loadVoices;
+    }
 
     const saved = localStorage.getItem("narrationPresets");
     if (saved) setPresets(JSON.parse(saved));
 
     return () => {
-      window.speechSynthesis.onvoiceschanged = null;
+      if (window.speechSynthesis) {
+        window.speechSynthesis.onvoiceschanged = null;
+      }
     };
   }, []);
 
