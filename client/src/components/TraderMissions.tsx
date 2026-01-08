@@ -5,8 +5,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
-import { Trophy, Target, ShieldAlert, Star, ArrowLeft, Calendar } from "lucide-react";
+import { Trophy, Target, ShieldAlert, Star, ArrowLeft, Calendar, Lightbulb, Sparkles, ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { TRADER_MISSIONS, getMissionByDay, getTotalMissions } from "@/lib/traderMissions";
 
 interface MissionEntry {
   id: string;
@@ -19,19 +20,6 @@ interface MissionEntry {
   createdAt: number;
 }
 
-const MISSIONS = [
-  {
-    id: "1",
-    dia: 1,
-    titulo: "Aceptación del Riesgo",
-    descripcion: "Hoy nos enfocamos en entender que el riesgo es parte del juego, no un enemigo.",
-    accionDestruir: "Deja de intentar tener razón en cada operación. La necesidad de ganar siempre destruye tu cuenta.",
-    accionConstruir: "Acepta la pérdida como un costo operativo necesario. Sin riesgo no hay recompensa.",
-    afirmacion: "Acepto el riesgo con serenidad y ejecuto mi plan sin vacilar."
-  },
-  // Se pueden añadir más misiones aquí
-];
-
 export function TraderMissions() {
   const [entries, setEntries] = useState<MissionEntry[]>(() => {
     const saved = localStorage.getItem("traderEntries");
@@ -42,9 +30,10 @@ export function TraderMissions() {
   const [view, setView] = useState<'mission' | 'calendar' | 'detail'>('mission');
   const [selectedEntry, setSelectedEntry] = useState<MissionEntry | null>(null);
 
-  const mission = MISSIONS.find(m => m.dia === currentDay) || MISSIONS[0];
+  const totalMissions = getTotalMissions();
+  const mission = getMissionByDay(currentDay) || TRADER_MISSIONS[0];
   const completedDays = entries.filter(e => e.completed).length;
-  const progress = (completedDays / 30) * 100;
+  const progress = (completedDays / totalMissions) * 100;
 
   const saveEntry = () => {
     if (!content.trim()) return;
@@ -62,6 +51,9 @@ export function TraderMissions() {
     setEntries(updated);
     localStorage.setItem("traderEntries", JSON.stringify(updated));
     setContent("");
+    if (currentDay < totalMissions) {
+      setCurrentDay(currentDay + 1);
+    }
   };
 
   const getEntryByDay = (day: number): MissionEntry | undefined => {
@@ -82,6 +74,21 @@ export function TraderMissions() {
     if (entry) {
       setSelectedEntry(entry);
       setView('detail');
+    } else {
+      setCurrentDay(day);
+      setView('mission');
+    }
+  };
+
+  const goToPreviousDay = () => {
+    if (currentDay > 1) {
+      setCurrentDay(currentDay - 1);
+    }
+  };
+
+  const goToNextDay = () => {
+    if (currentDay < totalMissions) {
+      setCurrentDay(currentDay + 1);
     }
   };
 
@@ -91,9 +98,9 @@ export function TraderMissions() {
         <CardHeader className="pb-2">
           <div className="flex items-center justify-between mb-4">
             <Badge variant="outline" className="border-amber-500/50 text-amber-500 font-serif uppercase tracking-wider">
-              Progreso de Misiones
+              365 Días de Transformación
             </Badge>
-            <span className="text-amber-500 font-bold">{completedDays}/30 Días</span>
+            <span className="text-amber-500 font-bold">{completedDays}/{totalMissions} Días</span>
           </div>
           <Progress value={progress} className="h-2 bg-white/5" />
         </CardHeader>
@@ -120,45 +127,77 @@ export function TraderMissions() {
         <Card className="glass-card border-amber-500/30 bg-black/60 backdrop-blur-2xl relative overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-amber-500/50 to-transparent" />
           <CardContent className="pt-8 space-y-6">
-            <div className="text-center space-y-4">
-              <Badge className="bg-amber-500 text-black hover:bg-amber-600 font-bold px-4 py-1">
-                DÍA {mission.dia}
-              </Badge>
-              <h2 className="text-3xl font-serif font-bold gold-text uppercase tracking-tighter">
-                {mission.titulo}
-              </h2>
-              <p className="text-lg text-white/70 leading-relaxed max-w-lg mx-auto">
-                {mission.descripcion}
-              </p>
+            <div className="flex items-center justify-between">
+              <Button
+                size="icon"
+                variant="ghost"
+                onClick={goToPreviousDay}
+                disabled={currentDay <= 1}
+                className="text-amber-500/70 hover:text-amber-500"
+              >
+                <ChevronLeft className="h-6 w-6" />
+              </Button>
+              <div className="text-center space-y-4 flex-1">
+                <Badge className="bg-amber-500 text-black hover:bg-amber-600 font-bold px-4 py-1">
+                  DÍA {mission.dia}
+                </Badge>
+                <h2 className="text-2xl font-serif font-bold gold-text uppercase tracking-tighter">
+                  {mission.titulo}
+                </h2>
+                <Badge variant="outline" className="border-white/20 text-white/50 text-xs">
+                  {mission.categoria}
+                </Badge>
+              </div>
+              <Button
+                size="icon"
+                variant="ghost"
+                onClick={goToNextDay}
+                disabled={currentDay >= totalMissions}
+                className="text-amber-500/70 hover:text-amber-500"
+              >
+                <ChevronRight className="h-6 w-6" />
+              </Button>
             </div>
 
-            <div className="grid gap-4 mt-8">
-              <div className="bg-red-500/10 border border-red-500/20 rounded-2xl p-6 flex gap-4">
-                <div className="h-10 w-10 rounded-full bg-red-500/20 flex items-center justify-center shrink-0">
-                  <ShieldAlert className="h-6 w-6 text-red-500" />
+            <div className="bg-blue-500/10 border border-blue-500/20 rounded-2xl p-5">
+              <h3 className="text-blue-400 font-bold text-sm uppercase mb-2">Objetivo</h3>
+              <p className="text-white/80 leading-snug">{mission.objetivo}</p>
+            </div>
+
+            <div className="bg-amber-500/10 border border-amber-500/20 rounded-2xl p-5">
+              <div className="flex items-start gap-3">
+                <div className="h-10 w-10 rounded-full bg-amber-500/20 flex items-center justify-center shrink-0">
+                  <Target className="h-6 w-6 text-amber-400" />
                 </div>
                 <div>
-                  <h3 className="text-red-500 font-bold text-sm uppercase mb-1">DESTRUIR</h3>
-                  <p className="text-white/80 leading-snug">{mission.accionDestruir}</p>
+                  <h3 className="text-amber-400 font-bold text-sm uppercase mb-2">Reto del Día</h3>
+                  <p className="text-white/80 leading-relaxed whitespace-pre-line">{mission.reto}</p>
                 </div>
               </div>
+            </div>
 
-              <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-2xl p-6 flex gap-4">
+            <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-2xl p-5">
+              <div className="flex items-start gap-3">
                 <div className="h-10 w-10 rounded-full bg-emerald-500/20 flex items-center justify-center shrink-0">
-                  <Target className="h-6 w-6 text-emerald-400" />
+                  <Lightbulb className="h-6 w-6 text-emerald-400" />
                 </div>
                 <div>
-                  <h3 className="text-emerald-400 font-bold text-sm uppercase mb-1">CONSTRUIR</h3>
-                  <p className="text-white/80 leading-snug">{mission.accionConstruir}</p>
+                  <h3 className="text-emerald-400 font-bold text-sm uppercase mb-2">Por Qué Funciona</h3>
+                  <p className="text-white/80 leading-relaxed">{mission.porQueFunciona}</p>
                 </div>
               </div>
             </div>
 
-            <div className="bg-amber-500/5 border border-amber-500/20 rounded-2xl p-6 text-center space-y-2">
-              <Trophy className="h-8 w-8 text-amber-500 mx-auto" />
-              <p className="text-amber-500 font-serif italic text-lg tracking-wide">
-                "{mission.afirmacion}"
-              </p>
+            <div className="bg-purple-500/10 border border-purple-500/20 rounded-2xl p-5">
+              <div className="flex items-start gap-3">
+                <div className="h-10 w-10 rounded-full bg-purple-500/20 flex items-center justify-center shrink-0">
+                  <Sparkles className="h-6 w-6 text-purple-400" />
+                </div>
+                <div>
+                  <h3 className="text-purple-400 font-bold text-sm uppercase mb-2">Aplicación Cotidiana</h3>
+                  <p className="text-white/80 leading-relaxed">{mission.aplicacionCotidiana}</p>
+                </div>
+              </div>
             </div>
 
             <div className="space-y-4 pt-4">
@@ -175,7 +214,7 @@ export function TraderMissions() {
                 onClick={saveEntry}
                 className="w-full bg-amber-500 text-black hover:bg-amber-600 font-bold h-12 rounded-xl shadow-[0_0_20px_rgba(245,158,11,0.2)]"
               >
-                Completar Misión
+                Completar Misión del Día {mission.dia}
               </Button>
             </div>
           </CardContent>
@@ -184,23 +223,25 @@ export function TraderMissions() {
         <Card className="glass-card border-amber-500/20 bg-black/40 backdrop-blur-xl">
           <CardContent className="pt-6">
             <p className="text-white/50 text-sm text-center mb-4">
-              Toca un día completado para ver la reflexión
+              Toca un día para ver la misión o tu reflexión
             </p>
             <div className="grid grid-cols-7 gap-2">
-              {Array.from({ length: 30 }).map((_, i) => {
+              {Array.from({ length: Math.min(totalMissions, 30) }).map((_, i) => {
                 const day = i + 1;
                 const entry = getEntryByDay(day);
                 const isCompleted = !!entry;
+                const missionData = getMissionByDay(day);
                 return (
                   <button
                     key={day}
-                    onClick={() => isCompleted && handleDayClick(day)}
-                    disabled={!isCompleted}
+                    onClick={() => handleDayClick(day)}
                     className={cn(
                       "aspect-square rounded-lg flex items-center justify-center text-sm font-bold relative transition-all",
                       isCompleted 
                         ? "bg-amber-500 text-black cursor-pointer hover:bg-amber-400" 
-                        : "bg-white/5 text-white/30 border border-white/5 cursor-not-allowed"
+                        : missionData 
+                          ? "bg-white/10 text-white/70 border border-white/10 cursor-pointer hover:bg-white/20"
+                          : "bg-white/5 text-white/30 border border-white/5 cursor-not-allowed"
                     )}
                     data-testid={`calendar-day-${day}`}
                   >
@@ -210,6 +251,11 @@ export function TraderMissions() {
                 );
               })}
             </div>
+            {totalMissions > 30 && (
+              <p className="text-white/30 text-xs text-center mt-4">
+                Mostrando los primeros 30 días de {totalMissions} misiones totales
+              </p>
+            )}
           </CardContent>
         </Card>
       ) : (

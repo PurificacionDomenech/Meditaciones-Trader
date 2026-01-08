@@ -27,8 +27,10 @@ import { useToast } from "@/hooks/use-toast";
 import { meditacionesPredefinidas, categorias } from "@/lib/meditationData";
 import type { Meditacion, MeditacionPersonalizada, InsertMeditacion } from "@shared/schema";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { cn } from "@/lib/utils";
 
 import { TraderMissions } from "@/components/TraderMissions";
+import tradingDesdeCeroImg from "@assets/meditation_backgrounds/tradingDesdeCero.png";
 
 function cleanText(text: string): string {
   return text.replace(/\[.*?\]/g, "").replace(/\(.*?\)/g, "").trim();
@@ -331,25 +333,21 @@ export default function Home() {
 
   const renderHomeTab = () => (
     <div className="flex-1 overflow-y-auto pb-24 scrollbar-hide">
-      <div className="p-4 space-y-6">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Avatar className="h-12 w-12 border-2 border-amber-500/30">
-              <AvatarImage src="/favicon.png" />
-              <AvatarFallback className="bg-gradient-to-br from-amber-600 to-amber-800 text-white">
-                <User className="h-6 w-6" />
-              </AvatarFallback>
-            </Avatar>
-            <div>
-              <p className="text-xs text-amber-400/80 uppercase tracking-wider">Bienvenido de nuevo</p>
-              <h2 className="text-lg font-semibold text-white">Hola, Trader</h2>
-            </div>
+      <div className="sticky top-0 z-40 bg-black/80 backdrop-blur-md px-4 py-4 flex items-center justify-between border-b border-white/5">
+        <div className="flex items-center gap-3">
+          <Avatar className="h-12 w-12 border-2 border-amber-500/30">
+            <AvatarImage src="/favicon.png" />
+            <AvatarFallback className="bg-gradient-to-br from-amber-600 to-amber-800 text-white">
+              <User className="h-6 w-6" />
+            </AvatarFallback>
+          </Avatar>
+          <div>
+            <p className="text-xs text-amber-400/80 uppercase tracking-wider">Bienvenido de nuevo</p>
+            <h2 className="text-lg font-semibold text-white">Hola, Trader</h2>
           </div>
-          <Button size="icon" variant="ghost" className="text-amber-400/70" data-testid="button-notifications">
-            <Bell className="h-5 w-5" />
-          </Button>
         </div>
-
+      </div>
+      <div className="p-4 space-y-6">
         <div className="relative rounded-2xl overflow-hidden glass-dark" data-testid="card-now-playing">
           <div className="relative p-6 space-y-6 flex flex-col items-center text-center">
             <div className="w-48 h-48 rounded-full border-2 border-amber-500/20 overflow-hidden shadow-2xl shadow-amber-500/10">
@@ -407,6 +405,27 @@ export default function Home() {
                 data-testid="button-next"
               >
                 <SkipForward className="h-8 w-8" />
+              </Button>
+            </div>
+
+            <div className="flex items-center gap-4 pt-2">
+              <Button 
+                size="icon" 
+                variant="ghost" 
+                className="text-amber-400/50 hover:text-amber-400"
+                onClick={() => setShowVoiceSettings(true)}
+                data-testid="button-voice-settings-home"
+              >
+                <Mic className="h-5 w-5" />
+              </Button>
+              <Button 
+                size="icon" 
+                variant="ghost" 
+                className="text-amber-400/50 hover:text-amber-400"
+                onClick={() => setShowAmbientSounds(true)}
+                data-testid="button-ambient-sounds-home"
+              >
+                <Volume2 className="h-5 w-5" />
               </Button>
             </div>
 
@@ -505,14 +524,18 @@ export default function Home() {
 
   const renderExploreTab = () => (
     <div className="flex-1 overflow-y-auto pb-24 scrollbar-hide">
+      <div className="sticky top-0 z-40 bg-black/80 backdrop-blur-md px-4 py-4 flex items-center justify-between border-b border-white/5">
+        <h2 className="text-xl font-semibold text-white">Explorar</h2>
+        <Button 
+          size="icon" 
+          variant="ghost" 
+          className="text-amber-400/70"
+          onClick={() => setShowVoiceSettings(true)}
+        >
+          <Settings className="h-5 w-5" />
+        </Button>
+      </div>
       <div className="p-4 space-y-6">
-        <div className="flex items-center justify-between">
-          <h2 className="text-xl font-semibold text-white">Explorar</h2>
-          <Button size="icon" variant="ghost" className="text-amber-400/70">
-            <Settings className="h-5 w-5" />
-          </Button>
-        </div>
-
         {categorias.map(cat => {
           const meditations = getMeditationsByCategory(cat.id);
           if (meditations.length === 0) return null;
@@ -604,6 +627,9 @@ export default function Home() {
 
   const renderMisionesTab = () => (
     <div className="flex-1 overflow-y-auto pb-24 scrollbar-hide">
+      <div className="sticky top-0 z-40 bg-black/80 backdrop-blur-md px-4 py-4 border-b border-white/5">
+        <h2 className="text-xl font-semibold text-white">Misiones Trader</h2>
+      </div>
       <div className="p-4">
         <TraderMissions />
       </div>
@@ -612,6 +638,9 @@ export default function Home() {
 
   const renderProfileTab = () => (
     <div className="flex-1 overflow-y-auto pb-24 scrollbar-hide">
+      <div className="sticky top-0 z-40 bg-black/80 backdrop-blur-md px-4 py-4 border-b border-white/5">
+        <h2 className="text-xl font-semibold text-white">Perfil</h2>
+      </div>
       <div className="p-4 space-y-6">
         <div className="flex flex-col items-center text-center py-6">
           <Avatar className="h-20 w-20 border-4 border-amber-500/30 mb-4">
@@ -625,18 +654,30 @@ export default function Home() {
         </div>
 
         <div className="space-y-2">
-          <button className="w-full p-4 rounded-xl glass-dark hover-elevate active-elevate-2 text-left flex items-center justify-between">
-            <span className="text-white">Configuración de Voz</span>
-            <ChevronRight className="h-5 w-5 text-amber-400/70" />
-          </button>
-          <button className="w-full p-4 rounded-xl glass-dark hover-elevate active-elevate-2 text-left flex items-center justify-between">
-            <span className="text-white">Sonidos Guardados</span>
-            <ChevronRight className="h-5 w-5 text-amber-400/70" />
-          </button>
-          <button className="w-full p-4 rounded-xl glass-dark hover-elevate active-elevate-2 text-left flex items-center justify-between">
-            <span className="text-white">Preferencias</span>
-            <ChevronRight className="h-5 w-5 text-amber-400/70" />
-          </button>
+          <h3 className="text-sm font-semibold text-white/70 uppercase tracking-widest px-2">Ajustes</h3>
+          <div className="glass-dark rounded-xl overflow-hidden">
+            <button 
+              className="w-full p-4 flex items-center justify-between text-white hover:bg-white/5 transition-colors"
+              onClick={() => setShowVoiceSettings(true)}
+            >
+              <div className="flex items-center gap-3">
+                <Mic className="h-5 w-5 text-amber-400" />
+                <span>Voz y Narración</span>
+              </div>
+              <ChevronRight className="h-4 w-4 text-white/30" />
+            </button>
+            
+            <button 
+              className="w-full p-4 flex items-center justify-between text-white hover:bg-white/5 transition-colors border-t border-white/5"
+              onClick={() => setShowAmbientSounds(true)}
+            >
+              <div className="flex items-center gap-3">
+                <Volume2 className="h-5 w-5 text-amber-400" />
+                <span>Sonidos de Fondo</span>
+              </div>
+              <ChevronRight className="h-4 w-4 text-white/30" />
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -708,6 +749,20 @@ export default function Home() {
         </div>
       </nav>
 
+      <a 
+        href="https://www.skool.com/metodo-medina/about?ref=5410d87590444ff6a99c244493fe47cd"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="fixed bottom-20 left-0 right-0 z-40 flex justify-center px-4 py-1 bg-black/90"
+        data-testid="banner-trading-desde-cero"
+      >
+        <img 
+          src={tradingDesdeCeroImg} 
+          alt="Trading Desde Cero" 
+          className="h-10 object-contain rounded-md"
+        />
+      </a>
+
       <CreateMeditationDialog
         open={dialogOpen}
         onOpenChange={setDialogOpen}
@@ -715,54 +770,50 @@ export default function Home() {
         editingMeditation={editingMeditation}
       />
 
-      {showVoiceSettings && (
-        <div className="fixed inset-0 z-50 bg-black/80 flex items-end">
-          <div className="w-full max-h-[80vh] overflow-y-auto bg-neutral-900 border-t border-amber-500/20 rounded-t-3xl p-4 space-y-4">
-            <div className="flex items-center justify-between mb-2">
-              <h3 className="text-lg font-semibold text-white">Configuración de Voz</h3>
-              <Button 
-                size="icon" 
-                variant="ghost" 
-                onClick={() => setShowVoiceSettings(false)}
-                className="text-amber-400/70"
-              >
-                <ChevronRight className="h-5 w-5 rotate-90" />
-              </Button>
-            </div>
-            <VoiceControls
-              speed={speed}
-              pitch={pitch}
-              volume={volume}
-              pauseBetweenPhrases={pauseBetweenPhrases}
-              selectedVoice={selectedVoice}
-              onSpeedChange={setSpeed}
-              onPitchChange={setPitch}
-              onVolumeChange={setVolume}
-              onPauseChange={setPauseBetweenPhrases}
-              onVoiceChange={setSelectedVoice}
-            />
+      <div className={cn("fixed inset-0 z-50 bg-black/80 flex items-end transition-opacity duration-300", showVoiceSettings ? "opacity-100" : "opacity-0 pointer-events-none")}>
+        <div className={cn("w-full max-h-[80vh] overflow-y-auto bg-neutral-900 border-t border-amber-500/20 rounded-t-3xl p-4 space-y-4 transition-transform duration-300 transform", showVoiceSettings ? "translate-y-0" : "translate-y-full")}>
+          <div className="flex items-center justify-between mb-2">
+            <h3 className="text-lg font-semibold text-white">Configuración de Voz</h3>
+            <Button 
+              size="icon" 
+              variant="ghost" 
+              onClick={() => setShowVoiceSettings(false)}
+              className="text-amber-400/70"
+            >
+              <ChevronRight className="h-5 w-5 rotate-90" />
+            </Button>
           </div>
+          <VoiceControls
+            speed={speed}
+            pitch={pitch}
+            volume={volume}
+            pauseBetweenPhrases={pauseBetweenPhrases}
+            selectedVoice={selectedVoice}
+            onSpeedChange={setSpeed}
+            onPitchChange={setPitch}
+            onVolumeChange={setVolume}
+            onPauseChange={setPauseBetweenPhrases}
+            onVoiceChange={setSelectedVoice}
+          />
         </div>
-      )}
+      </div>
 
-      {showAmbientSounds && (
-        <div className="fixed inset-0 z-50 bg-black/80 flex items-end">
-          <div className="w-full max-h-[80vh] overflow-y-auto bg-neutral-900 border-t border-amber-500/20 rounded-t-3xl p-4 space-y-4">
-            <div className="flex items-center justify-between mb-2">
-              <h3 className="text-lg font-semibold text-white">Sonidos Ambiente</h3>
-              <Button 
-                size="icon" 
-                variant="ghost" 
-                onClick={() => setShowAmbientSounds(false)}
-                className="text-amber-400/70"
-              >
-                <ChevronRight className="h-5 w-5 rotate-90" />
-              </Button>
-            </div>
-            <AmbientSounds ref={ambientSoundsRef} />
+      <div className={cn("fixed inset-0 z-50 bg-black/80 flex items-end transition-opacity duration-300", showAmbientSounds ? "opacity-100" : "opacity-0 pointer-events-none")}>
+        <div className={cn("w-full max-h-[80vh] overflow-y-auto bg-neutral-900 border-t border-amber-500/20 rounded-t-3xl p-4 space-y-4 transition-transform duration-300 transform", showAmbientSounds ? "translate-y-0" : "translate-y-full")}>
+          <div className="flex items-center justify-between mb-2">
+            <h3 className="text-lg font-semibold text-white">Sonidos Ambiente</h3>
+            <Button 
+              size="icon" 
+              variant="ghost" 
+              onClick={() => setShowAmbientSounds(false)}
+              className="text-amber-400/70"
+            >
+              <ChevronRight className="h-5 w-5 rotate-90" />
+            </Button>
           </div>
+          <AmbientSounds ref={ambientSoundsRef} />
         </div>
-      )}
+      </div>
     </div>
   );
 }
