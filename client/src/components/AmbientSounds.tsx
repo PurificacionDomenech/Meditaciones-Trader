@@ -401,8 +401,42 @@ class AudioGenerator {
     }
 
     switch (id) {
+      case "water":
+        this.createWaterSound(volume);
+        break;
+      case "wind":
+        this.createWindSound(volume);
+        break;
+      case "rain":
+        this.createRainSound(volume);
+        break;
+      case "ocean":
+        this.createOceanSound(volume);
+        break;
+      case "fire":
+        this.createFireSound(volume);
+        break;
+      case "birds":
+        this.createBirdsSound(volume);
+        break;
+      case "bell-1":
+      case "bell-2":
+        this.createBellSound(id, volume);
+        break;
+      case "bowl-1":
+      case "bowl-2":
+        this.createSingingBowlSound(id, volume);
+        break;
+      case "gong":
+        this.createGongSound(volume);
+        break;
       case "metronome":
         this.createMetronomeSound(volume);
+        break;
+      case "music-zen":
+      case "music-space":
+      case "music-healing":
+        this.createRelaxingMusic(id, volume);
         break;
     }
   }

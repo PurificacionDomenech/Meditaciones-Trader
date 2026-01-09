@@ -1,0 +1,101 @@
+# Instrucciones Técnicas para Implementar Pausas Diferenciadas en la Narración
+
+Para que la aplicación "Meditaciones Trader" pueda interpretar los saltos de línea en los guiones de meditación y aplicar pausas de duración diferente (pausa breve para un salto de línea simple, pausa profunda para un doble salto de línea), necesitarás modificar la lógica de procesamiento de texto en el componente que maneja la narración por voz. Asumo que esta lógica reside en un archivo como `MeditationPlayer.tsx` o un hook relacionado.
+
+El objetivo es que el sistema detecte `\n` (un solo salto de línea) como una pausa corta y `\n\n` (dos saltos de línea consecutivos) como una pausa más larga, que puede ser la pausa configurada por el usuario más un extra.
+
+## 1. Identificar el Archivo y la Función Clave
+
+Localiza el archivo donde se encuentra la función `speakMeditation` o similar, que es responsable de dividir el texto de la meditación en segmentos y pasarlos al `speechSynthesis` API. Según el análisis previo, esto podría estar en `Meditaciones-Trader/client/src/components/MeditationPlayer.tsx` o un archivo similar.
+
+Dentro de esa función, busca la parte donde se divide el texto por líneas o se manejan las pausas. Actualmente, la lógica es algo como:
+
+```typescript
+// ...
+const lines = cleanedText.split('\n');
+// ...
+const pauseDuration = segment.hasLineBreakAfter 
+  ? (pauseBetweenPhrases + 2) * 1000 
+  : pauseBetweenPhrases * 1000;
+await new Promise(resolve => setTimeout(resolve, pauseDuration));
+// ...
+```
+
+## 2. Modificar la Lógica de Segmentación y Pausas
+
+La clave es procesar el texto de forma que podamos distinguir entre un `\n` y un `\n\n`. Una forma efectiva es dividir el texto en "párrafos" primero y luego en "frases" dentro de esos párrafos.
+
+Aquí te presento una propuesta de cómo modificar la función `speakMeditation` (o la función equivalente) para lograr esto. El código es una adaptación conceptual y puede requerir ajustes según la implementación exacta de tu proyecto:
+
+```typescript
+// Suponiendo que tienes acceso a `text` (el guion de la meditación)
+// y a `pauseBetweenPhrases` (la duración base de la pausa en segundos)
+
+async function speakMeditation(text: string, pauseBetweenPhrases: number) {
+  const cleanedText = cleanText(text); // Asegúrate de que esta función elimina [] y ()
+
+  // Dividir el texto en bloques (párrafos) por dobles saltos de línea
+  const paragraphs = cleanedText.split(/\n\s*\n/); // Divide por \n\n y opcionalmente espacios en blanco entre ellos
+
+  for (let i = 0; i < paragraphs.length; i++) {
+    const paragraph = paragraphs[i];
+    // Dividir cada párrafo en frases por saltos de línea simples o puntuación
+    // Esto es una simplificación, tu lógica actual de split por oraciones es mejor si la mantienes
+    const sentences = paragraph.split(/(?<=[.!?…])\s+|\n/);
+
+    for (let j = 0; j < sentences.length; j++) {
+      const sentence = sentences[j].trim();
+      if (sentence) { // Asegurarse de que no sea una cadena vacía
+        const utterance = new SpeechSynthesisUtterance(sentence);
+        // Configurar velocidad, tono, volumen, voz, etc. aquí
+        // utterance.rate = ...
+        // utterance.pitch = ...
+        // utterance.volume = ...
+        // utterance.voice = ...
+
+        speechSynthesis.speak(utterance);
+
+        // Esperar a que la frase termine de hablarse
+        await new Promise(resolve => {
+          utterance.onend = resolve;
+          utterance.onerror = (event) => {
+            console.error('SpeechSynthesisUtterance.onerror', event);
+            resolve(); // Continuar incluso si hay un error de voz
+          };
+        });
+
+        // Lógica de pausas diferenciadas
+        let currentPauseDuration = pauseBetweenPhrases * 1000; // Pausa base
+
+        // Si es la última frase del párrafo Y no es el último párrafo,
+        // significa que hubo un doble salto de línea original (pausa profunda)
+        if (j === sentences.length - 1 && i < paragraphs.length - 1) {
+          currentPauseDuration = (pauseBetweenPhrases + 3) * 1000; // Pausa profunda (ej. +3 segundos)
+        }
+        // Si no es la última frase del párrafo, es una pausa breve (simple salto de línea o puntuación)
+        // La pausa base ya es la breve, así que no se necesita modificar aquí a menos que quieras una pausa aún más corta
+
+        await new Promise(resolve => setTimeout(resolve, currentPauseDuration));
+      }
+    }
+  }
+}
+```
+
+### Explicación de la Lógica:
+
+1.  **`cleanedText.split(/\n\s*\n/)`**: Esta expresión regular divide el texto en un array de párrafos. `\n\s*\n` busca dos saltos de línea consecutivos, permitiendo cualquier cantidad de espacios en blanco (`\s*`) entre ellos. Esto es clave para identificar los bloques que deben tener una pausa más larga al final.
+2.  **`paragraph.split(/(?<=[.!?…])\s+|\n/)`**: Dentro de cada párrafo, se divide en frases. Aquí, `|\n` se añade para que también se divida por saltos de línea simples dentro de un párrafo. Esto asegura que cada línea se trate como una frase individual para la narración.
+3.  **Lógica de `currentPauseDuration`**:
+    *   Por defecto, la duración de la pausa es la `pauseBetweenPhrases` configurada por el usuario.
+    *   Si la frase actual es la **última frase de un párrafo** (`j === sentences.length - 1`) Y **no es el último párrafo del texto completo** (`i < paragraphs.length - 1`), significa que el párrafo original estaba seguido por un doble salto de línea (`\n\n`). En este caso, se aplica una pausa más profunda (ej., `pauseBetweenPhrases + 3` segundos).
+    *   Para las pausas entre frases dentro de un mismo párrafo (donde solo hubo un `\n` o puntuación), se usa la `pauseBetweenPhrases` normal.
+
+## 3. Consideraciones Adicionales
+
+*   **`cleanText` Function:** Asegúrate de que tu función `cleanText` (si existe) elimine corchetes `[]` y paréntesis `()` como se especifica en tus requisitos originales, antes de que el texto sea procesado por esta nueva lógica.
+*   **`SpeechSynthesisUtterance.onend`:** Es crucial esperar a que cada `utterance` termine de hablarse antes de aplicar la pausa y pasar a la siguiente frase. El `await new Promise(resolve => { utterance.onend = resolve; });` se encarga de esto.
+*   **Valores de Pausa:** Puedes ajustar el valor `+ 3` segundos para la pausa profunda según lo que consideres más adecuado para el ritmo de las meditaciones.
+*   **Pruebas:** Realiza pruebas exhaustivas con diferentes guiones que contengan tanto saltos de línea simples como dobles para asegurarte de que las pausas se aplican correctamente.
+
+Con estas modificaciones, tu aplicación podrá ofrecer una experiencia de narración mucho más matizada y profesional, incluso antes de integrar voces grabadas, lo que contribuirá significativamente a la inmersión del usuario.
