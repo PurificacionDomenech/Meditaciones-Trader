@@ -219,7 +219,14 @@ export default function Home() {
     };
 
     // Speak immediately
-    window.speechSynthesis.speak(utterance);
+    if (typeof window !== "undefined" && window.speechSynthesis) {
+      window.speechSynthesis.cancel();
+      setTimeout(() => {
+        if (!isStoppedRef.current && isPlayingRef.current) {
+          window.speechSynthesis.speak(utterance);
+        }
+      }, 50);
+    }
   }, [speed, pitch, volume, pauseBetweenPhrases, selectedVoice]);
 
   const handlePlay = useCallback(() => {
@@ -304,12 +311,17 @@ export default function Home() {
     isCancellingRef.current = true;
     window.speechSynthesis.cancel();
     
+    // Clear any pending timeouts for the next segment
+    if (utteranceRef.current) {
+      utteranceRef.current.onend = null;
+    }
+    
     setTimeout(() => {
       isCancellingRef.current = false;
       if (isPlayingRef.current && !isStoppedRef.current) {
         speakSegment(currentIndexRef.current);
       }
-    }, 100);
+    }, 150);
   }, [speakSegment]);
 
   const handleSelectMeditation = useCallback((meditation: Meditacion) => {
