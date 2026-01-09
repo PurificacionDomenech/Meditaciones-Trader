@@ -5,9 +5,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
-import { Trophy, Target, ShieldAlert, Star, ArrowLeft, Calendar, Lightbulb, Sparkles, ChevronLeft, ChevronRight } from "lucide-react";
+import { Trophy, Target, ShieldAlert, Star, ArrowLeft, Calendar, Lightbulb, Sparkles, ChevronLeft, ChevronRight, Play } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { TRADER_MISSIONS, getMissionByDay, getTotalMissions } from "@/lib/traderMissions";
+import { meditacionesPredefinidas } from "@/lib/meditationData";
+import type { Meditacion } from "@shared/schema";
 
 interface MissionEntry {
   id: string;
@@ -20,7 +22,12 @@ interface MissionEntry {
   createdAt: number;
 }
 
-export function TraderMissions() {
+interface TraderMissionsProps {
+  onSelectMeditation?: (meditation: Meditacion) => void;
+  onPlay?: () => void;
+}
+
+export function TraderMissions({ onSelectMeditation, onPlay }: TraderMissionsProps) {
   const [entries, setEntries] = useState<MissionEntry[]>(() => {
     const saved = localStorage.getItem("traderEntries");
     return saved ? JSON.parse(saved) : [];
@@ -194,11 +201,30 @@ export function TraderMissions() {
                   <div className="h-10 w-10 rounded-full bg-purple-500/20 flex items-center justify-center shrink-0">
                     <Sparkles className="h-6 w-6 text-purple-400" />
                   </div>
-                  <div>
+                  <div className="flex-1">
                     <h3 className="text-purple-400 font-bold text-sm uppercase mb-2">Meditación Recomendada</h3>
-                    <p className="text-white/80 leading-relaxed">
-                      Se recomienda realizar la sesión: <span className="text-purple-300 font-semibold">{mission.meditacionRecomendada}</span>
-                    </p>
+                    <div className="flex items-center justify-between gap-4">
+                      <p className="text-white/80 leading-relaxed">
+                        <span className="text-purple-300 font-semibold">{mission.meditacionRecomendada}</span>
+                      </p>
+                      {onSelectMeditation && (
+                        <Button 
+                          size="sm" 
+                          variant="secondary"
+                          className="bg-purple-600 hover:bg-purple-700 text-white border-none h-8 gap-2"
+                          onClick={() => {
+                            const med = meditacionesPredefinidas.find(m => m.titulo === mission.meditacionRecomendada);
+                            if (med) {
+                              onSelectMeditation(med);
+                              onPlay?.();
+                            }
+                          }}
+                        >
+                          <Play className="h-3 w-3 fill-current" />
+                          Escuchar
+                        </Button>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>

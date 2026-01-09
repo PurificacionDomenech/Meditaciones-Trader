@@ -704,7 +704,15 @@ export default function Home() {
         <h2 className="text-xl font-semibold text-white">Misiones Trader</h2>
       </div>
       <div className="p-4">
-        <TraderMissions />
+        <TraderMissions 
+          onSelectMeditation={(med) => {
+            handleSelectMeditation(med);
+            setActiveTab("inicio");
+          }}
+          onPlay={() => {
+            setTimeout(handlePlay, 100);
+          }}
+        />
       </div>
     </div>
   );
