@@ -321,8 +321,15 @@ export default function Home() {
       if (isPlayingRef.current && !isStoppedRef.current) {
         speakSegment(currentIndexRef.current);
       }
-    }, 150);
+    }, 50); // Reducido para mayor respuesta
   }, [speakSegment]);
+
+  // Efectos para actualizar la voz en tiempo real al cambiar los controles
+  useEffect(() => {
+    if (isPlaying && !isPaused) {
+      handleRestartCurrentSegment();
+    }
+  }, [speed, pitch, volume, selectedVoice, handleRestartCurrentSegment]);
 
   const handleSelectMeditation = useCallback((meditation: Meditacion) => {
     handleStop();
