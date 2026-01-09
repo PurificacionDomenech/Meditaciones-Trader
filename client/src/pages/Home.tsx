@@ -17,7 +17,8 @@ import {
   Settings,
   ChevronRight,
   Volume2,
-  Mic
+  Mic,
+  Star
 } from "lucide-react";
 import { MeditationPlayer } from "@/components/MeditationPlayer";
 import { VoiceControls } from "@/components/VoiceControls";
