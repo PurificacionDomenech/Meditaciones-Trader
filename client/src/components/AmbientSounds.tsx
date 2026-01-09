@@ -15,15 +15,15 @@ import { Heart, Trash2, Waves, Wind, CloudRain, Bird, Flame, Music, Bell, Sparkl
 import type { SoundPreset, AmbientSound } from "@shared/schema";
 
 const ambientSounds: AmbientSound[] = [
-  { id: "custom-campanilla", nombre: "Campanilla", icon: "Bell", category: "oriental", url: "/src/assets/custom_sounds/campanilla.mp3" },
-  { id: "custom-campanillas", nombre: "Campanillas", icon: "Bell", category: "oriental", url: "/src/assets/custom_sounds/campanillas.mp3" },
-  { id: "custom-gong", nombre: "Gong Personalizado", icon: "Music", category: "oriental", url: "/src/assets/custom_sounds/Gong.mp3" },
-  { id: "custom-lluvia", nombre: "Lluvia Real", icon: "CloudRain", category: "natural", url: "/src/assets/custom_sounds/lluvia.mp3" },
-  { id: "custom-pajaros", nombre: "Pájaros Bosque", icon: "Bird", category: "natural", url: "/src/assets/custom_sounds/pajaros.mp3" },
+  { id: "custom-campanilla", nombre: "Campanilla", icon: "Bell", category: "oriental", url: "/client/src/assets/custom_sounds/campanilla.mp3" },
+  { id: "custom-campanillas", nombre: "Campanillas", icon: "Bell", category: "oriental", url: "/client/src/assets/custom_sounds/campanillas.mp3" },
+  { id: "custom-gong", nombre: "Gong Personalizado", icon: "Music", category: "oriental", url: "/client/src/assets/custom_sounds/Gong.mp3" },
+  { id: "custom-lluvia", nombre: "Lluvia Real", icon: "CloudRain", category: "natural", url: "/client/src/assets/custom_sounds/lluvia.mp3" },
+  { id: "custom-pajaros", nombre: "Pájaros Bosque", icon: "Bird", category: "natural", url: "/client/src/assets/custom_sounds/pajaros.mp3" },
   { id: "metronome", nombre: "Metrónomo", icon: "Music", category: "rhythm" },
-  { id: "music-333", nombre: "333 Hz Healing", icon: "Music", category: "relaxing", url: "/src/assets/custom_sounds/Musica/333-hz.mp3" },
-  { id: "music-alpha", nombre: "Alpha Waves", icon: "Music", category: "relaxing", url: "/src/assets/custom_sounds/Musica/alpha-8-to-12-hz-healing-frequencies-222945.mp3" },
-  { id: "music-meditation", nombre: "Meditación Zen", icon: "Music", category: "relaxing", url: "/src/assets/custom_sounds/Musica/meditation.mp3" },
+  { id: "music-333", nombre: "333 Hz Healing", icon: "Music", category: "relaxing", url: "/client/src/assets/custom_sounds/Musica/333-hz.mp3" },
+  { id: "music-alpha", nombre: "Alpha Waves", icon: "Music", category: "relaxing", url: "/client/src/assets/custom_sounds/Musica/alpha-8-to-12-hz-healing-frequencies-222945.mp3" },
+  { id: "music-meditation", nombre: "Meditación Zen", icon: "Music", category: "relaxing", url: "/client/src/assets/custom_sounds/Musica/meditation.mp3" },
 ];
 
 const iconMap: Record<string, typeof Bell> = {
@@ -378,25 +378,39 @@ class AudioGenerator {
     
     const soundData = ambientSounds.find(s => s.id === id);
     if (soundData?.url) {
-      const ctx = this.getContext();
       const audio = new Audio();
       audio.src = soundData.url;
       audio.crossOrigin = "anonymous";
       
-      const source = ctx.createMediaElementSource(audio);
-      const gainNode = ctx.createGain();
+      const gainNode = this.getContext().createGain();
       
       let multiplier = 0.3;
       if (id.startsWith("music-")) multiplier = 0.15;
       
       gainNode.gain.value = volume * multiplier;
-      source.connect(gainNode);
-      gainNode.connect(ctx.destination);
+      
+      // Intentar usar MediaElementSource pero manejar fallback si falla (algunos navegadores restringen esto)
+      try {
+        const source = this.getContext().createMediaElementSource(audio);
+        source.connect(gainNode);
+        gainNode.connect(this.getContext().destination);
+      } catch (e) {
+        console.warn("Fallback to direct audio playback due to MediaElementSource restriction", e);
+        // Si falla el ruteo por AudioContext (común en algunos entornos de desarrollo/seguridad)
+        // el audio se reproducirá pero sin el control de gainNode del AudioContext
+        audio.volume = volume * multiplier;
+      }
       
       audio.loop = true;
-      audio.play().catch(err => console.error("Error playing audio:", err));
+      audio.play().catch(err => {
+        console.error("Error playing audio:", err);
+        // Desbloqueo de audio en navegadores si es necesario
+        if (this.getContext().state === 'suspended') {
+          this.getContext().resume().then(() => audio.play());
+        }
+      });
       
-      this.oscillators.set(id, { nodes: [source as any], gainNode, audio } as any);
+      this.oscillators.set(id, { nodes: [], gainNode, audio } as any);
       return;
     }
 
