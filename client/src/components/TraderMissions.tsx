@@ -145,7 +145,7 @@ export function TraderMissions() {
                   {mission.titulo}
                 </h2>
                 <Badge variant="outline" className="border-white/20 text-white/50 text-xs">
-                  {mission.categoria}
+                  Misión de Transformación
                 </Badge>
               </div>
               <Button
