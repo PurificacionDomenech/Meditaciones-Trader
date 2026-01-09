@@ -42,6 +42,18 @@ export function TraderMissions({ onSelectMeditation, onPlay }: TraderMissionsPro
   const completedDays = entries.filter(e => e.completed).length;
   const progress = (completedDays / totalMissions) * 100;
 
+  const trophies = {
+    bronze: completedDays >= 1,
+    silver: completedDays >= 7,
+    gold: completedDays >= 30,
+    platinum: completedDays >= 180,
+    diamond: completedDays >= 365
+  };
+
+  useEffect(() => {
+    localStorage.setItem("traderTrophies", JSON.stringify(trophies));
+  }, [completedDays]);
+
   const saveEntry = () => {
     if (!content.trim()) return;
     const newEntry: MissionEntry = {
