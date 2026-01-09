@@ -1,64 +1,65 @@
-# Meditation App for Traders
+# Aplicación de Meditación para Traders
 
-## Overview
+## Resumen
 
-A guided meditation web application designed specifically for traders. The app provides voice-narrated meditation sessions with customizable speech synthesis, ambient sounds, and the ability to create personal meditations. It combines calming meditation aesthetics with professional utility to help traders manage stress, improve focus, control impulses, and build mental resilience.
+Una aplicación web de meditación guiada diseñada específicamente para traders. La aplicación proporciona sesiones de meditación narradas por voz con síntesis de voz personalizable, sonidos ambientales y la capacidad de crear meditaciones personales. Combina una estética de meditación relajante con utilidad profesional para ayudar a los traders a gestionar el estrés, mejorar la concentración, controlar los impulsos y desarrollar resiliencia mental.
 
-## User Preferences
+## Preferencias del Usuario
 
-Preferred communication style: Simple, everyday language.
+Estilo de comunicación preferido: Lenguaje sencillo y cotidiano.
 
-## System Architecture
+## Arquitectura del Sistema
 
-### Frontend Architecture
-- **Framework**: React 18 with TypeScript
-- **Routing**: Wouter (lightweight React router)
-- **State Management**: TanStack React Query for server state, React useState/useRef for local state
-- **UI Components**: shadcn/ui component library built on Radix UI primitives
-- **Styling**: Tailwind CSS with custom design tokens for a dark-mode-first, meditation-focused theme
-- **Build Tool**: Vite with React plugin
+### Arquitectura del Frontend
+- **Framework**: React 18 con TypeScript
+- **Enrutamiento**: Wouter (enrutador React ligero)
+- **Gestión de Estado**: TanStack React Query para el estado del servidor, React useState/useRef para el estado local
+- **Componentes de UI**: Biblioteca de componentes shadcn/ui basada en primitivas de Radix UI
+- **Estilo**: Tailwind CSS con tokens de diseño personalizados para un tema enfocado en la meditación, priorizando el modo oscuro
+- **Herramienta de Construcción**: Vite con plugin de React
 
-### Backend Architecture
-- **Runtime**: Node.js with Express
-- **Language**: TypeScript with ESM modules
-- **API Pattern**: RESTful JSON API at `/api/*` routes
-- **Storage**: Currently uses in-memory storage (MemStorage class) with interfaces designed for easy database migration
+### Arquitectura del Backend
+- **Entorno de ejecución**: Node.js con Express
+- **Lenguaje**: TypeScript con módulos ESM
+- **Patrón de API**: API JSON RESTful en rutas `/api/*`
+- **Almacenamiento**: Actualmente utiliza almacenamiento en memoria (clase MemStorage) con interfaces diseñadas para una fácil migración a base de datos
 
-### Data Layer
-- **ORM**: Drizzle ORM configured for PostgreSQL (schema defined but database not yet connected)
-- **Validation**: Zod schemas for both client and server-side validation
-- **Schema Location**: `shared/schema.ts` contains shared type definitions and validation schemas
+### Capa de Datos
+- **ORM**: Drizzle ORM configurado para PostgreSQL (esquema definido pero base de datos aún no conectada)
+- **Validación**: Esquemas Zod para validación tanto en el cliente como en el servidor
+- **Ubicación del Esquema**: `shared/schema.ts` contiene definiciones de tipos compartidos y esquemas de validación
 
-### Key Features Implementation
-1. **Speech Synthesis**: Uses Web Speech API for voice narration with configurable speed, pitch, volume, and pause timing
-2. **Ambient Sounds**: Web Audio API generates synthetic sounds (oscillators, noise) for meditation backgrounds
-3. **Meditation Categories**: Pre-defined meditations organized by trader-specific categories (stress, focus, impulse control, resilience, intuition)
-4. **Custom Meditations**: Users can create, edit, and delete personal meditations stored in localStorage
+### Implementación de Características Clave
+1. **Síntesis de Voz**: Utiliza la Web Speech API para la narración de voz con velocidad, tono, volumen y tiempos de pausa configurables.
+2. **Sonidos Ambientales**: La Web Audio API genera sonidos sintéticos (osciladores, ruido) para los fondos de meditación.
+3. **Categorías de Meditación**: Meditaciones predefinidas organizadas por categorías específicas para traders (estrés, enfoque, control de impulsos, resiliencia, intuición).
+4. **Misiones Trader**: Un currículo de 31 días con retos simbólicos y físicos diseñados para transformar la psicología del trader (ej. el ritual del reset, la caja de Pandora, caminata de pérdida).
+5. **Meditaciones Personalizadas**: Los usuarios pueden crear, editar y eliminar meditaciones personales almacenadas en localStorage.
 
-### Design System
-- Typography: Cinzel (serif) for headers, Inter/Open Sans for body
-- Color scheme: Dark theme with gold accent gradients
-- Layout: Two-column desktop layout (420px sidebar + flexible content area), single-column mobile
+### Sistema de Diseño
+- Tipografía: Cinzel (serif) para encabezados, Inter/Open Sans para el cuerpo.
+- Esquema de colores: Tema oscuro con gradientes de acento dorados.
+- Diseño: Diseño de escritorio de dos columnas (barra lateral de 420px + área de contenido flexible), columna única en móviles.
 
-## External Dependencies
+## Dependencias Externas
 
-### Core Libraries
-- **@tanstack/react-query**: Server state management and API data fetching
-- **drizzle-orm** + **drizzle-zod**: Database ORM and schema validation (PostgreSQL ready)
-- **express**: HTTP server framework
-- **zod**: Runtime type validation
+### Librerías Core
+- **@tanstack/react-query**: Gestión de estado del servidor y obtención de datos de API.
+- **drizzle-orm** + **drizzle-zod**: ORM de base de datos y validación de esquemas (listo para PostgreSQL).
+- **express**: Framework de servidor HTTP.
+- **zod**: Validación de tipos en tiempo de ejecución.
 
-### UI Framework
-- **@radix-ui/react-***: Accessible UI primitives (dialog, accordion, select, slider, etc.)
-- **tailwindcss**: Utility-first CSS framework
-- **class-variance-authority**: Component variant management
-- **lucide-react**: Icon library
+### Framework de UI
+- **@radix-ui/react-***: Primitivas de UI accesibles (diálogo, acordeón, selección, deslizador, etc.)
+- **tailwindcss**: Framework de CSS basado en utilidades.
+- **class-variance-authority**: Gestión de variantes de componentes.
+- **lucide-react**: Librería de iconos.
 
-### Browser APIs Used
-- **Web Speech API**: `window.speechSynthesis` for text-to-speech narration
-- **Web Audio API**: `AudioContext`, `OscillatorNode` for ambient sound generation
-- **localStorage**: Persisting custom meditations and user preferences
+### APIs del Navegador Utilizadas
+- **Web Speech API**: `window.speechSynthesis` para narración de texto a voz.
+- **Web Audio API**: `AudioContext`, `OscillatorNode` para generación de sonido ambiental.
+- **localStorage**: Persistencia de meditaciones personalizadas y preferencias de usuario.
 
-### Database (Configured but not active)
-- **PostgreSQL**: Target database (requires DATABASE_URL environment variable)
-- **connect-pg-simple**: Session storage for PostgreSQL (available for future auth)
+### Base de Datos (Configurada pero no activa)
+- **PostgreSQL**: Base de datos objetivo (requiere la variable de entorno DATABASE_URL).
+- **connect-pg-simple**: Almacenamiento de sesiones para PostgreSQL (disponible para futura autenticación).

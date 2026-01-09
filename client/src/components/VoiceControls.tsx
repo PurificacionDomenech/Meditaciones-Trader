@@ -25,6 +25,7 @@ interface VoiceControlsProps {
   onVolumeChange: (value: number) => void;
   onPauseChange: (value: number) => void;
   onVoiceChange: (value: string) => void;
+  onRestartCurrentSegment?: () => void;
 }
 
 interface GroupedVoices {
@@ -85,6 +86,7 @@ export function VoiceControls({
   onVolumeChange,
   onPauseChange,
   onVoiceChange,
+  onRestartCurrentSegment,
 }: VoiceControlsProps) {
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
   const [presets, setPresets] = useState<NarrationPreset[]>([]);
@@ -92,21 +94,37 @@ export function VoiceControls({
 
   useEffect(() => {
     const loadVoices = () => {
+      if (typeof window === "undefined" || !window.speechSynthesis) return;
       const allVoices = window.speechSynthesis.getVoices();
+      if (allVoices.length === 0) return;
+      
       const spanishVoices = allVoices.filter(v => 
         v.lang.toLowerCase().startsWith("es")
       );
-      setVoices(spanishVoices.length > 0 ? spanishVoices : allVoices.slice(0, 10));
+      setVoices(spanishVoices.length > 0 ? spanishVoices : allVoices);
     };
 
-    loadVoices();
-    window.speechSynthesis.onvoiceschanged = loadVoices;
+    if (typeof window !== "undefined" && window.speechSynthesis) {
+      loadVoices();
+      window.speechSynthesis.onvoiceschanged = loadVoices;
+      
+      const interval = setInterval(() => {
+        if (window.speechSynthesis.getVoices().length > 0) {
+          loadVoices();
+          clearInterval(interval);
+        }
+      }, 100);
+      
+      setTimeout(() => clearInterval(interval), 5000);
+    }
 
     const saved = localStorage.getItem("narrationPresets");
     if (saved) setPresets(JSON.parse(saved));
 
     return () => {
-      window.speechSynthesis.onvoiceschanged = null;
+      if (typeof window !== "undefined" && window.speechSynthesis) {
+        window.speechSynthesis.onvoiceschanged = null;
+      }
     };
   }, []);
 
@@ -172,7 +190,10 @@ export function VoiceControls({
             </div>
             <Slider
               value={[speed]}
-              onValueChange={([v]) => onSpeedChange(v)}
+              onValueChange={([v]) => {
+                onSpeedChange(v);
+                onRestartCurrentSegment?.();
+              }}
               min={0.5}
               max={1.5}
               step={0.05}
@@ -191,7 +212,10 @@ export function VoiceControls({
             </div>
             <Slider
               value={[pitch]}
-              onValueChange={([v]) => onPitchChange(v)}
+              onValueChange={([v]) => {
+                onPitchChange(v);
+                onRestartCurrentSegment?.();
+              }}
               min={0.5}
               max={2}
               step={0.1}
@@ -210,7 +234,10 @@ export function VoiceControls({
             </div>
             <Slider
               value={[volume]}
-              onValueChange={([v]) => onVolumeChange(v)}
+              onValueChange={([v]) => {
+                onVolumeChange(v);
+                onRestartCurrentSegment?.();
+              }}
               min={0}
               max={1}
               step={0.05}
@@ -240,12 +267,17 @@ export function VoiceControls({
         </div>
 
         <div className="space-y-2">
-          <Label className="text-xs text-muted-foreground">Voz</Label>
+          <Label className="text-xs text-muted-foreground">Voz ({voices.length} disponibles)</Label>
           <Select value={selectedVoice} onValueChange={onVoiceChange}>
             <SelectTrigger data-testid="select-voice" className="bg-background/50">
-              <SelectValue placeholder="Selecciona una voz" />
+              <SelectValue placeholder={voices.length === 0 ? "Cargando voces..." : "Selecciona una voz"} />
             </SelectTrigger>
             <SelectContent>
+              {voices.length === 0 && (
+                <div className="px-2 py-3 text-xs text-muted-foreground text-center">
+                  No hay voces disponibles
+                </div>
+              )}
               {groupedVoices.female.length > 0 && (
                 <>
                   <div className="px-2 py-1.5 text-xs font-semibold text-muted-foreground">

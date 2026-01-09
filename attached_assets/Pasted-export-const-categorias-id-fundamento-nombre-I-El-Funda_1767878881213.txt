@@ -1,0 +1,44 @@
+export const categorias = [
+  { id: "fundamento", nombre: "I. El Fundamento Inquebrantable", icon: "Anchor" },
+  { id: "escudo", nombre: "II. El Escudo del Capital", icon: "Shield" },
+  { id: "vision", nombre: "III. La Visión Clara del Mercado", icon: "Eye" },
+  { id: "maestria", nombre: "IV. La Maestría Emocional", icon: "Brain" },
+  { id: "recuperacion", nombre: "V. El Arte de la Recuperación", icon: "RefreshCcw" },
+  { id: "proyeccion", nombre: "VI. La Forja del Éxito", icon: "Sparkles" },
+];
+
+export const meditacionesPredefinidas = [
+  {
+    id: "fundamento-1",
+    titulo: "El Despertar del Trader Consciente",
+    categoria: "I. El Fundamento Inquebrantable",
+    categoriaId: "fundamento",
+    duracion: "8-10 min",
+    texto: "Bienvenido a tu espacio de preparación. El santuario de tu mente antes de que el mercado despierte.\n\nEncuentra tu postura. Firme, pero relajada. Cierra suavemente los ojos.\n\nConecta con tu respiración. Siente cómo el aire entra, llenando tus pulmones, y cómo sale, liberando cualquier residuo de la noche.\n\nNo busques motivación hoy. La motivación es volátil, se apaga. Busca constancia.\n\nBusca la decisión inquebrantable de hacer lo que toca, incluso sin ganas.\n\nImagina tu plan de trading. Claro. Conciso. Inalterable. Visualiza cada paso: tu entrada, tu gestión, tu salida.\n\nNo hay espacio para la improvisación. Solo para la ejecución consciente. Para la disciplina que te forja.\n\nRepite en tu interior: \"Mi disciplina es mi mayor activo. Mi constancia es mi camino. Mi plan es mi guía.\"\n\nSiente la fuerza de esa convicción. No es una emoción. Es una decisión. Una elección diaria.\n\nCuando estés listo, abre los ojos. El mercado espera. Pero tú estás preparado. No por suerte, sino por trabajo."
+  },
+  {
+    id: "fundamento-2",
+    titulo: "El Hábito que Transforma",
+    categoria: "I. El Fundamento Inquebrantable",
+    categoriaId: "fundamento",
+    duracion: "7-9 min",
+    texto: "Hoy nos enfocamos en la fuerza silenciosa que construye imperios: el hábito.\n\nNo la chispa fugaz del arranque, sino el fuego constante de la disciplina diaria.\n\nCierra los ojos. Siente tu respiración. Cada inhalación es un nuevo ladrillo en tu estructura. Cada exhalación es el cemento que une.\n\nPiensa en tu rutina. No en los resultados, sino en las acciones. ¿Revisas tu plan? ¿Estudias tus gráficos? ¿Respetas tus horarios?\n\nCada pequeña acción repetida es un acto de poder. Es la constancia que te hace imparable.\n\nEl trader que solo actúa cuando está motivado, desaparece. Pero el que se construye con constancia, perdura como la lluvia o como el sol.\n\nVisualiza cómo cada día, al seguir tu rutina, te conviertes en una versión más fuerte. No hay atajos. Solo el camino.\n\nRepite en tu interior: \"Soy la suma de mis hábitos. Elijo la constancia. Construyo mi éxito día a día.\"\n\nSiente la solidez de esta verdad. La paz que viene de saber que estás en el camino correcto, sin depender de cómo te sientes.\n\nCuando estés listo, abre los ojos. Y haz lo que sabes que tienes que hacer. Con constancia."
+  },
+  {
+    id: "fundamento-3",
+    titulo: "La Visión del Guerrero",
+    categoria: "I. El Fundamento Inquebrantable",
+    categoriaId: "fundamento",
+    duracion: "10-12 min",
+    texto: "El mercado te grita. Te tienta con movimientos rápidos. Te asusta con caídas repentinas.\n\nPero tú tienes una visión. Una visión que va más allá del gráfico de un minuto.\n\nCierra los ojos. Respira profundamente. Siente cómo te elevas por encima del ruido inmediato.\n\nEste camino no es un sprint. Es una maratón. Cada operación es solo un paso. Cada día, un entrenamiento.\n\nNo le des el control de tu crecimiento a un estado emocional momentáneo. Mantén el foco en el horizonte.\n\nVisualiza la paciencia. La capacidad de esperar tu momento. De dejar que tu plan se desarrolle. De confiar en el proceso.\n\nEl trader maduro no presume de puntos. Observa. Refina. Aguanta sin romperse.\n\nRepite en tu interior: \"Mi visión es clara. Mi paciencia es infinita. Construyo un legado, no una ganancia rápida.\"\n\nSiente la calma que te da esta perspectiva. La libertad de no estar atado a cada tick. La fuerza de tu propósito.\n\nCuando estés listo, abre los ojos. Vuelve al presente, pero con la sabiduría de quien sabe a dónde va."
+  },
+  {
+    id: "fundamento-4",
+    titulo: "Anclando la Constancia",
+    categoria: "I. El Fundamento Inquebrantable",
+    categoriaId: "fundamento",
+    duracion: "6-8 min",
+    texto: "La jornada termina. Es momento de soltar. De dejar ir lo que fue, para preparar lo que será.\n\nAdopta una postura cómoda. Permite que tu cuerpo se relaje profundamente.\n\nRecorre el día que termina. Sin juicio. Solo observación. ¿Fuiste leal a tu sistema? ¿Cumpliste tu plan?\n\nSi hubo errores, obsérvalos como lecciones. No como fracasos. Cada error es una oportunidad para afinar.\n\nRespira profundamente. Con cada exhalación, libera cualquier apego a los resultados de hoy. A las ganancias. A las pérdidas.\n\nNo importa si hoy no te apetecía. Lo que importa es que estuviste ahí. Que cumpliste.\n\nVisualiza el día de mañana. Te ves despertando con claridad. Con la misma constancia. Con la misma disciplina.\n\nRepite en tu interior: \"Cada día construyo mi mejor versión. Cada noche suelto el pasado. Mañana, la constancia me entrena.\"\n\nSiente la paz de la preparación. La certeza de tu compromiso. El descanso merecido.\n\nCuando estés listo, abre los ojos. Estás listo para un descanso reparador. Y para un nuevo día de constancia."
+  }
+];
+```"

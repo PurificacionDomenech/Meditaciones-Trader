@@ -31,6 +31,7 @@ import { cn } from "@/lib/utils";
 
 import { TraderMissions } from "@/components/TraderMissions";
 import tradingDesdeCeroImg from "@assets/meditation_backgrounds/tradingDesdeCero.png";
+import cafeConRafaImg from "@assets/image_1767882571491.png";
 
 function cleanText(text: string): string {
   return text.replace(/\[.*?\]/g, "").replace(/\(.*?\)/g, "").trim();
@@ -58,12 +59,14 @@ export default function Home() {
   const [volume, setVolume] = useState(0.9);
   const [pauseBetweenPhrases, setPauseBetweenPhrases] = useState(3);
   const [selectedVoice, setSelectedVoice] = useState("");
+  const [completedMissions, setCompletedMissions] = useState<{missionDay: number}[]>([]);
   
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
-  const segmentsRef = useRef<{ text: string; hasLineBreakAfter: boolean }[]>([]);
+  const segmentsRef = useRef<{ text: string; isDeepPauseAfter: boolean }[]>([]);
   const currentIndexRef = useRef(0);
   const isStoppedRef = useRef(false);
   const isPlayingRef = useRef(false);
+  const isCancellingRef = useRef(false);
   const ambientSoundsRef = useRef<AmbientSoundsRef>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -73,7 +76,15 @@ export default function Home() {
       setCustomMeditations(JSON.parse(saved));
     }
 
+    const savedMissions = localStorage.getItem("traderEntries");
+    if (savedMissions) {
+      const entries = JSON.parse(savedMissions);
+      const completed = entries.filter((e: {completed: boolean}) => e.completed);
+      setCompletedMissions(completed);
+    }
+
     const loadVoice = () => {
+      if (typeof window === "undefined" || !window.speechSynthesis) return;
       const voices = window.speechSynthesis.getVoices();
       if (voices.length === 0) return;
       
@@ -86,11 +97,15 @@ export default function Home() {
       }
     };
 
-    loadVoice();
-    window.speechSynthesis.onvoiceschanged = loadVoice;
+    if (typeof window !== "undefined" && window.speechSynthesis) {
+      loadVoice();
+      window.speechSynthesis.onvoiceschanged = loadVoice;
+    }
 
     return () => {
-      window.speechSynthesis.cancel();
+      if (typeof window !== "undefined" && window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+      }
       if (timerRef.current) clearInterval(timerRef.current);
     };
   }, [selectedVoice]);
@@ -116,17 +131,21 @@ export default function Home() {
 
   const parseTextIntoSegments = useCallback((text: string) => {
     const cleanedText = cleanText(text);
-    const lines = cleanedText.split("\n").filter(line => line.trim());
-    const segments: { text: string; hasLineBreakAfter: boolean }[] = [];
+    // Split by double line breaks (deep pauses)
+    const paragraphs = cleanedText.split(/\n\s*\n/);
+    const segments: { text: string; isDeepPauseAfter: boolean }[] = [];
 
-    lines.forEach((line, lineIndex) => {
-      const sentences = line.split(/(?<=[.!?…])\s+/).filter(s => s.trim());
-      sentences.forEach((sentence, sentenceIndex) => {
-        const isLastSentenceInLine = sentenceIndex === sentences.length - 1;
-        const isLastLine = lineIndex === lines.length - 1;
+    paragraphs.forEach((paragraph, pIndex) => {
+      // Split each paragraph into sentences or single line breaks (short pauses)
+      const sentences = paragraph.split(/(?<=[.!?…])\s+|\n/).filter(s => s.trim());
+      
+      sentences.forEach((sentence, sIndex) => {
+        const isLastInParagraph = sIndex === sentences.length - 1;
+        const isLastParagraph = pIndex === paragraphs.length - 1;
+        
         segments.push({
           text: sentence.trim(),
-          hasLineBreakAfter: isLastSentenceInLine && !isLastLine,
+          isDeepPauseAfter: isLastInParagraph && !isLastParagraph
         });
       });
     });
@@ -135,6 +154,8 @@ export default function Home() {
   }, []);
 
   const speakSegment = useCallback((index: number) => {
+    if (typeof window === "undefined" || !window.speechSynthesis) return;
+    
     if (isStoppedRef.current || index >= segmentsRef.current.length) {
       setIsPlaying(false);
       isPlayingRef.current = false;
@@ -154,12 +175,29 @@ export default function Home() {
     utterance.pitch = pitch;
     utterance.volume = volume;
 
+    // Direct reference to the utterance to allow live updates
+    utteranceRef.current = utterance;
+
     utterance.onend = () => {
       if (isStoppedRef.current) return;
       
-      const pauseDuration = segment.hasLineBreakAfter
-        ? (pauseBetweenPhrases + 2) * 1000
-        : pauseBetweenPhrases * 1000;
+      const isLastSegment = index === segmentsRef.current.length - 1;
+      
+      if (isLastSegment) {
+        setIsPlaying(false);
+        isPlayingRef.current = false;
+        setIsPaused(false);
+        setCurrentTime(totalDuration);
+        toast({
+          title: "Meditación completada",
+          description: "Has terminado tu sesión. Que tengas un buen trading.",
+        });
+        return;
+      }
+      
+      const pauseDuration = segment.isDeepPauseAfter
+        ? (pauseBetweenPhrases + 3) * 1000 // Deep pause (\n\n)
+        : pauseBetweenPhrases * 1000;      // Normal pause (\n or punctuation)
 
       setTimeout(() => {
         if (!isStoppedRef.current && isPlayingRef.current) {
@@ -170,13 +208,12 @@ export default function Home() {
     };
 
     utterance.onerror = (event) => {
+      if (isCancellingRef.current) {
+        isCancellingRef.current = false;
+        return;
+      }
       if (event.error !== "canceled" && event.error !== "interrupted") {
         console.error("Speech error:", event.error);
-        setTimeout(() => {
-          if (!isStoppedRef.current && isPlayingRef.current) {
-            speakSegment(index);
-          }
-        }, 500);
       }
     };
 
@@ -197,11 +234,15 @@ export default function Home() {
     }
 
     // Cancel any existing speech
-    window.speechSynthesis.cancel();
+    if (typeof window !== "undefined" && window.speechSynthesis) {
+      isCancellingRef.current = true;
+      window.speechSynthesis.cancel();
+    }
     
     // Set refs immediately before calling speakSegment
     isStoppedRef.current = false;
     isPlayingRef.current = true;
+    isCancellingRef.current = false;
 
     if (isPaused) {
       setIsPaused(false);
@@ -222,7 +263,7 @@ export default function Home() {
   }, [selectedMeditation, isPaused, parseTextIntoSegments, speakSegment]);
 
   const handlePause = useCallback(() => {
-    if (window.speechSynthesis.speaking) {
+    if (typeof window !== "undefined" && window.speechSynthesis && window.speechSynthesis.speaking) {
       window.speechSynthesis.pause();
       isPlayingRef.current = false;
       setIsPaused(true);
@@ -231,7 +272,7 @@ export default function Home() {
   }, []);
 
   const handleResume = useCallback(() => {
-    if (window.speechSynthesis.paused) {
+    if (typeof window !== "undefined" && window.speechSynthesis && window.speechSynthesis.paused) {
       window.speechSynthesis.resume();
       setIsPaused(false);
       setIsPlaying(true);
@@ -244,7 +285,10 @@ export default function Home() {
   const handleStop = useCallback(() => {
     isStoppedRef.current = true;
     isPlayingRef.current = false;
-    window.speechSynthesis.cancel();
+    isCancellingRef.current = true;
+    if (typeof window !== "undefined" && window.speechSynthesis) {
+      window.speechSynthesis.cancel();
+    }
     currentIndexRef.current = 0;
     segmentsRef.current = [];
     setIsPlaying(false);
@@ -253,16 +297,28 @@ export default function Home() {
     ambientSoundsRef.current?.stopAll();
   }, []);
 
+  const handleRestartCurrentSegment = useCallback(() => {
+    if (!isPlayingRef.current || typeof window === "undefined" || !window.speechSynthesis) return;
+    
+    isCancellingRef.current = true;
+    window.speechSynthesis.cancel();
+    
+    setTimeout(() => {
+      isCancellingRef.current = false;
+      if (isPlayingRef.current && !isStoppedRef.current) {
+        speakSegment(currentIndexRef.current);
+      }
+    }, 100);
+  }, [speakSegment]);
+
   const handleSelectMeditation = useCallback((meditation: Meditacion) => {
-    if (isPlaying) {
-      handleStop();
-    }
+    handleStop();
     setSelectedMeditation(meditation);
     const durationMatch = meditation.duracion.match(/(\d+)/);
     if (durationMatch) {
       setTotalDuration(parseInt(durationMatch[1]) * 60);
     }
-  }, [isPlaying, handleStop]);
+  }, [handleStop]);
 
   const handleCreateMeditation = useCallback((data: InsertMeditacion) => {
     if (editingMeditation) {
@@ -309,26 +365,30 @@ export default function Home() {
     return meditacionesPredefinidas.filter(m => m.categoriaId === categoryId);
   };
 
-  const categoryBackgrounds: Record<string, string> = {
-    "estres": "from-amber-900/40 via-yellow-900/30 to-amber-950/40",
-    "concentracion": "from-amber-800/50 via-amber-900/40 to-yellow-950/40",
-    "impulsos": "from-amber-900/40 via-orange-900/30 to-amber-950/40",
-    "resiliencia": "from-yellow-900/40 via-amber-900/30 to-amber-950/40",
-    "visualizacion": "from-amber-800/40 via-yellow-900/30 to-amber-950/40",
-    "intuicion": "from-amber-900/40 via-amber-800/30 to-yellow-950/40",
-  };
+
 
   const meditationImages: Record<string, string> = {
-    "estres": "/src/assets/meditation_backgrounds/aa.png",
-    "concentracion": "/src/assets/meditation_backgrounds/arbol.png",
-    "impulsos": "/src/assets/meditation_backgrounds/Captura de pantalla 2025-12-17 202508.png",
-    "resiliencia": "/src/assets/meditation_backgrounds/Captura de pantalla 2026-01-07 190813.png",
-    "visualizacion": "/src/assets/meditation_backgrounds/Captura de pantalla 2026-01-07 190844.png",
-    "intuicion": "/src/assets/meditation_backgrounds/Captura de pantalla 2026-01-07 191053.png",
+    "fundamento": "/src/assets/meditation_backgrounds/aa.png",
+    "escudo": "/src/assets/meditation_backgrounds/arbol.png",
+    "vision": "/src/assets/meditation_backgrounds/Captura de pantalla 2025-12-17 202508.png",
+    "maestria": "/src/assets/meditation_backgrounds/Captura de pantalla 2026-01-07 190813.png",
+    "recuperacion": "/src/assets/meditation_backgrounds/Captura de pantalla 2026-01-07 190844.png",
+    "proyeccion": "/src/assets/meditation_backgrounds/Captura de pantalla 2026-01-07 191053.png",
+    "cafe": cafeConRafaImg,
+  };
+
+  const categoryBackgrounds: Record<string, string> = {
+    "fundamento": "from-amber-900/40 via-yellow-900/30 to-amber-950/40",
+    "escudo": "from-amber-800/50 via-amber-900/40 to-yellow-950/40",
+    "vision": "from-amber-900/40 via-orange-900/30 to-amber-950/40",
+    "maestria": "from-yellow-900/40 via-amber-900/30 to-amber-950/40",
+    "recuperacion": "from-amber-800/40 via-yellow-900/30 to-amber-950/40",
+    "proyeccion": "from-amber-900/40 via-amber-800/30 to-yellow-950/40",
+    "cafe": "from-amber-900/40 via-stone-900/30 to-amber-950/40",
   };
 
   const currentBgImage = selectedMeditation 
-    ? (meditationImages[selectedMeditation.categoriaId] || meditationImages["estres"])
+    ? (meditationImages[selectedMeditation.categoriaId] || meditationImages["fundamento"])
     : "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80&w=1000";
 
   const renderHomeTab = () => (
@@ -360,10 +420,10 @@ export default function Home() {
             
             <div className="space-y-2">
               <h3 className="text-3xl font-bold text-white tracking-tight">
-                {selectedMeditation?.titulo || "Deep Sleep Journey"}
+                {selectedMeditation?.titulo || "Selecciona una Meditación"}
               </h3>
               <p className="text-lg text-white/60">
-                {selectedMeditation?.descripcion || "Relax your mind and body for a restful night."}
+                {selectedMeditation?.descripcion || "Comienza tu camino hacia la maestría en el trading."}
               </p>
             </div>
 
@@ -535,6 +595,19 @@ export default function Home() {
           <Settings className="h-5 w-5" />
         </Button>
       </div>
+      <VoiceControls
+        speed={speed}
+        pitch={pitch}
+        volume={volume}
+        pauseBetweenPhrases={pauseBetweenPhrases}
+        selectedVoice={selectedVoice}
+        onSpeedChange={setSpeed}
+        onPitchChange={setPitch}
+        onVolumeChange={setVolume}
+        onPauseChange={setPauseBetweenPhrases}
+        onVoiceChange={setSelectedVoice}
+        onRestartCurrentSegment={handleRestartCurrentSegment}
+      />
       <div className="p-4 space-y-6">
         {categorias.map(cat => {
           const meditations = getMeditationsByCategory(cat.id);
@@ -651,6 +724,49 @@ export default function Home() {
           </Avatar>
           <h2 className="text-xl font-semibold text-white">Trader</h2>
           <p className="text-white/50">Meditador desde 2024</p>
+        </div>
+
+        <div className="grid grid-cols-3 gap-3">
+          <div className="glass-dark p-3 rounded-xl text-center">
+            <p className="text-2xl font-bold text-amber-400">{completedMissions.length}</p>
+            <p className="text-[10px] text-white/40 uppercase tracking-widest">Misiones</p>
+          </div>
+          <div className="glass-dark p-3 rounded-xl text-center">
+            <p className="text-2xl font-bold text-amber-400">{customMeditations.length}</p>
+            <p className="text-[10px] text-white/40 uppercase tracking-widest">Creadas</p>
+          </div>
+          <div className="glass-dark p-3 rounded-xl text-center">
+            <p className="text-2xl font-bold text-amber-400">{Math.floor(completedMissions.length / 7)}</p>
+            <p className="text-[10px] text-white/40 uppercase tracking-widest">Semanas</p>
+          </div>
+        </div>
+
+        <div className="space-y-3">
+          <h3 className="text-sm font-semibold text-white/70 uppercase tracking-widest px-2 flex items-center gap-2">
+            <Trophy className="h-4 w-4 text-amber-500" />
+            Copas Ganadas
+          </h3>
+          {completedMissions.length > 0 ? (
+            <div className="grid grid-cols-5 gap-3">
+              {completedMissions.map((mission, index) => (
+                <div 
+                  key={`trophy-${mission.missionDay}-${index}`} 
+                  className="flex flex-col items-center gap-1"
+                  data-testid={`trophy-${mission.missionDay}`}
+                >
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-b from-amber-300 to-amber-600 flex items-center justify-center shadow-lg shadow-amber-500/30 border-2 border-amber-200/30">
+                    <Trophy className="h-5 w-5 text-white drop-shadow" />
+                  </div>
+                  <span className="text-[10px] text-white/50 font-medium">Día {mission.missionDay}</span>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="glass-dark rounded-xl p-6 text-center">
+              <Trophy className="h-8 w-8 text-white/20 mx-auto mb-2" />
+              <p className="text-sm text-white/40">Completa tu primera misión para ganar una copa</p>
+            </div>
+          )}
         </div>
 
         <div className="space-y-2">
@@ -794,6 +910,7 @@ export default function Home() {
             onVolumeChange={setVolume}
             onPauseChange={setPauseBetweenPhrases}
             onVoiceChange={setSelectedVoice}
+            onRestartCurrentSegment={handleRestartCurrentSegment}
           />
         </div>
       </div>
