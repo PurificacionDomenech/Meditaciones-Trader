@@ -159,46 +159,50 @@ export function TraderMissions() {
               </Button>
             </div>
 
-            <div className="bg-blue-500/10 border border-blue-500/20 rounded-2xl p-5">
-              <h3 className="text-blue-400 font-bold text-sm uppercase mb-2">Objetivo</h3>
-              <p className="text-white/80 leading-snug">{mission.objetivo}</p>
+            <div className="bg-amber-500/10 border border-amber-500/20 rounded-2xl p-6 relative">
+              <Sparkles className="absolute -top-3 -right-3 h-8 w-8 text-amber-500/20" />
+              <h3 className="text-amber-400 font-bold text-sm uppercase mb-4 flex items-center gap-2">
+                <Target className="h-4 w-4" />
+                La Misión
+              </h3>
+              <p className="text-white/90 leading-relaxed text-lg whitespace-pre-line">{mission.texto}</p>
+              
+              {mission.cita && (
+                <div className="mt-6 pt-6 border-t border-amber-500/10 italic text-white/60 text-sm text-center">
+                  "{mission.cita}"
+                </div>
+              )}
             </div>
 
-            <div className="bg-amber-500/10 border border-amber-500/20 rounded-2xl p-5">
-              <div className="flex items-start gap-3">
-                <div className="h-10 w-10 rounded-full bg-amber-500/20 flex items-center justify-center shrink-0">
-                  <Target className="h-6 w-6 text-amber-400" />
-                </div>
-                <div>
-                  <h3 className="text-amber-400 font-bold text-sm uppercase mb-2">Reto del Día</h3>
-                  <p className="text-white/80 leading-relaxed whitespace-pre-line">{mission.reto}</p>
+            {mission.aplicacionCotidiana && (
+              <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-2xl p-5">
+                <div className="flex items-start gap-3">
+                  <div className="h-10 w-10 rounded-full bg-emerald-500/20 flex items-center justify-center shrink-0">
+                    <Lightbulb className="h-6 w-6 text-emerald-400" />
+                  </div>
+                  <div>
+                    <h3 className="text-emerald-400 font-bold text-sm uppercase mb-2">Aplicación Cotidiana</h3>
+                    <p className="text-white/80 leading-relaxed">{mission.aplicacionCotidiana}</p>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
 
-            <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-2xl p-5">
-              <div className="flex items-start gap-3">
-                <div className="h-10 w-10 rounded-full bg-emerald-500/20 flex items-center justify-center shrink-0">
-                  <Lightbulb className="h-6 w-6 text-emerald-400" />
-                </div>
-                <div>
-                  <h3 className="text-emerald-400 font-bold text-sm uppercase mb-2">Por Qué Funciona</h3>
-                  <p className="text-white/80 leading-relaxed">{mission.porQueFunciona}</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-purple-500/10 border border-purple-500/20 rounded-2xl p-5">
-              <div className="flex items-start gap-3">
-                <div className="h-10 w-10 rounded-full bg-purple-500/20 flex items-center justify-center shrink-0">
-                  <Sparkles className="h-6 w-6 text-purple-400" />
-                </div>
-                <div>
-                  <h3 className="text-purple-400 font-bold text-sm uppercase mb-2">Aplicación Cotidiana</h3>
-                  <p className="text-white/80 leading-relaxed">{mission.aplicacionCotidiana}</p>
+            {mission.meditacionRecomendada && (
+              <div className="bg-purple-500/10 border border-purple-500/20 rounded-2xl p-5">
+                <div className="flex items-start gap-3">
+                  <div className="h-10 w-10 rounded-full bg-purple-500/20 flex items-center justify-center shrink-0">
+                    <Sparkles className="h-6 w-6 text-purple-400" />
+                  </div>
+                  <div>
+                    <h3 className="text-purple-400 font-bold text-sm uppercase mb-2">Meditación Recomendada</h3>
+                    <p className="text-white/80 leading-relaxed">
+                      Se recomienda realizar la sesión: <span className="text-purple-300 font-semibold">{mission.meditacionRecomendada}</span>
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
 
             <div className="space-y-4 pt-4">
               <Label className="text-amber-500/80 uppercase tracking-widest text-[10px] font-bold">
