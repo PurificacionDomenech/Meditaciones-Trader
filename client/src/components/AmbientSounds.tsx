@@ -14,16 +14,25 @@ import {
 import { Heart, Trash2, Waves, Wind, CloudRain, Bird, Flame, Music, Bell, Sparkles, Volume2 } from "lucide-react";
 import type { SoundPreset, AmbientSound } from "@shared/schema";
 
+import meditationMp3 from "@assets/custom_sounds/Musica/meditation.mp3";
+import alphaMp3 from "@assets/custom_sounds/Musica/alpha-8-to-12-hz-healing-frequencies-222945.mp3";
+import hz333Mp3 from "@assets/custom_sounds/Musica/333-hz.mp3";
+import pajarosMp3 from "@assets/custom_sounds/pajaros.mp3";
+import lluviaMp3 from "@assets/custom_sounds/lluvia.mp3";
+import gongMp3 from "@assets/custom_sounds/Gong.mp3";
+import campanillasMp3 from "@assets/custom_sounds/campanillas.mp3";
+import campanillaMp3 from "@assets/custom_sounds/campanilla.mp3";
+
 const ambientSounds: AmbientSound[] = [
-  { id: "custom-campanilla", nombre: "Campanilla", icon: "Bell", category: "oriental", url: "/src/assets/custom_sounds/campanilla.mp3" },
-  { id: "custom-campanillas", nombre: "Campanillas", icon: "Bell", category: "oriental", url: "/src/assets/custom_sounds/campanillas.mp3" },
-  { id: "custom-gong", nombre: "Gong Personalizado", icon: "Music", category: "oriental", url: "/src/assets/custom_sounds/Gong.mp3" },
-  { id: "custom-lluvia", nombre: "Lluvia Real", icon: "CloudRain", category: "natural", url: "/src/assets/custom_sounds/lluvia.mp3" },
-  { id: "custom-pajaros", nombre: "Pájaros Bosque", icon: "Bird", category: "natural", url: "/src/assets/custom_sounds/pajaros.mp3" },
+  { id: "custom-campanilla", nombre: "Campanilla", icon: "Bell", category: "oriental", url: campanillaMp3 },
+  { id: "custom-campanillas", nombre: "Campanillas", icon: "Bell", category: "oriental", url: campanillasMp3 },
+  { id: "custom-gong", nombre: "Gong Personalizado", icon: "Music", category: "oriental", url: gongMp3 },
+  { id: "custom-lluvia", nombre: "Lluvia Real", icon: "CloudRain", category: "natural", url: lluviaMp3 },
+  { id: "custom-pajaros", nombre: "Pájaros Bosque", icon: "Bird", category: "natural", url: pajarosMp3 },
   { id: "metronome", nombre: "Metrónomo", icon: "Music", category: "rhythm" },
-  { id: "music-333", nombre: "333 Hz Healing", icon: "Music", category: "relaxing", url: "/src/assets/custom_sounds/Musica/333-hz.mp3" },
-  { id: "music-alpha", nombre: "Alpha Waves", icon: "Music", category: "relaxing", url: "/src/assets/custom_sounds/Musica/alpha-8-to-12-hz-healing-frequencies-222945.mp3" },
-  { id: "music-meditation", nombre: "Meditación Zen", icon: "Music", category: "relaxing", url: "/src/assets/custom_sounds/Musica/meditation.mp3" },
+  { id: "music-333", nombre: "333 Hz Healing", icon: "Music", category: "relaxing", url: hz333Mp3 },
+  { id: "music-alpha", nombre: "Alpha Waves", icon: "Music", category: "relaxing", url: alphaMp3 },
+  { id: "music-meditation", nombre: "Meditación Zen", icon: "Music", category: "relaxing", url: meditationMp3 },
 ];
 
 const iconMap: Record<string, typeof Bell> = {
@@ -51,7 +60,10 @@ class AudioGenerator {
 
   private getContext(): AudioContext {
     if (!this.audioContext) {
-      this.audioContext = new AudioContext();
+      this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+    }
+    if (this.audioContext.state === 'suspended') {
+      this.audioContext.resume();
     }
     return this.audioContext;
   }
@@ -378,25 +390,39 @@ class AudioGenerator {
     
     const soundData = ambientSounds.find(s => s.id === id);
     if (soundData?.url) {
-      const ctx = this.getContext();
-      const audio = new Audio();
-      audio.src = soundData.url;
-      audio.crossOrigin = "anonymous";
-      
-      const source = ctx.createMediaElementSource(audio);
-      const gainNode = ctx.createGain();
+      // Use simple Audio element for better mobile compatibility
+      const audio = new Audio(soundData.url);
       
       let multiplier = 0.3;
-      if (id.startsWith("music-")) multiplier = 0.15;
+      if (id.startsWith("music-") || id.startsWith("custom-")) multiplier = 0.15;
       
-      gainNode.gain.value = volume * multiplier;
-      source.connect(gainNode);
-      gainNode.connect(ctx.destination);
-      
+      audio.volume = volume * multiplier;
       audio.loop = true;
-      audio.play().catch(err => console.error("Error playing audio:", err));
+      audio.preload = "auto";
       
-      this.oscillators.set(id, { nodes: [source as any], gainNode, audio } as any);
+      // Handle play with promise for mobile browsers
+      const playPromise = audio.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            console.log("Audio playing:", id);
+          })
+          .catch(err => {
+            console.error("Error playing audio:", err, "URL:", soundData.url);
+            // If it's a mobile gesture issue, wait for next interaction
+            // or try a direct play without multiplier first as fallback
+            setTimeout(() => {
+              audio.play().catch(e => console.error("Retry failed:", e));
+            }, 500);
+          });
+      }
+      
+      // Create a dummy gain node for volume control compatibility
+      const ctx = this.getContext();
+      const gainNode = ctx.createGain();
+      gainNode.gain.value = volume * multiplier;
+      
+      this.oscillators.set(id, { nodes: [], gainNode, audio } as any);
       return;
     }
 
@@ -472,10 +498,15 @@ class AudioGenerator {
       else if (id === "ocean") multiplier = 0.35;
       else if (id === "fire") multiplier = 0.15;
       else if (id === "nature" || id === "birds") multiplier = 0.1;
-      else if (id.startsWith("music-")) multiplier = 0.15;
+      else if (id.startsWith("music-") || id.startsWith("custom-")) multiplier = 0.15;
       else if (id === "gong") multiplier = 0.5;
       
-      sound.gainNode.gain.setTargetAtTime(volume * multiplier, this.getContext().currentTime, 0.1);
+      // Handle Audio element volume directly
+      if ((sound as any).audio) {
+        (sound as any).audio.volume = volume * multiplier;
+      } else {
+        sound.gainNode.gain.setTargetAtTime(volume * multiplier, this.getContext().currentTime, 0.1);
+      }
     }
   }
 

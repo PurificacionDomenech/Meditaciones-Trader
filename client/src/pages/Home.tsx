@@ -17,7 +17,8 @@ import {
   Settings,
   ChevronRight,
   Volume2,
-  Mic
+  Mic,
+  Star
 } from "lucide-react";
 import { MeditationPlayer } from "@/components/MeditationPlayer";
 import { VoiceControls } from "@/components/VoiceControls";
@@ -86,28 +87,41 @@ export default function Home() {
     const loadVoice = () => {
       if (typeof window === "undefined" || !window.speechSynthesis) return;
       const voices = window.speechSynthesis.getVoices();
-      if (voices.length === 0) return;
       
-      const spanishVoice = voices.find(v => v.lang.toLowerCase().includes("es"));
-      const googleSpanish = voices.find(v => v.name.includes("Google") && v.lang.includes("es"));
-      const finalVoice = googleSpanish || spanishVoice || voices[0];
-      
-      if (finalVoice && !selectedVoice) {
-        setSelectedVoice(finalVoice.voiceURI);
+      // En móviles, getVoices() puede tardar o devolver 0 al inicio
+      // No retornamos si es 0, dejamos que onvoiceschanged vuelva a disparar
+      if (voices.length > 0) {
+        const spanishVoice = voices.find(v => v.lang.toLowerCase().includes("es"));
+        const googleSpanish = voices.find(v => v.name.includes("Google") && v.lang.includes("es"));
+        const finalVoice = googleSpanish || spanishVoice || voices[0];
+        
+        if (finalVoice && !selectedVoice) {
+          setSelectedVoice(finalVoice.voiceURI);
+        }
       }
     };
 
     if (typeof window !== "undefined" && window.speechSynthesis) {
       loadVoice();
       window.speechSynthesis.onvoiceschanged = loadVoice;
-    }
+      
+      // Polling para navegadores que no disparan onvoiceschanged (común en móviles)
+      const voiceInterval = setInterval(() => {
+        const voices = window.speechSynthesis.getVoices();
+        if (voices.length > 0) {
+          loadVoice();
+          clearInterval(voiceInterval);
+        }
+      }, 500);
 
-    return () => {
-      if (typeof window !== "undefined" && window.speechSynthesis) {
-        window.speechSynthesis.cancel();
-      }
-      if (timerRef.current) clearInterval(timerRef.current);
-    };
+      return () => {
+        clearInterval(voiceInterval);
+        if (typeof window !== "undefined" && window.speechSynthesis) {
+          window.speechSynthesis.cancel();
+        }
+        if (timerRef.current) clearInterval(timerRef.current);
+      };
+    }
   }, [selectedVoice]);
 
   useEffect(() => {
@@ -165,18 +179,22 @@ export default function Home() {
 
     const segment = segmentsRef.current[index];
     const utterance = new SpeechSynthesisUtterance(segment.text);
+    
+    // Force reset and initialization for production compatibility
+    if (window.speechSynthesis.speaking) {
+      window.speechSynthesis.cancel();
+    }
+    
     utteranceRef.current = utterance;
 
     const voices = window.speechSynthesis.getVoices();
     const voice = voices.find(v => v.voiceURI === selectedVoice);
     if (voice) utterance.voice = voice;
 
+    utterance.lang = "es-ES";
     utterance.rate = speed;
     utterance.pitch = pitch;
     utterance.volume = volume;
-
-    // Direct reference to the utterance to allow live updates
-    utteranceRef.current = utterance;
 
     utterance.onend = () => {
       if (isStoppedRef.current) return;
@@ -221,6 +239,25 @@ export default function Home() {
     window.speechSynthesis.speak(utterance);
   }, [speed, pitch, volume, pauseBetweenPhrases, selectedVoice]);
 
+  const initializeSpeechSynthesis = useCallback(() => {
+    if (typeof window === "undefined" || !window.speechSynthesis) return;
+    
+    // Force load voices (required for some browsers)
+    const voices = window.speechSynthesis.getVoices();
+    if (voices.length === 0) {
+      // Voices not loaded yet, wait for them
+      window.speechSynthesis.onvoiceschanged = () => {
+        window.speechSynthesis.getVoices();
+      };
+    }
+    
+    // Warm up speech synthesis with a silent utterance (mobile browsers)
+    const warmup = new SpeechSynthesisUtterance("");
+    warmup.volume = 0;
+    window.speechSynthesis.speak(warmup);
+    window.speechSynthesis.cancel();
+  }, []);
+
   const handlePlay = useCallback(() => {
     let currentMeditation = selectedMeditation;
     
@@ -232,6 +269,9 @@ export default function Home() {
         setTotalDuration(parseInt(durationMatch[1]) * 60);
       }
     }
+
+    // Initialize speech synthesis on user gesture (required for mobile)
+    initializeSpeechSynthesis();
 
     // Cancel any existing speech
     if (typeof window !== "undefined" && window.speechSynthesis) {
@@ -258,9 +298,9 @@ export default function Home() {
       // Small delay after cancel to ensure it takes effect
       setTimeout(() => {
         speakSegment(0);
-      }, 50);
+      }, 100);
     }
-  }, [selectedMeditation, isPaused, parseTextIntoSegments, speakSegment]);
+  }, [selectedMeditation, isPaused, parseTextIntoSegments, speakSegment, initializeSpeechSynthesis]);
 
   const handlePause = useCallback(() => {
     if (typeof window !== "undefined" && window.speechSynthesis && window.speechSynthesis.speaking) {
@@ -704,100 +744,148 @@ export default function Home() {
         <h2 className="text-xl font-semibold text-white">Misiones Trader</h2>
       </div>
       <div className="p-4">
-        <TraderMissions />
+        <TraderMissions 
+          onSelectMeditation={(med) => {
+            handleSelectMeditation(med);
+            setActiveTab("inicio");
+          }}
+          onPlay={() => {
+            setTimeout(handlePlay, 100);
+          }}
+        />
       </div>
     </div>
   );
 
-  const renderProfileTab = () => (
-    <div className="flex-1 overflow-y-auto pb-24 scrollbar-hide">
-      <div className="sticky top-0 z-40 bg-black/80 backdrop-blur-md px-4 py-4 border-b border-white/5">
-        <h2 className="text-xl font-semibold text-white">Perfil</h2>
-      </div>
-      <div className="p-4 space-y-6">
-        <div className="flex flex-col items-center text-center py-6">
-          <Avatar className="h-20 w-20 border-4 border-amber-500/30 mb-4">
-            <AvatarImage src="" />
-            <AvatarFallback className="bg-gradient-to-br from-amber-600 to-amber-800 text-white text-2xl">
-              <User className="h-10 w-10" />
-            </AvatarFallback>
-          </Avatar>
-          <h2 className="text-xl font-semibold text-white">Trader</h2>
-          <p className="text-white/50">Meditador desde 2024</p>
-        </div>
+  const renderProfileTab = () => {
+    const savedTrophies = localStorage.getItem("traderTrophies");
+    const trophies = savedTrophies ? JSON.parse(savedTrophies) : { bronze: false, silver: false, gold: false, platinum: false, diamond: false };
+    const completedDays = completedMissions.length;
 
-        <div className="grid grid-cols-3 gap-3">
-          <div className="glass-dark p-3 rounded-xl text-center">
-            <p className="text-2xl font-bold text-amber-400">{completedMissions.length}</p>
-            <p className="text-[10px] text-white/40 uppercase tracking-widest">Misiones</p>
-          </div>
-          <div className="glass-dark p-3 rounded-xl text-center">
-            <p className="text-2xl font-bold text-amber-400">{customMeditations.length}</p>
-            <p className="text-[10px] text-white/40 uppercase tracking-widest">Creadas</p>
-          </div>
-          <div className="glass-dark p-3 rounded-xl text-center">
-            <p className="text-2xl font-bold text-amber-400">{Math.floor(completedMissions.length / 7)}</p>
-            <p className="text-[10px] text-white/40 uppercase tracking-widest">Semanas</p>
-          </div>
+    return (
+      <div className="flex-1 overflow-y-auto pb-24 scrollbar-hide">
+        <div className="sticky top-0 z-40 bg-black/80 backdrop-blur-md px-4 py-4 border-b border-white/5">
+          <h2 className="text-xl font-semibold text-white">Perfil</h2>
         </div>
-
-        <div className="space-y-3">
-          <h3 className="text-sm font-semibold text-white/70 uppercase tracking-widest px-2 flex items-center gap-2">
-            <Trophy className="h-4 w-4 text-amber-500" />
-            Copas Ganadas
-          </h3>
-          {completedMissions.length > 0 ? (
-            <div className="grid grid-cols-5 gap-3">
-              {completedMissions.map((mission, index) => (
-                <div 
-                  key={`trophy-${mission.missionDay}-${index}`} 
-                  className="flex flex-col items-center gap-1"
-                  data-testid={`trophy-${mission.missionDay}`}
-                >
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-b from-amber-300 to-amber-600 flex items-center justify-center shadow-lg shadow-amber-500/30 border-2 border-amber-200/30">
-                    <Trophy className="h-5 w-5 text-white drop-shadow" />
-                  </div>
-                  <span className="text-[10px] text-white/50 font-medium">Día {mission.missionDay}</span>
+        <div className="p-4 space-y-6">
+          <div className="flex flex-col items-center text-center py-6 relative">
+            <div className="relative">
+              <Avatar className="h-24 w-24 border-4 border-amber-500/30 mb-4 shadow-2xl shadow-amber-500/20">
+                <AvatarImage src="/favicon.png" />
+                <AvatarFallback className="bg-gradient-to-br from-amber-600 to-amber-800 text-white text-2xl">
+                  <User className="h-12 w-12" />
+                </AvatarFallback>
+              </Avatar>
+              
+              {/* Copas de Plata/Oro cerca del avatar (Victorias conseguidas) */}
+              {trophies.silver && (
+                <div className="absolute -top-1 -right-2 bg-slate-300 rounded-full p-1.5 shadow-lg border border-white/50 animate-bounce">
+                  <Trophy className="h-4 w-4 text-slate-600" />
                 </div>
-              ))}
+              )}
+              {trophies.gold && (
+                <div className="absolute -top-1 -left-2 bg-amber-400 rounded-full p-1.5 shadow-lg border border-white/50 animate-pulse">
+                  <Trophy className="h-4 w-4 text-amber-700" />
+                </div>
+              )}
             </div>
-          ) : (
-            <div className="glass-dark rounded-xl p-6 text-center">
-              <Trophy className="h-8 w-8 text-white/20 mx-auto mb-2" />
-              <p className="text-sm text-white/40">Completa tu primera misión para ganar una copa</p>
+
+            <h3 className="text-xl font-bold text-white uppercase tracking-tighter">Trader Disciplinado</h3>
+            <p className="text-amber-500/80 text-sm font-medium">Nivel: Guardián del Capital</p>
+          </div>
+
+          {/* Medallas Especiales (Grandes) */}
+          {(trophies.platinum || trophies.diamond) && (
+            <div className="grid grid-cols-2 gap-4">
+              {trophies.platinum && (
+                <div className="glass-dark p-4 rounded-2xl border border-blue-400/30 flex flex-col items-center gap-2 text-center">
+                  <div className="h-12 w-12 rounded-full bg-blue-400/20 flex items-center justify-center">
+                    <Star className="h-6 w-6 text-blue-300 fill-blue-300" />
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-bold text-blue-300 uppercase block">Medalla Platino</span>
+                    <span className="text-[8px] text-white/40">6 MESES CUMPLIDOS</span>
+                  </div>
+                </div>
+              )}
+              {trophies.diamond && (
+                <div className="glass-dark p-4 rounded-2xl border border-cyan-300/30 flex flex-col items-center gap-2 text-center">
+                  <div className="h-12 w-12 rounded-full bg-cyan-300/20 flex items-center justify-center">
+                    <Sparkles className="h-6 w-6 text-cyan-200 fill-cyan-200" />
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-bold text-cyan-200 uppercase block">Medalla Diamante</span>
+                    <span className="text-[8px] text-white/40">1 AÑO DE MAESTRÍA</span>
+                  </div>
+                </div>
+              )}
             </div>
           )}
-        </div>
 
-        <div className="space-y-2">
-          <h3 className="text-sm font-semibold text-white/70 uppercase tracking-widest px-2">Ajustes</h3>
-          <div className="glass-dark rounded-xl overflow-hidden">
-            <button 
-              className="w-full p-4 flex items-center justify-between text-white hover:bg-white/5 transition-colors"
-              onClick={() => setShowVoiceSettings(true)}
-            >
-              <div className="flex items-center gap-3">
-                <Mic className="h-5 w-5 text-amber-400" />
-                <span>Voz y Narración</span>
+          <div className="grid grid-cols-3 gap-3">
+            <div className="glass-dark p-3 rounded-xl text-center">
+              <p className="text-2xl font-bold text-amber-400">{completedDays}</p>
+              <p className="text-[10px] text-white/40 uppercase tracking-widest">Días</p>
+            </div>
+            <div className="glass-dark p-3 rounded-xl text-center">
+              <p className="text-2xl font-bold text-amber-400">{Math.floor(completedDays / 7)}</p>
+              <p className="text-[10px] text-white/40 uppercase tracking-widest">Semanas</p>
+            </div>
+            <div className="glass-dark p-3 rounded-xl text-center">
+              <p className="text-2xl font-bold text-amber-400">{Math.floor(completedDays / 30)}</p>
+              <p className="text-[10px] text-white/40 uppercase tracking-widest">Meses</p>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <h3 className="text-xs font-bold text-white/40 uppercase tracking-widest px-2">Tus Trofeos</h3>
+            <div className="grid grid-cols-4 gap-3">
+              <div className={cn("aspect-square rounded-2xl flex flex-col items-center justify-center gap-1 border transition-all", 
+                trophies.bronze ? "bg-orange-900/20 border-orange-500/40" : "bg-white/5 border-white/5 opacity-30 grayscale")}>
+                <Trophy className={cn("h-6 w-6", trophies.bronze ? "text-orange-500" : "text-white/20")} />
+                <span className="text-[8px] font-bold uppercase">Bronce</span>
               </div>
-              <ChevronRight className="h-4 w-4 text-white/30" />
-            </button>
-            
-            <button 
-              className="w-full p-4 flex items-center justify-between text-white hover:bg-white/5 transition-colors border-t border-white/5"
-              onClick={() => setShowAmbientSounds(true)}
-            >
-              <div className="flex items-center gap-3">
-                <Volume2 className="h-5 w-5 text-amber-400" />
-                <span>Sonidos de Fondo</span>
+              <div className={cn("aspect-square rounded-2xl flex flex-col items-center justify-center gap-1 border transition-all", 
+                trophies.silver ? "bg-slate-400/20 border-slate-300/40" : "bg-white/5 border-white/5 opacity-30 grayscale")}>
+                <Trophy className={cn("h-6 w-6", trophies.silver ? "text-slate-300" : "text-white/20")} />
+                <span className="text-[8px] font-bold uppercase">Plata</span>
               </div>
-              <ChevronRight className="h-4 w-4 text-white/30" />
-            </button>
+              <div className={cn("aspect-square rounded-2xl flex flex-col items-center justify-center gap-1 border transition-all", 
+                trophies.gold ? "bg-amber-500/20 border-amber-400/40" : "bg-white/5 border-white/5 opacity-30 grayscale")}>
+                <Trophy className={cn("h-6 w-6", trophies.gold ? "text-amber-400" : "text-white/20")} />
+                <span className="text-[8px] font-bold uppercase">Oro</span>
+              </div>
+              <div className={cn("aspect-square rounded-2xl flex flex-col items-center justify-center gap-1 border transition-all", 
+                trophies.platinum ? "bg-blue-400/20 border-blue-300/40" : "bg-white/5 border-white/5 opacity-30 grayscale")}>
+                <Trophy className={cn("h-6 w-6", trophies.platinum ? "text-blue-300" : "text-white/20")} />
+                <span className="text-[8px] font-bold uppercase">Platino</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-2 pt-2">
+            <h3 className="text-xs font-bold text-white/40 uppercase tracking-widest px-2">Ajustes</h3>
+            <div className="glass-dark rounded-xl overflow-hidden">
+              <button className="w-full p-4 flex items-center justify-between text-white hover:bg-white/5 transition-colors" onClick={() => setShowVoiceSettings(true)}>
+                <div className="flex items-center gap-3">
+                  <Mic className="h-5 w-5 text-amber-400" />
+                  <span className="text-sm">Voz y Narración</span>
+                </div>
+                <ChevronRight className="h-4 w-4 text-white/30" />
+              </button>
+              <button className="w-full p-4 flex items-center justify-between text-white hover:bg-white/5 transition-colors border-t border-white/5" onClick={() => setShowAmbientSounds(true)}>
+                <div className="flex items-center gap-3">
+                  <Volume2 className="h-5 w-5 text-amber-400" />
+                  <span className="text-sm">Sonidos de Fondo</span>
+                </div>
+                <ChevronRight className="h-4 w-4 text-white/30" />
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <div className="min-h-screen h-screen flex flex-col app-background">

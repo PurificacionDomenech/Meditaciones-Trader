@@ -1,13 +1,15 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
-import { Trophy, Target, ShieldAlert, Star, ArrowLeft, Calendar, Lightbulb, Sparkles, ChevronLeft, ChevronRight } from "lucide-react";
+import { Trophy, Target, ShieldAlert, Star, ArrowLeft, Calendar, Lightbulb, Sparkles, ChevronLeft, ChevronRight, Play } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { TRADER_MISSIONS, getMissionByDay, getTotalMissions } from "@/lib/traderMissions";
+import { meditacionesPredefinidas } from "@/lib/meditationData";
+import type { Meditacion } from "@shared/schema";
 
 interface MissionEntry {
   id: string;
@@ -20,7 +22,12 @@ interface MissionEntry {
   createdAt: number;
 }
 
-export function TraderMissions() {
+interface TraderMissionsProps {
+  onSelectMeditation?: (meditation: Meditacion) => void;
+  onPlay?: () => void;
+}
+
+export function TraderMissions({ onSelectMeditation, onPlay }: TraderMissionsProps) {
   const [entries, setEntries] = useState<MissionEntry[]>(() => {
     const saved = localStorage.getItem("traderEntries");
     return saved ? JSON.parse(saved) : [];
@@ -34,6 +41,18 @@ export function TraderMissions() {
   const mission = getMissionByDay(currentDay) || TRADER_MISSIONS[0];
   const completedDays = entries.filter(e => e.completed).length;
   const progress = (completedDays / totalMissions) * 100;
+
+  const trophies = {
+    bronze: completedDays >= 1,
+    silver: completedDays >= 7,
+    gold: completedDays >= 30,
+    platinum: completedDays >= 180,
+    diamond: completedDays >= 365
+  };
+
+  useEffect(() => {
+    localStorage.setItem("traderTrophies", JSON.stringify(trophies));
+  }, [completedDays]);
 
   const saveEntry = () => {
     if (!content.trim()) return;
@@ -145,7 +164,7 @@ export function TraderMissions() {
                   {mission.titulo}
                 </h2>
                 <Badge variant="outline" className="border-white/20 text-white/50 text-xs">
-                  {mission.categoria}
+                  Misión de Transformación
                 </Badge>
               </div>
               <Button
@@ -159,46 +178,69 @@ export function TraderMissions() {
               </Button>
             </div>
 
-            <div className="bg-blue-500/10 border border-blue-500/20 rounded-2xl p-5">
-              <h3 className="text-blue-400 font-bold text-sm uppercase mb-2">Objetivo</h3>
-              <p className="text-white/80 leading-snug">{mission.objetivo}</p>
+            <div className="bg-amber-500/10 border border-amber-500/20 rounded-2xl p-6 relative">
+              <Sparkles className="absolute -top-3 -right-3 h-8 w-8 text-amber-500/20" />
+              <h3 className="text-amber-400 font-bold text-sm uppercase mb-4 flex items-center gap-2">
+                <Target className="h-4 w-4" />
+                La Misión
+              </h3>
+              <p className="text-white/90 leading-relaxed text-lg whitespace-pre-line">{mission.texto}</p>
+              
+              {mission.cita && (
+                <div className="mt-6 pt-6 border-t border-amber-500/10 italic text-white/60 text-sm text-center">
+                  "{mission.cita}"
+                </div>
+              )}
             </div>
 
-            <div className="bg-amber-500/10 border border-amber-500/20 rounded-2xl p-5">
-              <div className="flex items-start gap-3">
-                <div className="h-10 w-10 rounded-full bg-amber-500/20 flex items-center justify-center shrink-0">
-                  <Target className="h-6 w-6 text-amber-400" />
-                </div>
-                <div>
-                  <h3 className="text-amber-400 font-bold text-sm uppercase mb-2">Reto del Día</h3>
-                  <p className="text-white/80 leading-relaxed whitespace-pre-line">{mission.reto}</p>
+            {mission.aplicacionCotidiana && (
+              <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-2xl p-5">
+                <div className="flex items-start gap-3">
+                  <div className="h-10 w-10 rounded-full bg-emerald-500/20 flex items-center justify-center shrink-0">
+                    <Lightbulb className="h-6 w-6 text-emerald-400" />
+                  </div>
+                  <div>
+                    <h3 className="text-emerald-400 font-bold text-sm uppercase mb-2">Aplicación Cotidiana</h3>
+                    <p className="text-white/80 leading-relaxed">{mission.aplicacionCotidiana}</p>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
 
-            <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-2xl p-5">
-              <div className="flex items-start gap-3">
-                <div className="h-10 w-10 rounded-full bg-emerald-500/20 flex items-center justify-center shrink-0">
-                  <Lightbulb className="h-6 w-6 text-emerald-400" />
-                </div>
-                <div>
-                  <h3 className="text-emerald-400 font-bold text-sm uppercase mb-2">Por Qué Funciona</h3>
-                  <p className="text-white/80 leading-relaxed">{mission.porQueFunciona}</p>
+            {mission.meditacionRecomendada && (
+              <div className="bg-purple-500/10 border border-purple-500/20 rounded-2xl p-5">
+                <div className="flex items-start gap-3">
+                  <div className="h-10 w-10 rounded-full bg-purple-500/20 flex items-center justify-center shrink-0">
+                    <Sparkles className="h-6 w-6 text-purple-400" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-purple-400 font-bold text-sm uppercase mb-2">Meditación Recomendada</h3>
+                    <div className="flex items-center justify-between gap-4">
+                      <p className="text-white/80 leading-relaxed">
+                        <span className="text-purple-300 font-semibold">{mission.meditacionRecomendada}</span>
+                      </p>
+                      {onSelectMeditation && (
+                        <Button 
+                          size="sm" 
+                          variant="secondary"
+                          className="bg-purple-600 hover:bg-purple-700 text-white border-none h-8 gap-2"
+                          onClick={() => {
+                            const med = meditacionesPredefinidas.find(m => m.titulo === mission.meditacionRecomendada);
+                            if (med) {
+                              onSelectMeditation(med);
+                              onPlay?.();
+                            }
+                          }}
+                        >
+                          <Play className="h-3 w-3 fill-current" />
+                          Escuchar
+                        </Button>
+                      )}
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-
-            <div className="bg-purple-500/10 border border-purple-500/20 rounded-2xl p-5">
-              <div className="flex items-start gap-3">
-                <div className="h-10 w-10 rounded-full bg-purple-500/20 flex items-center justify-center shrink-0">
-                  <Sparkles className="h-6 w-6 text-purple-400" />
-                </div>
-                <div>
-                  <h3 className="text-purple-400 font-bold text-sm uppercase mb-2">Aplicación Cotidiana</h3>
-                  <p className="text-white/80 leading-relaxed">{mission.aplicacionCotidiana}</p>
-                </div>
-              </div>
-            </div>
+            )}
 
             <div className="space-y-4 pt-4">
               <Label className="text-amber-500/80 uppercase tracking-widest text-[10px] font-bold">

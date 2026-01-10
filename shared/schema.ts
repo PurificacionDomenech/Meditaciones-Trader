@@ -77,9 +77,10 @@ export interface TraderMission {
   dia: number;
   titulo: string;
   descripcion: string;
-  accionDestruir: string;
-  accionConstruir: string;
-  afirmacion: string;
+  texto: string;
+  cita?: string;
+  aplicacionCotidiana?: string;
+  meditacionRecomendada?: string;
 }
 
 export interface TraderEntry {

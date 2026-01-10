@@ -96,36 +96,42 @@ export function VoiceControls({
     const loadVoices = () => {
       if (typeof window === "undefined" || !window.speechSynthesis) return;
       const allVoices = window.speechSynthesis.getVoices();
-      if (allVoices.length === 0) return;
       
-      const spanishVoices = allVoices.filter(v => 
-        v.lang.toLowerCase().startsWith("es")
-      );
-      setVoices(spanishVoices.length > 0 ? spanishVoices : allVoices);
+      // En móviles, getVoices() puede tardar o devolver 0 al inicio
+      if (allVoices.length > 0) {
+        const spanishVoices = allVoices.filter(v => 
+          v.lang.toLowerCase().startsWith("es")
+        );
+        setVoices(spanishVoices.length > 0 ? spanishVoices : allVoices);
+      }
     };
 
     if (typeof window !== "undefined" && window.speechSynthesis) {
       loadVoices();
       window.speechSynthesis.onvoiceschanged = loadVoices;
       
+      // Polling para navegadores que no disparan onvoiceschanged (común en móviles)
       const interval = setInterval(() => {
-        if (window.speechSynthesis.getVoices().length > 0) {
+        const v = window.speechSynthesis.getVoices();
+        if (v.length > 0) {
           loadVoices();
           clearInterval(interval);
         }
-      }, 100);
+      }, 500);
       
-      setTimeout(() => clearInterval(interval), 5000);
+      const timeout = setTimeout(() => clearInterval(interval), 10000);
+
+      return () => {
+        clearInterval(interval);
+        clearTimeout(timeout);
+        if (typeof window !== "undefined" && window.speechSynthesis) {
+          window.speechSynthesis.onvoiceschanged = null;
+        }
+      };
     }
 
     const saved = localStorage.getItem("narrationPresets");
     if (saved) setPresets(JSON.parse(saved));
-
-    return () => {
-      if (typeof window !== "undefined" && window.speechSynthesis) {
-        window.speechSynthesis.onvoiceschanged = null;
-      }
-    };
   }, []);
 
   const groupedVoices: GroupedVoices = voices.reduce(
