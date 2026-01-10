@@ -85,7 +85,12 @@ export default function Home() {
 
     const loadVoice = () => {
       if (typeof window === "undefined" || !window.speechSynthesis) return;
-      const voices = window.speechSynthesis.getVoices();
+      let voices = window.speechSynthesis.getVoices();
+      
+      if (voices.length === 0) {
+        voices = window.speechSynthesis.getVoices();
+      }
+      
       if (voices.length === 0) return;
       
       const spanishVoice = voices.find(v => v.lang.toLowerCase().includes("es"));
@@ -218,7 +223,15 @@ export default function Home() {
     };
 
     // Speak immediately
-    window.speechSynthesis.speak(utterance);
+    // En móviles, a veces es necesario cancelar cualquier habla previa
+    if (window.speechSynthesis.speaking) {
+      window.speechSynthesis.cancel();
+    }
+    
+    // Pequeño delay para asegurar que el sistema de voz esté listo
+    setTimeout(() => {
+      window.speechSynthesis.speak(utterance);
+    }, 50);
   }, [speed, pitch, volume, pauseBetweenPhrases, selectedVoice]);
 
   const handlePlay = useCallback(() => {
@@ -406,6 +419,28 @@ export default function Home() {
             <h2 className="text-lg font-semibold text-white">Hola, Trader</h2>
           </div>
         </div>
+        {!voicesLoaded && (
+          <Button 
+            size="sm" 
+            variant="outline" 
+            className="text-amber-400 border-amber-400/50 bg-amber-400/10"
+            onClick={() => {
+              if (typeof window !== "undefined" && window.speechSynthesis) {
+                window.speechSynthesis.getVoices();
+                const utterance = new SpeechSynthesisUtterance("");
+                window.speechSynthesis.speak(utterance);
+                setVoicesLoaded(true);
+                toast({
+                  title: "Voces activadas",
+                  description: "El sistema de voz ha sido inicializado.",
+                });
+              }
+            }}
+          >
+            <Mic className="h-4 w-4 mr-1" />
+            Activar Voz
+          </Button>
+        )}
       </div>
       <div className="p-4 space-y-6">
         <div className="relative rounded-2xl overflow-hidden glass-dark" data-testid="card-now-playing">
