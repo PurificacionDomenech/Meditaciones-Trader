@@ -56,6 +56,8 @@ export default function Home() {
   const [currentTime, setCurrentTime] = useState(0);
   const [totalDuration, setTotalDuration] = useState(15 * 60);
   
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  
   const [speed, setSpeed] = useState(0.75);
   const [pitch, setPitch] = useState(1.0);
   const [volume, setVolume] = useState(0.9);
@@ -276,6 +278,24 @@ export default function Home() {
       }
     }
 
+    // Si la meditación tiene un archivo de audio MP3
+    if (currentMeditation.audioUrl) {
+      if (!audioRef.current) {
+        audioRef.current = new Audio(currentMeditation.audioUrl.replace('@assets', '/src/assets'));
+        audioRef.current.onended = () => {
+          setIsPlaying(false);
+          setIsPaused(false);
+          setCurrentTime(totalDuration);
+        };
+      }
+      
+      audioRef.current.volume = volume;
+      audioRef.current.play();
+      setIsPlaying(true);
+      setIsPaused(false);
+      return;
+    }
+
     // Initialize speech synthesis on user gesture (required for mobile)
     initializeSpeechSynthesis();
 
@@ -309,6 +329,12 @@ export default function Home() {
   }, [selectedMeditation, isPaused, parseTextIntoSegments, speakSegment, initializeSpeechSynthesis]);
 
   const handlePause = useCallback(() => {
+    if (selectedMeditation?.audioUrl && audioRef.current) {
+      audioRef.current.pause();
+      setIsPaused(true);
+      setIsPlaying(false);
+      return;
+    }
     if (typeof window !== "undefined" && window.speechSynthesis && window.speechSynthesis.speaking) {
       window.speechSynthesis.pause();
       isPlayingRef.current = false;
@@ -318,6 +344,12 @@ export default function Home() {
   }, []);
 
   const handleResume = useCallback(() => {
+    if (selectedMeditation?.audioUrl && audioRef.current) {
+      audioRef.current.play();
+      setIsPaused(false);
+      setIsPlaying(true);
+      return;
+    }
     if (typeof window !== "undefined" && window.speechSynthesis && window.speechSynthesis.paused) {
       window.speechSynthesis.resume();
       setIsPaused(false);
@@ -329,6 +361,11 @@ export default function Home() {
   }, [handlePlay]);
 
   const handleStop = useCallback(() => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+      audioRef.current = null;
+    }
     isStoppedRef.current = true;
     isPlayingRef.current = false;
     isCancellingRef.current = true;
@@ -359,6 +396,10 @@ export default function Home() {
 
   const handleSelectMeditation = useCallback((meditation: Meditacion) => {
     handleStop();
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current = null;
+    }
     setSelectedMeditation(meditation);
     const durationMatch = meditation.duracion.match(/(\d+)/);
     if (durationMatch) {
@@ -436,6 +477,12 @@ export default function Home() {
   const currentBgImage = selectedMeditation 
     ? (meditationImages[selectedMeditation.categoriaId] || meditationImages["fundamento"])
     : "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80&w=1000";
+
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = volume;
+    }
+  }, [volume]);
 
   const renderHomeTab = () => (
     <div className="flex-1 overflow-y-auto pb-24 scrollbar-hide">

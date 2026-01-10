@@ -8,6 +8,7 @@ export interface Meditacion {
   duracion: string;
   descripcion: string;
   texto: string;
+  audioUrl?: string; // URL al archivo MP3 opcional
 }
 
 export interface MeditacionPersonalizada extends Meditacion {
