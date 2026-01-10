@@ -86,30 +86,15 @@ export default function Home() {
 
     const loadVoice = () => {
       if (typeof window === "undefined" || !window.speechSynthesis) return;
-      let voices = window.speechSynthesis.getVoices();
-      
-      // Intentar cargar voces de nuevo si no hay ninguna (común en móviles)
-      if (voices.length === 0) {
-        window.speechSynthesis.getVoices();
-        voices = window.speechSynthesis.getVoices();
-      }
-
+      const voices = window.speechSynthesis.getVoices();
       if (voices.length === 0) return;
       
-      // Priorizar voces en español de calidad (Google o Microsoft)
-      const preferredVoices = voices.filter(v => 
-        v.lang.toLowerCase().includes("es") && 
-        (v.name.includes("Google") || v.name.includes("Microsoft") || v.name.includes("Natural"))
-      );
+      const spanishVoice = voices.find(v => v.lang.toLowerCase().includes("es"));
+      const googleSpanish = voices.find(v => v.name.includes("Google") && v.lang.includes("es"));
+      const finalVoice = googleSpanish || spanishVoice || voices[0];
       
-      const spanishVoices = voices.filter(v => v.lang.toLowerCase().includes("es"));
-      const finalVoices = preferredVoices.length > 0 ? preferredVoices : spanishVoices;
-      
-      if (finalVoices.length > 0 && !selectedVoice) {
-        // Seleccionar la mejor voz disponible (la primera suele ser la más común)
-        setSelectedVoice(finalVoices[0].voiceURI);
-      } else if (voices.length > 0 && !selectedVoice) {
-        setSelectedVoice(voices[0].voiceURI);
+      if (finalVoice && !selectedVoice) {
+        setSelectedVoice(finalVoice.voiceURI);
       }
     };
 
@@ -234,14 +219,7 @@ export default function Home() {
     };
 
     // Speak immediately
-    if (typeof window !== "undefined" && window.speechSynthesis) {
-      window.speechSynthesis.cancel();
-      setTimeout(() => {
-        if (!isStoppedRef.current && isPlayingRef.current) {
-          window.speechSynthesis.speak(utterance);
-        }
-      }, 50);
-    }
+    window.speechSynthesis.speak(utterance);
   }, [speed, pitch, volume, pauseBetweenPhrases, selectedVoice]);
 
   const handlePlay = useCallback(() => {
@@ -326,25 +304,13 @@ export default function Home() {
     isCancellingRef.current = true;
     window.speechSynthesis.cancel();
     
-    // Clear any pending timeouts for the next segment
-    if (utteranceRef.current) {
-      utteranceRef.current.onend = null;
-    }
-    
     setTimeout(() => {
       isCancellingRef.current = false;
       if (isPlayingRef.current && !isStoppedRef.current) {
         speakSegment(currentIndexRef.current);
       }
-    }, 50); // Reducido para mayor respuesta
+    }, 100);
   }, [speakSegment]);
-
-  // Efectos para actualizar la voz en tiempo real al cambiar los controles
-  useEffect(() => {
-    if (isPlaying && !isPaused) {
-      handleRestartCurrentSegment();
-    }
-  }, [speed, pitch, volume, selectedVoice, handleRestartCurrentSegment]);
 
   const handleSelectMeditation = useCallback((meditation: Meditacion) => {
     handleStop();

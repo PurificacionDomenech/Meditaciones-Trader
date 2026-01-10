@@ -15,15 +15,15 @@ import { Heart, Trash2, Waves, Wind, CloudRain, Bird, Flame, Music, Bell, Sparkl
 import type { SoundPreset, AmbientSound } from "@shared/schema";
 
 const ambientSounds: AmbientSound[] = [
-  { id: "custom-campanilla", nombre: "Campanilla", icon: "Bell", category: "oriental", url: "https://raw.githubusercontent.com/rafa-medina/meditation-assets/main/campanilla.mp3" },
-  { id: "custom-campanillas", nombre: "Campanillas", icon: "Bell", category: "oriental", url: "https://raw.githubusercontent.com/rafa-medina/meditation-assets/main/campanillas.mp3" },
-  { id: "custom-gong", nombre: "Gong Personalizado", icon: "Music", category: "oriental", url: "https://raw.githubusercontent.com/rafa-medina/meditation-assets/main/Gong.mp3" },
-  { id: "custom-lluvia", nombre: "Lluvia Real", icon: "CloudRain", category: "natural", url: "https://raw.githubusercontent.com/rafa-medina/meditation-assets/main/lluvia.mp3" },
-  { id: "custom-pajaros", nombre: "Pájaros Bosque", icon: "Bird", category: "natural", url: "https://raw.githubusercontent.com/rafa-medina/meditation-assets/main/pajaros.mp3" },
+  { id: "custom-campanilla", nombre: "Campanilla", icon: "Bell", category: "oriental", url: "/src/assets/custom_sounds/campanilla.mp3" },
+  { id: "custom-campanillas", nombre: "Campanillas", icon: "Bell", category: "oriental", url: "/src/assets/custom_sounds/campanillas.mp3" },
+  { id: "custom-gong", nombre: "Gong Personalizado", icon: "Music", category: "oriental", url: "/src/assets/custom_sounds/Gong.mp3" },
+  { id: "custom-lluvia", nombre: "Lluvia Real", icon: "CloudRain", category: "natural", url: "/src/assets/custom_sounds/lluvia.mp3" },
+  { id: "custom-pajaros", nombre: "Pájaros Bosque", icon: "Bird", category: "natural", url: "/src/assets/custom_sounds/pajaros.mp3" },
   { id: "metronome", nombre: "Metrónomo", icon: "Music", category: "rhythm" },
-  { id: "music-333", nombre: "333 Hz Healing", icon: "Music", category: "relaxing", url: "https://raw.githubusercontent.com/rafa-medina/meditation-assets/main/Musica/333-hz.mp3" },
-  { id: "music-alpha", nombre: "Alpha Waves", icon: "Music", category: "relaxing", url: "https://raw.githubusercontent.com/rafa-medina/meditation-assets/main/Musica/alpha-8-to-12-hz-healing-frequencies-222945.mp3" },
-  { id: "music-meditation", nombre: "Meditación Zen", icon: "Music", category: "relaxing", url: "https://raw.githubusercontent.com/rafa-medina/meditation-assets/main/Musica/meditation.mp3" },
+  { id: "music-333", nombre: "333 Hz Healing", icon: "Music", category: "relaxing", url: "/src/assets/custom_sounds/Musica/333-hz.mp3" },
+  { id: "music-alpha", nombre: "Alpha Waves", icon: "Music", category: "relaxing", url: "/src/assets/custom_sounds/Musica/alpha-8-to-12-hz-healing-frequencies-222945.mp3" },
+  { id: "music-meditation", nombre: "Meditación Zen", icon: "Music", category: "relaxing", url: "/src/assets/custom_sounds/Musica/meditation.mp3" },
 ];
 
 const iconMap: Record<string, typeof Bell> = {
@@ -378,43 +378,25 @@ class AudioGenerator {
     
     const soundData = ambientSounds.find(s => s.id === id);
     if (soundData?.url) {
+      const ctx = this.getContext();
       const audio = new Audio();
-      // Importante: No usar /client/src ni /src al inicio si los assets están en la raíz pública o servidos por Vite
-      // Vite suele servir los assets de src/assets bajo /src/assets durante el desarrollo
       audio.src = soundData.url;
       audio.crossOrigin = "anonymous";
       
-      const gainNode = this.getContext().createGain();
+      const source = ctx.createMediaElementSource(audio);
+      const gainNode = ctx.createGain();
+      
       let multiplier = 0.3;
       if (id.startsWith("music-")) multiplier = 0.15;
+      
       gainNode.gain.value = volume * multiplier;
-
-      // Intentar conectar al AudioContext
-      try {
-        const source = this.getContext().createMediaElementSource(audio);
-        source.connect(gainNode);
-        gainNode.connect(this.getContext().destination);
-      } catch (e) {
-        // Fallback: Si falla el AudioContext, usar el volumen nativo del elemento audio
-        audio.volume = Math.min(1, volume * multiplier);
-      }
+      source.connect(gainNode);
+      gainNode.connect(ctx.destination);
       
       audio.loop = true;
+      audio.play().catch(err => console.error("Error playing audio:", err));
       
-      const playAudio = () => {
-        audio.play().catch(err => {
-          console.error("Error playing audio:", err);
-          // Si el contexto está suspendido (política de autodesbloqueo), reanudarlo
-          if (this.getContext().state === 'suspended') {
-            document.addEventListener('click', () => {
-              this.getContext().resume().then(() => audio.play());
-            }, { once: true });
-          }
-        });
-      };
-
-      playAudio();
-      this.oscillators.set(id, { nodes: [], gainNode, audio } as any);
+      this.oscillators.set(id, { nodes: [source as any], gainNode, audio } as any);
       return;
     }
 

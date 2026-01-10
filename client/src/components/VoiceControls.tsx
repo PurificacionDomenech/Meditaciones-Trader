@@ -96,24 +96,12 @@ export function VoiceControls({
     const loadVoices = () => {
       if (typeof window === "undefined" || !window.speechSynthesis) return;
       const allVoices = window.speechSynthesis.getVoices();
+      if (allVoices.length === 0) return;
       
-      // Intentar forzar la carga si está vacío (común en móviles)
-      if (allVoices.length === 0) {
-        window.speechSynthesis.getVoices();
-      }
-
       const spanishVoices = allVoices.filter(v => 
         v.lang.toLowerCase().startsWith("es")
       );
-
-      // Si hay muchas voces, priorizar las de alta calidad (Google/Microsoft/Natural)
-      const qualityVoices = spanishVoices.filter(v => 
-        v.name.includes("Google") || v.name.includes("Microsoft") || v.name.includes("Natural")
-      );
-
-      // Limitar a una lista manejable en móviles si hay demasiadas
-      const finalVoices = qualityVoices.length > 0 ? qualityVoices : spanishVoices;
-      setVoices(finalVoices.slice(0, 10)); // Mostrar las 10 mejores para no saturar
+      setVoices(spanishVoices.length > 0 ? spanishVoices : allVoices);
     };
 
     if (typeof window !== "undefined" && window.speechSynthesis) {
