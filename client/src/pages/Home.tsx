@@ -88,11 +88,7 @@ export default function Home() {
     const loadVoice = () => {
       if (typeof window === "undefined" || !window.speechSynthesis) return;
       let voices = window.speechSynthesis.getVoices();
-      
-      if (voices.length === 0) {
-        voices = window.speechSynthesis.getVoices();
-      }
-      
+      if (voices.length === 0) voices = window.speechSynthesis.getVoices();
       if (voices.length === 0) return;
       
       const spanishVoice = voices.find(v => v.lang.toLowerCase().includes("es"));
@@ -110,12 +106,8 @@ export default function Home() {
         loadVoice();
         setVoicesLoaded(true);
       };
+      if (window.speechSynthesis.getVoices().length > 0) setVoicesLoaded(true);
       
-      // Verificar si ya hay voces disponibles inmediatamente
-      if (window.speechSynthesis.getVoices().length > 0) {
-        setVoicesLoaded(true);
-      }
-
       // Polling para navegadores que no disparan onvoiceschanged (común en móviles)
       const voiceInterval = setInterval(() => {
         const voices = window.speechSynthesis.getVoices();

@@ -281,51 +281,57 @@ export function VoiceControls({
 
         <div className="space-y-2">
           <Label className="text-xs text-muted-foreground">Voz ({voices.length} disponibles)</Label>
-          <Select value={selectedVoice} onValueChange={onVoiceChange}>
+          <Select 
+            value={voices.length > 0 ? selectedVoice : undefined} 
+            onValueChange={onVoiceChange}
+          >
             <SelectTrigger data-testid="select-voice" className="bg-background/50">
               <SelectValue placeholder={voices.length === 0 ? "Cargando voces..." : "Selecciona una voz"} />
             </SelectTrigger>
             <SelectContent>
-              {voices.length === 0 && (
+              {voices.length > 0 ? (
+                <>
+                  {groupedVoices.female.length > 0 && (
+                    <>
+                      <div className="px-2 py-1.5 text-xs font-semibold text-muted-foreground">
+                        Femeninas
+                      </div>
+                      {groupedVoices.female.map((voice) => (
+                        <SelectItem key={voice.voiceURI} value={voice.voiceURI}>
+                          {getCleanVoiceName(voice)} - {getVoiceCountry(voice)}
+                        </SelectItem>
+                      ))}
+                    </>
+                  )}
+                  {groupedVoices.male.length > 0 && (
+                    <>
+                      <div className="px-2 py-1.5 text-xs font-semibold text-muted-foreground">
+                        Masculinas
+                      </div>
+                      {groupedVoices.male.map((voice) => (
+                        <SelectItem key={voice.voiceURI} value={voice.voiceURI}>
+                          {getCleanVoiceName(voice)} - {getVoiceCountry(voice)}
+                        </SelectItem>
+                      ))}
+                    </>
+                  )}
+                  {groupedVoices.other.length > 0 && (
+                    <>
+                      <div className="px-2 py-1.5 text-xs font-semibold text-muted-foreground">
+                        Otras
+                      </div>
+                      {groupedVoices.other.map((voice) => (
+                        <SelectItem key={voice.voiceURI} value={voice.voiceURI}>
+                          {getCleanVoiceName(voice)} - {getVoiceCountry(voice)}
+                        </SelectItem>
+                      ))}
+                    </>
+                  )}
+                </>
+              ) : (
                 <div className="px-2 py-3 text-xs text-muted-foreground text-center">
-                  No hay voces disponibles
+                  Cargando voces disponibles...
                 </div>
-              )}
-              {groupedVoices.female.length > 0 && (
-                <>
-                  <div className="px-2 py-1.5 text-xs font-semibold text-muted-foreground">
-                    Femeninas
-                  </div>
-                  {groupedVoices.female.map((voice) => (
-                    <SelectItem key={voice.voiceURI} value={voice.voiceURI}>
-                      {getCleanVoiceName(voice)} - {getVoiceCountry(voice)}
-                    </SelectItem>
-                  ))}
-                </>
-              )}
-              {groupedVoices.male.length > 0 && (
-                <>
-                  <div className="px-2 py-1.5 text-xs font-semibold text-muted-foreground">
-                    Masculinas
-                  </div>
-                  {groupedVoices.male.map((voice) => (
-                    <SelectItem key={voice.voiceURI} value={voice.voiceURI}>
-                      {getCleanVoiceName(voice)} - {getVoiceCountry(voice)}
-                    </SelectItem>
-                  ))}
-                </>
-              )}
-              {groupedVoices.other.length > 0 && (
-                <>
-                  <div className="px-2 py-1.5 text-xs font-semibold text-muted-foreground">
-                    Otras
-                  </div>
-                  {groupedVoices.other.map((voice) => (
-                    <SelectItem key={voice.voiceURI} value={voice.voiceURI}>
-                      {getCleanVoiceName(voice)} - {getVoiceCountry(voice)}
-                    </SelectItem>
-                  ))}
-                </>
               )}
             </SelectContent>
           </Select>

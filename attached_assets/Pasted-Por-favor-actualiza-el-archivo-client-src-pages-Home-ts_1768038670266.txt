@@ -1,0 +1,54 @@
+Por favor, actualiza el archivo client/src/pages/Home.tsx con los siguientes cambios para solucionar el problema de las voces en dispositivos móviles:
+Añadir estado de carga: En la línea 51, añade:
+const [voicesLoaded, setVoicesLoaded] = useState(false);
+Actualizar loadVoice y su useEffect: Reemplaza el bloque que va de la línea 86 a la 103 por este:
+TypeScript
+const loadVoice = () => {
+  if (typeof window === "undefined" || !window.speechSynthesis) return;
+  let voices = window.speechSynthesis.getVoices();
+  if (voices.length === 0) voices = window.speechSynthesis.getVoices();
+  if (voices.length === 0) return;
+  
+  const spanishVoice = voices.find(v => v.lang.toLowerCase().includes("es"));
+  const googleSpanish = voices.find(v => v.name.includes("Google") && v.lang.includes("es"));
+  const finalVoice = googleSpanish || spanishVoice || voices[0];
+  
+  if (finalVoice && !selectedVoice) {
+    setSelectedVoice(finalVoice.voiceURI);
+  }
+};
+
+if (typeof window !== "undefined" && window.speechSynthesis) {
+  loadVoice();
+  window.speechSynthesis.onvoiceschanged = () => {
+    loadVoice();
+    setVoicesLoaded(true);
+  };
+  if (window.speechSynthesis.getVoices().length > 0) setVoicesLoaded(true);
+}
+Añadir botón de activación manual: En la línea 421, justo después del cierre del div que contiene "Hola, Trader", inserta:
+TSX
+{!voicesLoaded && (
+  <Button 
+    size="sm" 
+    variant="outline" 
+    className="text-amber-400 border-amber-400/50 bg-amber-400/10"
+    onClick={() => {
+      if (typeof window !== "undefined" && window.speechSynthesis) {
+        window.speechSynthesis.getVoices();
+        const utterance = new SpeechSynthesisUtterance("");
+        window.speechSynthesis.speak(utterance);
+        setVoicesLoaded(true);
+        toast({ title: "Voces activadas", description: "Sistema inicializado." });
+      }
+    }}
+  >
+    <Mic className="h-4 w-4 mr-1" />
+    Activar Voz
+  </Button>
+)}
+Ajustar speakSegment: En la línea 220, antes de window.speechSynthesis.speak(utterance);, añade:
+TypeScript
+if (window.speechSynthesis.speaking) window.speechSynthesis.cancel();
+setTimeout(() => { window.speechSynthesis.speak(utterance); }, 50);
+(Y elimina la línea original window.speechSynthesis.speak(utterance); que queda fuera del timeout).
