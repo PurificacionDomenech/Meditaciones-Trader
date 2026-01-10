@@ -336,7 +336,7 @@ export default function Home() {
   }, [selectedMeditation, isPaused, parseTextIntoSegments, speakSegment, initializeSpeechSynthesis]);
 
   const handlePause = useCallback(() => {
-    if (selectedMeditation?.audioUrl && audioRef.current) {
+    if (audioRef.current && !audioRef.current.paused) {
       audioRef.current.pause();
       setIsPaused(true);
       setIsPlaying(false);
@@ -351,8 +351,10 @@ export default function Home() {
   }, []);
 
   const handleResume = useCallback(() => {
-    if (selectedMeditation?.audioUrl && audioRef.current) {
-      audioRef.current.play();
+    if (audioRef.current && isPaused) {
+      audioRef.current.play().catch(err => {
+        console.error("Error al reanudar audio:", err);
+      });
       setIsPaused(false);
       setIsPlaying(true);
       return;
@@ -490,6 +492,17 @@ export default function Home() {
       audioRef.current.volume = volume;
     }
   }, [volume]);
+
+  useEffect(() => {
+    const updateProgress = () => {
+      if (audioRef.current && isPlaying) {
+        setCurrentTime(audioRef.current.currentTime);
+      }
+    };
+    
+    const interval = setInterval(updateProgress, 1000);
+    return () => clearInterval(interval);
+  }, [isPlaying]);
 
   const renderHomeTab = () => (
     <div className="flex-1 overflow-y-auto pb-24 scrollbar-hide">
