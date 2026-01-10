@@ -281,14 +281,7 @@ export default function Home() {
     // Si la meditación tiene un archivo de audio MP3
     if (currentMeditation.audioUrl) {
       if (!audioRef.current) {
-        // En Vite/Replit, las rutas de assets importadas son URLs directas
-        // Si viene de @assets, necesitamos la ruta relativa correcta para el navegador
-        let finalUrl = currentMeditation.audioUrl;
-        if (finalUrl.startsWith('@assets')) {
-          finalUrl = "/src/assets/" + finalUrl.split('/').pop();
-        }
-        
-        audioRef.current = new Audio(finalUrl);
+        audioRef.current = new Audio(currentMeditation.audioUrl);
         audioRef.current.onended = () => {
           setIsPlaying(false);
           setIsPaused(false);
