@@ -390,25 +390,37 @@ class AudioGenerator {
     
     const soundData = ambientSounds.find(s => s.id === id);
     if (soundData?.url) {
-      const ctx = this.getContext();
-      const audio = new Audio();
-      audio.src = soundData.url;
-      audio.crossOrigin = "anonymous";
-      
-      const source = ctx.createMediaElementSource(audio);
-      const gainNode = ctx.createGain();
+      // Use simple Audio element for better mobile compatibility
+      const audio = new Audio(soundData.url);
       
       let multiplier = 0.3;
       if (id.startsWith("music-")) multiplier = 0.15;
       
-      gainNode.gain.value = volume * multiplier;
-      source.connect(gainNode);
-      gainNode.connect(ctx.destination);
-      
+      audio.volume = volume * multiplier;
       audio.loop = true;
-      audio.play().catch(err => console.error("Error playing audio:", err));
       
-      this.oscillators.set(id, { nodes: [source as any], gainNode, audio } as any);
+      // Handle play with promise for mobile browsers
+      const playPromise = audio.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            console.log("Audio playing:", id);
+          })
+          .catch(err => {
+            console.error("Error playing audio:", err);
+            // Try again after a short delay (sometimes helps on mobile)
+            setTimeout(() => {
+              audio.play().catch(e => console.error("Retry failed:", e));
+            }, 100);
+          });
+      }
+      
+      // Create a dummy gain node for volume control compatibility
+      const ctx = this.getContext();
+      const gainNode = ctx.createGain();
+      gainNode.gain.value = volume * multiplier;
+      
+      this.oscillators.set(id, { nodes: [], gainNode, audio } as any);
       return;
     }
 
@@ -484,10 +496,15 @@ class AudioGenerator {
       else if (id === "ocean") multiplier = 0.35;
       else if (id === "fire") multiplier = 0.15;
       else if (id === "nature" || id === "birds") multiplier = 0.1;
-      else if (id.startsWith("music-")) multiplier = 0.15;
+      else if (id.startsWith("music-") || id.startsWith("custom-")) multiplier = 0.15;
       else if (id === "gong") multiplier = 0.5;
       
-      sound.gainNode.gain.setTargetAtTime(volume * multiplier, this.getContext().currentTime, 0.1);
+      // Handle Audio element volume directly
+      if ((sound as any).audio) {
+        (sound as any).audio.volume = volume * multiplier;
+      } else {
+        sound.gainNode.gain.setTargetAtTime(volume * multiplier, this.getContext().currentTime, 0.1);
+      }
     }
   }
 

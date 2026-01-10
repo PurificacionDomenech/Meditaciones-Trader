@@ -211,24 +211,6 @@ export default function Home() {
         }
       }, pauseDuration);
     };
-        toast({
-          title: "Meditación completada",
-          description: "Has terminado tu sesión. Que tengas un buen trading.",
-        });
-        return;
-      }
-      
-      const pauseDuration = segment.isDeepPauseAfter
-        ? (pauseBetweenPhrases + 3) * 1000 // Deep pause (\n\n)
-        : pauseBetweenPhrases * 1000;      // Normal pause (\n or punctuation)
-
-      setTimeout(() => {
-        if (!isStoppedRef.current && isPlayingRef.current) {
-          currentIndexRef.current = index + 1;
-          speakSegment(index + 1);
-        }
-      }, pauseDuration);
-    };
 
     utterance.onerror = (event) => {
       if (isCancellingRef.current) {
@@ -244,6 +226,25 @@ export default function Home() {
     window.speechSynthesis.speak(utterance);
   }, [speed, pitch, volume, pauseBetweenPhrases, selectedVoice]);
 
+  const initializeSpeechSynthesis = useCallback(() => {
+    if (typeof window === "undefined" || !window.speechSynthesis) return;
+    
+    // Force load voices (required for some browsers)
+    const voices = window.speechSynthesis.getVoices();
+    if (voices.length === 0) {
+      // Voices not loaded yet, wait for them
+      window.speechSynthesis.onvoiceschanged = () => {
+        window.speechSynthesis.getVoices();
+      };
+    }
+    
+    // Warm up speech synthesis with a silent utterance (mobile browsers)
+    const warmup = new SpeechSynthesisUtterance("");
+    warmup.volume = 0;
+    window.speechSynthesis.speak(warmup);
+    window.speechSynthesis.cancel();
+  }, []);
+
   const handlePlay = useCallback(() => {
     let currentMeditation = selectedMeditation;
     
@@ -255,6 +256,9 @@ export default function Home() {
         setTotalDuration(parseInt(durationMatch[1]) * 60);
       }
     }
+
+    // Initialize speech synthesis on user gesture (required for mobile)
+    initializeSpeechSynthesis();
 
     // Cancel any existing speech
     if (typeof window !== "undefined" && window.speechSynthesis) {
@@ -281,9 +285,9 @@ export default function Home() {
       // Small delay after cancel to ensure it takes effect
       setTimeout(() => {
         speakSegment(0);
-      }, 50);
+      }, 100);
     }
-  }, [selectedMeditation, isPaused, parseTextIntoSegments, speakSegment]);
+  }, [selectedMeditation, isPaused, parseTextIntoSegments, speakSegment, initializeSpeechSynthesis]);
 
   const handlePause = useCallback(() => {
     if (typeof window !== "undefined" && window.speechSynthesis && window.speechSynthesis.speaking) {
