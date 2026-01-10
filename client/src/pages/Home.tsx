@@ -281,7 +281,14 @@ export default function Home() {
     // Si la meditación tiene un archivo de audio MP3
     if (currentMeditation.audioUrl) {
       if (!audioRef.current) {
-        audioRef.current = new Audio(currentMeditation.audioUrl.replace('@assets', '/src/assets'));
+        // En Vite/Replit, las rutas de assets importadas son URLs directas
+        // Si viene de @assets, necesitamos la ruta relativa correcta para el navegador
+        let finalUrl = currentMeditation.audioUrl;
+        if (finalUrl.startsWith('@assets')) {
+          finalUrl = "/src/assets/" + finalUrl.split('/').pop();
+        }
+        
+        audioRef.current = new Audio(finalUrl);
         audioRef.current.onended = () => {
           setIsPlaying(false);
           setIsPaused(false);
@@ -290,7 +297,14 @@ export default function Home() {
       }
       
       audioRef.current.volume = volume;
-      audioRef.current.play();
+      audioRef.current.play().catch(err => {
+        console.error("Error al reproducir audio:", err);
+        toast({
+          title: "Error de audio",
+          description: "No se pudo cargar el archivo de audio. Verifica que existe.",
+          variant: "destructive"
+        });
+      });
       setIsPlaying(true);
       setIsPaused(false);
       return;

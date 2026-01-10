@@ -1,0 +1,383 @@
+Meditation
+Motivación o constancia: Elige quién te entrena
+Charla sobre la diferencia entre motivación pasajera y disciplina constante.
+
+00:08
+05:00
+
+
+
+
+
+
+Crear Nueva
+Con IA Personalizada
+
+
+Mis Guardadas
+Tu librería personal
+
+El Fundamento Inquebrantable
+Ver todo
+
+8m
+El Despertar del Trader Consciente
+El Fundamento Inquebrantable
+
+
+7m
+El Hábito que Transforma
+El Fundamento Inquebrantable
+
+
+10m
+La Visión del Guerrero
+El Fundamento Inquebrantable
+
+
+6m
+Anclando la Constancia
+El Fundamento Inquebrantable
+
+El Escudo del Capital
+Ver todo
+
+5m
+La Calma en la Tormenta
+El Escudo del Capital
+
+
+6m
+El Escudo del Stop Loss
+El Escudo del Capital
+
+
+8m
+La Lección de la Pérdida
+El Escudo del Capital
+
+
+7m
+Neutralidad ante la Incertidumbre
+El Escudo del Capital
+
+La Visión Clara del Mercado
+Ver todo
+
+9m
+La Ilusión del Valor
+La Visión Clara del Mercado
+
+
+8m
+El Observador Silencioso
+La Visión Clara del Mercado
+
+
+7m
+La Paciencia del Cazador
+La Visión Clara del Mercado
+
+
+8m
+La Verdad en los Números
+La Visión Clara del Mercado
+
+La Maestría Emocional
+Ver todo
+
+9m
+El Dominio del Miedo
+La Maestría Emocional
+
+
+8m
+La Trampa de la Euforia
+La Maestría Emocional
+
+
+7m
+La Rendición Consciente
+La Maestría Emocional
+
+
+8m
+El Observador de Pensamientos
+La Maestría Emocional
+
+El Arte de la Recuperación
+Ver todo
+
+9m
+Levantarse del Golpe
+El Arte de la Recuperación
+
+
+8m
+Romper el Ciclo de Venganza
+El Arte de la Recuperación
+
+
+10m
+El Reset Mental
+El Arte de la Recuperación
+
+
+8m
+La Fortaleza en la Adversidad
+El Arte de la Recuperación
+
+La Forja del Éxito
+Ver todo
+
+12m
+El Vuelo del Águila Imperial
+La Forja del Éxito
+
+
+13m
+La Metamorfosis del Trader
+La Forja del Éxito
+
+
+12m
+El Arquitecto de Tu Destino
+La Forja del Éxito
+
+
+11m
+La Corona del Trader Completo
+La Forja del Éxito
+
+Café con Rafa
+Ver todo
+
+5 minm
+Motivación o constancia: Elige quién te entrena
+
+5 minm
+Disciplina: el precio que pocos quieren pagar
+
+5 minm
+No es el mercado, eres Tú
+
+5 minm
+El silencio del trader maduro
+
+5 minm
+Gestión de riesgo: el escudo del trader
+
+Inicio
+
+Explorar
+
+
+Misiones
+
+Perfil
+Trading Desde Cero
+Configuración de Voz
+
+Controles de Narración
+Velocidad
+0.75x
+Tono
+1.0
+Volumen
+90%
+Pausa entre frases
+3s
+Voz (52 disponibles)
+
+Helena
+Femenina - Espana
+
+Laura
+Femenina - Espana
+
+Pablo
+Masculina - Espana
+
+Enric
+Neutra - Espanol
+
+Joana
+Femenina - Espanol
+
+Roi
+Neutra - Espanol
+
+Sabela
+Neutra - Espanol
+
+Elena
+Femenina - Argentina
+
+Tomas
+Neutra - Argentina
+
+Marcelo
+Neutra - Espanol
+
+Sofia
+Femenina - Espanol
+
+Catalina
+Neutra - Chile
+
+Lorenzo
+Neutra - Chile
+
+Gonzalo
+Neutra - Colombia
+
+Salome
+Neutra - Colombia
+
+Ximena
+Neutra - Espana
+
+Juan
+Masculina - Espanol
+
+Maria
+Femenina - Espanol
+
+Belkys
+Neutra - Espanol
+
+Manuel
+Masculina - Espanol
+
+Emilio
+Neutra - Espanol
+
+Ramona
+Neutra - Espanol
+
+Andrea
+Femenina - Espanol
+
+Luis
+Neutra - Espanol
+
+Lorena
+Neutra - Espanol
+
+Rodrigo
+Neutra - Espanol
+
+Javier
+Neutra - Espanol
+
+Teresa
+Neutra - Espanol
+
+Andres
+Masculina - Espanol
+
+Marta
+Femenina - Espanol
+
+Carlos
+Masculina - Espanol
+
+Karla
+Neutra - Espanol
+
+Dalia
+Neutra - Mexico
+
+Jorge
+Masculina - Mexico
+
+Federico
+Neutra - Espanol
+
+Yolanda
+Neutra - Espanol
+
+Margarita
+Femenina - Espanol
+
+Roberto
+Femenina - Espanol
+
+Mario
+Neutra - Espanol
+
+Tania
+Neutra - Espanol
+
+Alex
+Neutra - Peru
+
+Camila
+Neutra - Peru
+
+Karina
+Neutra - Espanol
+
+Victor
+Neutra - Espanol
+
+Alvaro
+Neutra - Espana
+
+Elvira
+Neutra - Espana
+
+Alonso
+Neutra - US
+
+Paloma
+Neutra - US
+
+Mateo
+Neutra - Espanol
+
+Valentina
+Neutra - Espanol
+
+Paola
+Neutra - Venezuela
+
+Sebastian
+Neutra - Venezuela
+Guardar Configuración
+Nombre del preset
+
+Sonidos Ambiente
+
+Sonidos Ambientales
+
+Sonidos Ambientales
+
+Música Relajante
+Guardar Combinación
+Nombre del preset
+
+a
+
+[plugin:runtime-error-plugin] Failed to load because no supported source was found.
+    at <anonymous> (/home/runner/workspace/node_modules/@replit/vite-plugin-runtime-error-modal/src/index.ts:29:37)
+    at emitCustomEvent (/home/runner/workspace/node_modules/vite/dist/node/chunks/config.js:20442:39)
+    at WebSocket$2.<anonymous> (/home/runner/workspace/node_modules/vite/dist/node/chunks/config.js:20452:4)
+    at WebSocket$2.emit (node:events:524:28)
+    at Receiver$2.receiverOnMessage (/home/runner/workspace/node_modules/vite/dist/node/chunks/config.js:19600:22)
+    at Receiver$2.emit (node:events:524:28)
+    at Receiver$2.dataMessage (/home/runner/workspace/node_modules/vite/dist/node/chunks/config.js:17811:11)
+    at Receiver$2.getData (/home/runner/workspace/node_modules/vite/dist/node/chunks/config.js:17746:9)
+    at Receiver$2.startLoop (/home/runner/workspace/node_modules/vite/dist/node/chunks/config.js:17571:12)
+    at Receiver$2._write (/home/runner/workspace/node_modules/vite/dist/node/chunks/config.js:17518:9)
+    at writeOrBuffer (node:internal/streams/writable:572:12)
+    at _write (node:internal/streams/writable:501:10)
+    at Writable.write (node:internal/streams/writable:510:10)
+    at Socket.socketOnData (/home/runner/workspace/node_modules/vite/dist/node/chunks/config.js:19688:37)
+    at Socket.emit (node:events:524:28)
+    at addChunk (node:internal/streams/readable:561:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+    at Readable.push (node:internal/streams/readable:392:5)
+    at TCP.onStreamRead (node:internal/stream_base_commons:191:23)
+Click outside, press Esc key, or fix the code to dismiss.
+You can also disable this overlay by setting server.hmr.overlay to false in vite.config.js.
