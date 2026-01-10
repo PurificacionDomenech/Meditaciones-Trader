@@ -86,15 +86,30 @@ export default function Home() {
 
     const loadVoice = () => {
       if (typeof window === "undefined" || !window.speechSynthesis) return;
-      const voices = window.speechSynthesis.getVoices();
+      let voices = window.speechSynthesis.getVoices();
+      
+      // Intentar cargar voces de nuevo si no hay ninguna (común en móviles)
+      if (voices.length === 0) {
+        window.speechSynthesis.getVoices();
+        voices = window.speechSynthesis.getVoices();
+      }
+
       if (voices.length === 0) return;
       
-      const spanishVoice = voices.find(v => v.lang.toLowerCase().includes("es"));
-      const googleSpanish = voices.find(v => v.name.includes("Google") && v.lang.includes("es"));
-      const finalVoice = googleSpanish || spanishVoice || voices[0];
+      // Priorizar voces en español de calidad (Google o Microsoft)
+      const preferredVoices = voices.filter(v => 
+        v.lang.toLowerCase().includes("es") && 
+        (v.name.includes("Google") || v.name.includes("Microsoft") || v.name.includes("Natural"))
+      );
       
-      if (finalVoice && !selectedVoice) {
-        setSelectedVoice(finalVoice.voiceURI);
+      const spanishVoices = voices.filter(v => v.lang.toLowerCase().includes("es"));
+      const finalVoices = preferredVoices.length > 0 ? preferredVoices : spanishVoices;
+      
+      if (finalVoices.length > 0 && !selectedVoice) {
+        // Seleccionar la mejor voz disponible (la primera suele ser la más común)
+        setSelectedVoice(finalVoices[0].voiceURI);
+      } else if (voices.length > 0 && !selectedVoice) {
+        setSelectedVoice(voices[0].voiceURI);
       }
     };
 
