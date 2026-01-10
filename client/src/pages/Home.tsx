@@ -166,18 +166,22 @@ export default function Home() {
 
     const segment = segmentsRef.current[index];
     const utterance = new SpeechSynthesisUtterance(segment.text);
+    
+    // Force reset and initialization for production compatibility
+    if (window.speechSynthesis.speaking) {
+      window.speechSynthesis.cancel();
+    }
+    
     utteranceRef.current = utterance;
 
     const voices = window.speechSynthesis.getVoices();
     const voice = voices.find(v => v.voiceURI === selectedVoice);
     if (voice) utterance.voice = voice;
 
+    utterance.lang = "es-ES";
     utterance.rate = speed;
     utterance.pitch = pitch;
     utterance.volume = volume;
-
-    // Direct reference to the utterance to allow live updates
-    utteranceRef.current = utterance;
 
     utterance.onend = () => {
       if (isStoppedRef.current) return;
@@ -189,6 +193,24 @@ export default function Home() {
         isPlayingRef.current = false;
         setIsPaused(false);
         setCurrentTime(totalDuration);
+        toast({
+          title: "Meditación completada",
+          description: "Has terminado tu sesión. Que tengas un buen trading.",
+        });
+        return;
+      }
+      
+      const pauseDuration = segment.isDeepPauseAfter
+        ? (pauseBetweenPhrases + 3) * 1000 // Deep pause (\n\n)
+        : pauseBetweenPhrases * 1000;      // Normal pause (\n or punctuation)
+
+      setTimeout(() => {
+        if (!isStoppedRef.current && isPlayingRef.current) {
+          currentIndexRef.current = index + 1;
+          speakSegment(index + 1);
+        }
+      }, pauseDuration);
+    };
         toast({
           title: "Meditación completada",
           description: "Has terminado tu sesión. Que tengas un buen trading.",
