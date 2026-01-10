@@ -496,7 +496,7 @@ export default function Home() {
       <div className="sticky top-0 z-40 bg-black/80 backdrop-blur-md px-4 py-4 flex items-center justify-between border-b border-white/5">
         <div className="flex items-center gap-3">
           <Avatar className="h-12 w-12 border-2 border-amber-500/30">
-            <AvatarImage src="/favicon.png" />
+            <AvatarImage src="/favicon.jpg" />
             <AvatarFallback className="bg-gradient-to-br from-amber-600 to-amber-800 text-white">
               <User className="h-6 w-6" />
             </AvatarFallback>
