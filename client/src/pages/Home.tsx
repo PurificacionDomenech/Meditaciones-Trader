@@ -87,28 +87,41 @@ export default function Home() {
     const loadVoice = () => {
       if (typeof window === "undefined" || !window.speechSynthesis) return;
       const voices = window.speechSynthesis.getVoices();
-      if (voices.length === 0) return;
       
-      const spanishVoice = voices.find(v => v.lang.toLowerCase().includes("es"));
-      const googleSpanish = voices.find(v => v.name.includes("Google") && v.lang.includes("es"));
-      const finalVoice = googleSpanish || spanishVoice || voices[0];
-      
-      if (finalVoice && !selectedVoice) {
-        setSelectedVoice(finalVoice.voiceURI);
+      // En móviles, getVoices() puede tardar o devolver 0 al inicio
+      // No retornamos si es 0, dejamos que onvoiceschanged vuelva a disparar
+      if (voices.length > 0) {
+        const spanishVoice = voices.find(v => v.lang.toLowerCase().includes("es"));
+        const googleSpanish = voices.find(v => v.name.includes("Google") && v.lang.includes("es"));
+        const finalVoice = googleSpanish || spanishVoice || voices[0];
+        
+        if (finalVoice && !selectedVoice) {
+          setSelectedVoice(finalVoice.voiceURI);
+        }
       }
     };
 
     if (typeof window !== "undefined" && window.speechSynthesis) {
       loadVoice();
       window.speechSynthesis.onvoiceschanged = loadVoice;
-    }
+      
+      // Polling para navegadores que no disparan onvoiceschanged (común en móviles)
+      const voiceInterval = setInterval(() => {
+        const voices = window.speechSynthesis.getVoices();
+        if (voices.length > 0) {
+          loadVoice();
+          clearInterval(voiceInterval);
+        }
+      }, 500);
 
-    return () => {
-      if (typeof window !== "undefined" && window.speechSynthesis) {
-        window.speechSynthesis.cancel();
-      }
-      if (timerRef.current) clearInterval(timerRef.current);
-    };
+      return () => {
+        clearInterval(voiceInterval);
+        if (typeof window !== "undefined" && window.speechSynthesis) {
+          window.speechSynthesis.cancel();
+        }
+        if (timerRef.current) clearInterval(timerRef.current);
+      };
+    }
   }, [selectedVoice]);
 
   useEffect(() => {
