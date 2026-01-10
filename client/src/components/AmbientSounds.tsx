@@ -394,10 +394,11 @@ class AudioGenerator {
       const audio = new Audio(soundData.url);
       
       let multiplier = 0.3;
-      if (id.startsWith("music-")) multiplier = 0.15;
+      if (id.startsWith("music-") || id.startsWith("custom-")) multiplier = 0.15;
       
       audio.volume = volume * multiplier;
       audio.loop = true;
+      audio.preload = "auto";
       
       // Handle play with promise for mobile browsers
       const playPromise = audio.play();
@@ -407,11 +408,12 @@ class AudioGenerator {
             console.log("Audio playing:", id);
           })
           .catch(err => {
-            console.error("Error playing audio:", err);
-            // Try again after a short delay (sometimes helps on mobile)
+            console.error("Error playing audio:", err, "URL:", soundData.url);
+            // If it's a mobile gesture issue, wait for next interaction
+            // or try a direct play without multiplier first as fallback
             setTimeout(() => {
               audio.play().catch(e => console.error("Retry failed:", e));
-            }, 100);
+            }, 500);
           });
       }
       
