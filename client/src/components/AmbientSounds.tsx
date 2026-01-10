@@ -14,14 +14,14 @@ import {
 import { Heart, Trash2, Waves, Wind, CloudRain, Bird, Flame, Music, Bell, Sparkles, Volume2 } from "lucide-react";
 import type { SoundPreset, AmbientSound } from "@shared/schema";
 
-import meditationMp3 from "@assets/custom_sounds/Musica/meditation.mp3";
-import alphaMp3 from "@assets/custom_sounds/Musica/alpha-8-to-12-hz-healing-frequencies-222945.mp3";
-import hz333Mp3 from "@assets/custom_sounds/Musica/333-hz.mp3";
-import pajarosMp3 from "@assets/custom_sounds/pajaros.mp3";
-import lluviaMp3 from "@assets/custom_sounds/lluvia.mp3";
-import gongMp3 from "@assets/custom_sounds/Gong.mp3";
-import campanillasMp3 from "@assets/custom_sounds/campanillas.mp3";
-import campanillaMp3 from "@assets/custom_sounds/campanilla.mp3";
+import meditationMp3 from "/assets/custom_sounds/Musica/meditation.mp3";
+import alphaMp3 from "/assets/custom_sounds/Musica/alpha-8-to-12-hz-healing-frequencies-222945.mp3";
+import hz333Mp3 from "/assets/custom_sounds/Musica/333-hz.mp3";
+import pajarosMp3 from "/assets/custom_sounds/pajaros.mp3";
+import lluviaMp3 from "/assets/custom_sounds/lluvia.mp3";
+import gongMp3 from "/assets/custom_sounds/Gong.mp3";
+import campanillasMp3 from "/assets/custom_sounds/campanillas.mp3";
+import campanillaMp3 from "/assets/custom_sounds/campanilla.mp3";
 
 const ambientSounds: AmbientSound[] = [
   { id: "custom-campanilla", nombre: "Campanilla", icon: "Bell", category: "oriental", url: campanillaMp3 },
