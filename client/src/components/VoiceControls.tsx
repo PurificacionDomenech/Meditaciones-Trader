@@ -95,15 +95,22 @@ export function VoiceControls({
   useEffect(() => {
     const loadVoices = () => {
       if (typeof window === "undefined" || !window.speechSynthesis) return;
-      const allVoices = window.speechSynthesis.getVoices();
+      let allVoices = window.speechSynthesis.getVoices();
       
-      // En móviles, getVoices() puede tardar o devolver 0 al inicio
-      if (allVoices.length > 0) {
-        const spanishVoices = allVoices.filter(v => 
-          v.lang.toLowerCase().startsWith("es")
-        );
-        setVoices(spanishVoices.length > 0 ? spanishVoices : allVoices);
+      // En algunos navegadores móviles, getVoices() puede tardar o requerir varios intentos
+      if (allVoices.length === 0) {
+        // Intentar forzar la carga en algunos navegadores
+        allVoices = window.speechSynthesis.getVoices();
       }
+
+      if (allVoices.length === 0) return;
+      
+      const spanishVoices = allVoices.filter(v => 
+        v.lang.toLowerCase().startsWith("es") || v.lang.toLowerCase().includes("es")
+      );
+      
+      // Priorizar voces en español, pero si no hay, mostrar todas las disponibles
+      setVoices(spanishVoices.length > 0 ? spanishVoices : allVoices);
     };
 
     if (typeof window !== "undefined" && window.speechSynthesis) {

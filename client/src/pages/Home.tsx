@@ -49,6 +49,7 @@ export default function Home() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [showVoiceSettings, setShowVoiceSettings] = useState(false);
   const [showAmbientSounds, setShowAmbientSounds] = useState(false);
+  const [voicesLoaded, setVoicesLoaded] = useState(false);
   
   const [isPlaying, setIsPlaying] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
@@ -86,30 +87,41 @@ export default function Home() {
 
     const loadVoice = () => {
       if (typeof window === "undefined" || !window.speechSynthesis) return;
-      const voices = window.speechSynthesis.getVoices();
+      let voices = window.speechSynthesis.getVoices();
       
-      // En móviles, getVoices() puede tardar o devolver 0 al inicio
-      // No retornamos si es 0, dejamos que onvoiceschanged vuelva a disparar
-      if (voices.length > 0) {
-        const spanishVoice = voices.find(v => v.lang.toLowerCase().includes("es"));
-        const googleSpanish = voices.find(v => v.name.includes("Google") && v.lang.includes("es"));
-        const finalVoice = googleSpanish || spanishVoice || voices[0];
-        
-        if (finalVoice && !selectedVoice) {
-          setSelectedVoice(finalVoice.voiceURI);
-        }
+      if (voices.length === 0) {
+        voices = window.speechSynthesis.getVoices();
+      }
+      
+      if (voices.length === 0) return;
+      
+      const spanishVoice = voices.find(v => v.lang.toLowerCase().includes("es"));
+      const googleSpanish = voices.find(v => v.name.includes("Google") && v.lang.includes("es"));
+      const finalVoice = googleSpanish || spanishVoice || voices[0];
+      
+      if (finalVoice && !selectedVoice) {
+        setSelectedVoice(finalVoice.voiceURI);
       }
     };
 
     if (typeof window !== "undefined" && window.speechSynthesis) {
       loadVoice();
-      window.speechSynthesis.onvoiceschanged = loadVoice;
+      window.speechSynthesis.onvoiceschanged = () => {
+        loadVoice();
+        setVoicesLoaded(true);
+      };
       
+      // Verificar si ya hay voces disponibles inmediatamente
+      if (window.speechSynthesis.getVoices().length > 0) {
+        setVoicesLoaded(true);
+      }
+
       // Polling para navegadores que no disparan onvoiceschanged (común en móviles)
       const voiceInterval = setInterval(() => {
         const voices = window.speechSynthesis.getVoices();
         if (voices.length > 0) {
           loadVoice();
+          setVoicesLoaded(true);
           clearInterval(voiceInterval);
         }
       }, 500);
@@ -235,8 +247,10 @@ export default function Home() {
       }
     };
 
-    // Speak immediately
-    window.speechSynthesis.speak(utterance);
+    // Speak with a small delay for mobile compatibility
+    setTimeout(() => {
+      window.speechSynthesis.speak(utterance);
+    }, 50);
   }, [speed, pitch, volume, pauseBetweenPhrases, selectedVoice]);
 
   const initializeSpeechSynthesis = useCallback(() => {
@@ -446,6 +460,28 @@ export default function Home() {
             <h2 className="text-lg font-semibold text-white">Hola, Trader</h2>
           </div>
         </div>
+        {!voicesLoaded && (
+          <Button 
+            size="sm" 
+            variant="outline" 
+            className="text-amber-400 border-amber-400/50 bg-amber-400/10"
+            onClick={() => {
+              if (typeof window !== "undefined" && window.speechSynthesis) {
+                window.speechSynthesis.getVoices();
+                const utterance = new SpeechSynthesisUtterance("");
+                window.speechSynthesis.speak(utterance);
+                setVoicesLoaded(true);
+                toast({
+                  title: "Voces activadas",
+                  description: "El sistema de voz ha sido inicializado.",
+                });
+              }
+            }}
+          >
+            <Mic className="h-4 w-4 mr-1" />
+            Activar Voz
+          </Button>
+        )}
       </div>
       <div className="p-4 space-y-6">
         <div className="relative rounded-2xl overflow-hidden glass-dark" data-testid="card-now-playing">
