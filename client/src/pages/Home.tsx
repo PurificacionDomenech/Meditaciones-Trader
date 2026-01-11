@@ -61,7 +61,7 @@ export default function Home() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   
   const [speed, setSpeed] = useState(1.05);
-  const [pitch, setPitch] = useState(1.8);
+  const [pitch, setPitch] = useState(1.0);
   const [volume, setVolume] = useState(0.9);
   const [pauseBetweenPhrases, setPauseBetweenPhrases] = useState(3);
   const [selectedVoice, setSelectedVoice] = useState("");
