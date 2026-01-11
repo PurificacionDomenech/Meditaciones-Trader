@@ -43,8 +43,8 @@ export interface SoundPreset {
 
 export const insertMeditacionSchema = z.object({
   titulo: z.string().min(1, "El título es requerido"),
-  descripcion: z.string().min(1, "La descripción es requerida"),
-  duracion: z.string().min(1, "La duración es requerida"),
+  descripcion: z.string().optional().default(""),
+  duracion: z.string().optional().default(""),
   texto: z.string().min(10, "El texto debe tener al menos 10 caracteres"),
   categoria: z.string().optional(),
   categoriaId: z.string().optional(),

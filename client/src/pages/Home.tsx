@@ -18,7 +18,9 @@ import {
   ChevronRight,
   Volume2,
   Mic,
-  Star
+  Star,
+  Coffee,
+  Clock
 } from "lucide-react";
 import { MeditationPlayer } from "@/components/MeditationPlayer";
 import { VoiceControls } from "@/components/VoiceControls";
