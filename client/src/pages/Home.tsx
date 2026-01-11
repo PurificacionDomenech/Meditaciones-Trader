@@ -893,63 +893,56 @@ export default function Home() {
 
     return (
       <div className="flex-1 overflow-y-auto pb-24 scrollbar-hide">
-        <div className="sticky top-0 z-40 bg-black/80 backdrop-blur-md px-4 py-4 border-b border-white/5">
-          <h2 className="text-xl font-semibold text-white">Perfil</h2>
+        <div className="sticky top-0 z-40 bg-black/80 backdrop-blur-md px-4 py-4 border-b border-white/5 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Avatar className="h-8 w-8 border border-amber-500/30">
+              <AvatarImage src="/favicon.jpg" />
+              <AvatarFallback className="bg-gradient-to-br from-amber-600 to-amber-800 text-white text-[10px]">
+                <User className="h-4 w-4" />
+              </AvatarFallback>
+            </Avatar>
+            <h2 className="text-lg font-semibold text-white">Perfil</h2>
+          </div>
         </div>
-        <div className="p-4 space-y-6">
-          <div className="flex flex-col items-center text-center py-6 relative">
-            <div className="relative">
-              <Avatar className="h-24 w-24 border-4 border-amber-500/30 mb-4 shadow-2xl shadow-amber-500/20">
-                <AvatarImage src="/favicon.png" />
-                <AvatarFallback className="bg-gradient-to-br from-amber-600 to-amber-800 text-white text-2xl">
-                  <User className="h-12 w-12" />
-                </AvatarFallback>
-              </Avatar>
-              
-              {/* Copas de Plata/Oro cerca del avatar (Victorias conseguidas) */}
-              {trophies.silver && (
-                <div className="absolute -top-1 -right-2 bg-slate-300 rounded-full p-1.5 shadow-lg border border-white/50 animate-bounce">
-                  <Trophy className="h-4 w-4 text-slate-600" />
-                </div>
-              )}
-              {trophies.gold && (
-                <div className="absolute -top-1 -left-2 bg-amber-400 rounded-full p-1.5 shadow-lg border border-white/50 animate-pulse">
-                  <Trophy className="h-4 w-4 text-amber-700" />
-                </div>
-              )}
-            </div>
 
-            <h3 className="text-xl font-bold text-white uppercase tracking-tighter">Trader Disciplinado</h3>
-            <p className="text-amber-500/80 text-sm font-medium">Nivel: Guardián del Capital</p>
+        <div className="p-4 space-y-6">
+          <div className="bg-black/40 backdrop-blur-md p-4 rounded-2xl border border-white/5">
+            <h3 className="text-xl font-bold text-white uppercase tracking-tighter">Purificación Santana</h3>
+            <p className="text-amber-500/80 text-sm font-medium mt-1">Nivel: Guardián del Capital</p>
           </div>
 
-          {/* Medallas Especiales (Grandes) */}
-          {(trophies.platinum || trophies.diamond) && (
-            <div className="grid grid-cols-2 gap-4">
-              {trophies.platinum && (
-                <div className="glass-dark p-4 rounded-2xl border border-blue-400/30 flex flex-col items-center gap-2 text-center">
-                  <div className="h-12 w-12 rounded-full bg-blue-400/20 flex items-center justify-center">
-                    <Star className="h-6 w-6 text-blue-300 fill-blue-300" />
-                  </div>
-                  <div>
-                    <span className="text-[10px] font-bold text-blue-300 uppercase block">Medalla Platino</span>
-                    <span className="text-[8px] text-white/40">6 MESES CUMPLIDOS</span>
-                  </div>
-                </div>
-              )}
-              {trophies.diamond && (
-                <div className="glass-dark p-4 rounded-2xl border border-cyan-300/30 flex flex-col items-center gap-2 text-center">
-                  <div className="h-12 w-12 rounded-full bg-cyan-300/20 flex items-center justify-center">
-                    <Sparkles className="h-6 w-6 text-cyan-200 fill-cyan-200" />
-                  </div>
-                  <div>
-                    <span className="text-[10px] font-bold text-cyan-200 uppercase block">Medalla Diamante</span>
-                    <span className="text-[8px] text-white/40">1 AÑO DE MAESTRÍA</span>
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
+          <Card className="glass-card border-white/5 bg-black/40 overflow-hidden">
+            <CardHeader className="pb-2 border-b border-white/5">
+              <h3 className="text-sm font-bold text-white/80 uppercase tracking-widest flex items-center gap-2">
+                <Sparkles className="h-4 w-4 text-amber-500" />
+                Créditos y Agradecimientos
+              </h3>
+            </CardHeader>
+            <CardContent className="pt-6 space-y-4 text-center">
+              <div className="space-y-1">
+                <p className="text-xs text-white/40 uppercase tracking-widest">Música y sonidos</p>
+                <p className="text-sm text-white/80">Pixabay</p>
+              </div>
+              <div className="space-y-1">
+                <p className="text-xs text-white/40 uppercase tracking-widest">Voces</p>
+                <p className="text-sm text-white/80">Web Speech API del navegador</p>
+              </div>
+              <div className="space-y-2 pt-2">
+                <p className="text-xs text-white/40 uppercase tracking-widest">Agradecimientos Especiales</p>
+                <p className="text-sm text-white/90 leading-relaxed">
+                  A <strong>Rafael Medina</strong>, mi mentor, por su guía invaluable en psicotrading y por permitir el uso de sus audios en este proyecto.
+                </p>
+              </div>
+              <div className="pt-4 border-t border-white/5">
+                <p className="text-[10px] text-white/30 uppercase tracking-widest">
+                  Proyecto personal desarrollado por Purificación Santana
+                </p>
+                <p className="text-[10px] text-amber-500/50 mt-1 font-bold">
+                  Trade Vision © 2026
+                </p>
+              </div>
+            </CardContent>
+          </Card>
 
           <div className="grid grid-cols-3 gap-3">
             <div className="glass-dark p-3 rounded-xl text-center">
