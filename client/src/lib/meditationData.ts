@@ -93,12 +93,39 @@ export const meditacionesPredefinidas: Meditacion[] = [
   },
   {
     id: "vision-1",
-    titulo: "La Mente en Blanco",
+    titulo: "La Ilusión de la Certeza",
     categoria: "III. La Visión Clara del Mercado",
     categoriaId: "vision",
-    duracion: "5-7 min",
-    descripcion: "Limpia tus sesgos antes de analizar el mercado.",
-    texto: "Siéntate derecho. Respira.\n\nTu mente está llena de gráficos pasados, de deseos de lo que el precio 'debería' hacer. Suéltalo.\n\nEl mercado es nuevo en cada segundo. No le importa lo que tú pienses.\n\nVisualiza una pizarra blanca. Con cada exhalación, borra un sesgo. Borra el deseo de ganar. Borra el miedo a perder.\n\nAhora, abre los ojos a la realidad de lo que ves, no de lo que esperas. Eres un observador puro. Sin juicios. Sin apegos. Solo tú y el flujo del precio.\n\nInhala claridad. Exhala expectativas.\n\nCuando estés listo, entra al mercado con la visión limpia del principiante y el rigor del maestro."
+    duracion: "8-10 min",
+    descripcion: "Desmantela la necesidad de saber qué hará el mercado y acepta la probabilidad.",
+    texto: "Cierra los ojos. Respira profundo.\n\nHoy enfrentamos la mentira más grande: la certeza.\n\nCrees que necesitas saber qué pasará para ganar. No es cierto.\n\nSolo necesitas saber que tienes una ventaja estadística.\n\nInhala profundamente. Siente la tensión de querer tener razón.\n\nExhala y suéltala. Suelta la necesidad de adivinar.\n\nEl mercado no es un puzzle que resolver. Es un flujo de probabilidades que navegar.\n\nVisualiza tu trade. Puede ganar, puede perder. No lo sabes. Y está bien.\n\nRepite: 'No sé qué pasará, y no necesito saberlo'.\n\nAbre los ojos. Mira el gráfico con la mente limpia de expectativas."
+  },
+  {
+    id: "vision-2",
+    titulo: "El Observador Imparcial",
+    categoria: "III. La Visión Clara del Mercado",
+    categoriaId: "vision",
+    duracion: "7-9 min",
+    descripcion: "Desarrolla la capacidad de ver el mercado sin sesgos emocionales ni deseos.",
+    texto: "Encuentra tu postura. Cierra los ojos.\n\nImagina que eres una montaña. Sólida. Inmóvil.\n\nEl mercado es el clima. Sol, lluvia, tormenta, nieve. Pasa frente a ti.\n\nPero tú no eres el clima. Eres la montaña.\n\nInhala profundamente. Observa tus deseos de que el precio suba o baje.\n\nSon solo nubes. No te mueven. No te definen.\n\nExhala y quédate en el centro. En la observación pura.\n\nNo busques entradas. Deja que las entradas te busquen a ti.\n\nVisualiza el gráfico. Velas rojas, velas verdes. Solo colores. Solo datos.\n\nAbre los ojos. Observa sin juicio. Actúa sin impulso."
+  },
+  {
+    id: "vision-3",
+    titulo: "La Paciencia del Cazador",
+    categoria: "III. La Visión Clara del Mercado",
+    categoriaId: "vision",
+    duracion: "9-11 min",
+    descripcion: "Aprende a esperar el momento exacto sin forzar operaciones por aburrimiento.",
+    texto: "Cierra los ojos. Respira con calma.\n\nImagina que eres un gran felino en la selva. Acechando.\n\nNo corres detrás de cada presa. Sabes que eso gasta energía y falla.\n\nEsperas. En silencio. Inmóvil. Durante horas si es necesario.\n\nInhala profundamente. Siente la fuerza de tu inacción.\n\nLa mayoría de las veces, la mejor operación es no hacer nada.\n\nExhala y suelta la ansiedad de 'perderse algo'.\n\nEl mercado siempre estará ahí. Tu oportunidad llegará. Solo tienes que estar listo.\n\nVisualízate frente a la pantalla. El precio se mueve, pero no toca tu zona. Y tú sonríes. Porque tu paciencia es tu ventaja.\n\nAbre los ojos. Espera tu momento con la calma del depredador."
+  },
+  {
+    id: "vision-4",
+    titulo: "La Verdad en los Números",
+    categoria: "III. La Visión Clara del Mercado",
+    categoriaId: "vision",
+    duracion: "8-10 min",
+    descripcion: "Conecta con la realidad estadística de tu sistema por encima de tus miedos.",
+    texto: "Respira. Encuentra tu centro.\n\nCierra los ojos. Hoy miramos la verdad fría y hermosa: la estadística.\n\nTus miedos te dicen que este trade es especial. Que esta pérdida es el fin.\n\nTus números te dicen algo distinto. Te dicen que eres rentable en el tiempo.\n\nInhala confianza en tu sistema. Exhala duda emocional.\n\nRecuerda tu backtest. Tu esperanza matemática. Esa es tu ancla.\n\nNo operes por fe. Opera por datos. Los números no mienten, tus emociones sí.\n\nVisualiza una serie de 100 trades. Algunos rojos, muchos verdes. Mira el resultado final.\n\nEsa es tu realidad. No este trade individual.\n\nAbre los ojos. Confía en las leyes de la probabilidad."
   },
   {
     id: "maestria-1",
@@ -107,7 +134,7 @@ export const meditacionesPredefinidas: Meditacion[] = [
     categoriaId: "maestria",
     duracion: "9-11 min",
     descripcion: "Aprende a reconocer y gestionar el miedo sin que paralice tus decisiones.",
-    texto: "Cierra los ojos. Respira profundo.\n\nHoy no huimos del miedo. Hoy lo miramos de frente.\n\nEl miedo es tu compañero constante en el mercado. Miedo a perder. Miedo a perderte el movimiento. Miedo a equivocarte.\n\nBut el miedo no es tu enemigo. Es información.\n\nInhala profundamente. Siente dónde vive el miedo en tu cuerpo. ¿En el pecho? ¿En el estómago?\n\nObsérvalo. No lo juzgues. Solo reconócelo.\n\nEl trader amateur lucha contra el miedo. El profesional lo siente, lo acepta y opera según su plan. Porque sabe que el miedo es solo una emoción, no una orden.\n\nVisualiza tu próximo trade. Siente el miedo a perder. Y ahora, mira tu stop loss. Ahí está tu protección. El miedo pierde su poder cuando el riesgo está aceptado.\n\nRespira calma. Exhala tensión.\n\nCuando estés listo, abre los ojos. Opera con miedo si es necesario, pero opera con tu plan."
+    texto: "Cierra los ojos. Respira profundo.\n\nHoy no huimos del miedo. Hoy lo miramos de frente.\n\nEl miedo es tu compañero constante en el mercado. Miedo a perder. Miedo a perderte el movimiento. Miedo a equivocarte.\n\nPero el miedo no es tu enemigo. Es información.\n\nInhala profundamente. Siente dónde vive el miedo en tu cuerpo. ¿En el pecho? ¿En el estómago?\n\nObsérvalo. No lo juzgues. Solo reconócelo.\n\nEl trader amateur lucha contra el miedo. El profesional lo siente, lo acepta y opera según su plan. Porque sabe que el miedo es solo una emoción, no una orden.\n\nVisualiza tu próximo trade. Siente el miedo a perder. Y ahora, mira tu stop loss. Ahí está tu protección. El miedo pierde su poder cuando el riesgo está aceptado.\n\nRespira calma. Exhala tensión.\n\nCuando estés listo, abre los ojos. Opera con miedo si es necesario, pero opera con tu plan."
   },
   {
     id: "maestria-2",
@@ -143,7 +170,7 @@ export const meditacionesPredefinidas: Meditacion[] = [
     categoriaId: "recuperacion",
     duracion: "9-11 min",
     descripcion: "Reconstruye tu mentalidad después de una pérdida significativa.",
-    texto: "Cierra los ojos. Respira, aunque duela.\n\nHoy estás aquí porque perdiste. Quizás mucho. Quizás duele.\n\nY está bien sentir ese dolor.\n\nNo lo niegues. No finjas fortaleza que no sientes. El dolor es real.\n\nInhala profundamente. Siente el peso en tu pecho.\n\nBut ahora escucha esto: Una pérdida no te define. Un mal día no borra tu camino.\n\nExhala lentamente. Suelta la vergüenza.\n\nTodos los grandes traders han estado donde estás ahora. Todos.\n\nLa diferencia es que ellos no se quedaron en el suelo. Se perdonaron. Analizaron. Y volvieron.\n\nPerdónate por el error, si lo hubo. Acepta el coste del aprendizaje. Mañana el mercado volverá a abrir y tú estarás listo, más sabio y más fuerte.\n\nVisualiza cómo te levantas, te sacudes el polvo y recuperas tu dignidad de profesional.\n\nAbre los ojos. Tu carrera acaba de empezar de nuevo."
+    texto: "Cierra los ojos. Respira, aunque duela.\n\nHoy estás aquí porque perdiste. Quizás mucho. Quizás duele.\n\nY está bien feeling ese dolor.\n\nNo lo niegues. No finjas fortaleza que no sientes. El dolor es real.\n\nInhala profundamente. Siente el peso en tu pecho.\n\nBut ahora escucha esto: Una pérdida no te define. Un mal día no borra tu camino.\n\nExhala lentamente. Suelta la vergüenza.\n\nTodos los grandes traders han estado donde estás ahora. Todos.\n\nLa diferencia es que ellos no se quedaron en el suelo. Se perdonaron. Analizaron. Y volvieron.\n\nPerdónate por el error, si lo hubo. Acepta el coste del aprendizaje. Mañana el mercado volverá a abrir y tú estarás listo, más sabio y más fuerte.\n\nVisualiza cómo te levantas, te sacudes el polvo y recuperas tu dignidad de profesional.\n\nAbre los ojos. Tu carrera acaba de empezar de nuevo."
   },
   {
     id: "recuperacion-2",
@@ -174,6 +201,33 @@ export const meditacionesPredefinidas: Meditacion[] = [
   },
   {
     id: "proyeccion-1",
+    titulo: "El Vuelo del Águila Imperial",
+    categoria: "VI. La Forja del Éxito",
+    categoriaId: "proyeccion",
+    duracion: "12-15 min",
+    descripcion: "Visualiza tu transformación en el trader de élite que estás destinado a ser.",
+    texto: "Cierra los ojos. Respira profundo. Hoy volamos alto.\n\nImagina un águila imperial. Solitaria. En lo alto de una montaña.\n\nObserva cómo despega. Sin prisa. Con poder. Extiende sus alas y se eleva.\n\nNo aletea frenéticamente como las aves pequeñas. No persigue. No se agota.\n\nUsa las corrientes. Lee el viento. Se eleva sin esfuerzo.\n\nInhala profundamente. Siente esa calma.\n\nEl águila ve lo que otros no ven. Desde arriba, tiene perspectiva completa.\n\nMientras las criaturas de abajo luchan por migajas, el águila espera su momento. Paciente. Implacable.\n\nY cuando ataca, no lo hace con esperanza. Lo hace con certeza.\n\nVisualízate como ese águila frente a las pantallas. Te elevas por encima de las emociones pequeñas. Ves el mapa completo. Esperas tu corriente.\n\nY cuando actúas, lo haces con el poder de quien sabe quién es.\n\nAbre los ojos. El cielo es tuyo."
+  },
+  {
+    id: "proyeccion-2",
+    titulo: "La Metamorfosis del Trader",
+    categoria: "VI. La Forja del Éxito",
+    categoriaId: "proyeccion",
+    duracion: "13-16 min",
+    descripcion: "Comprende que tu transformación, como la mariposa, requiere oscuridad antes de volar.",
+    texto: "Cierra los ojos. Respira suavemente.\n\nHoy hablamos de transformación. Real. Profunda. Dolorosa.\n\nPiensa en una oruga. Lenta. Vulnerable. Arrastrándose por el suelo.\n\nUn día, algo en ella le dice que es hora. Se envuelve en un capullo.\n\nOscuridad total. Soledad absoluta.\n\nInhala profundamente. Siente esa oscuridad.\n\nDentro del capullo, la oruga no se transforma gradualmente. Se desintegra.\n\nLiteralmente se disuelve. Convierte su cuerpo en sopa.\n\nTodo lo que conocía, todo lo que era, deja de existir. No es una mejora. Es una muerte.\n\nPero de esa sopa, nace algo nuevo. Alas. Colores. Libertad.\n\nSi hoy sientes que tu trading te está disolviendo, que nada tiene sentido, que estás en la oscuridad... felicidades.\n\nEstás en el capullo. No intentes salir antes de tiempo. Deja que el viejo trader muera para que el nuevo pueda volar.\n\nAbre los ojos. Confía en tu metamorfosis."
+  },
+  {
+    id: "proyeccion-3",
+    titulo: "El Arquitecto de Tu Destino",
+    categoria: "VI. La Forja del Éxito",
+    categoriaId: "proyeccion",
+    duracion: "12-15 min",
+    descripcion: "Construye conscientemente la vida y el legado que dejarás como trader profesional.",
+    texto: "Cierra los ojos. Respira profundo.\n\nHoy construimos. Ladrillo por ladrillo. La vida que mereces.\n\nNo estás aprendiendo a hacer dinero. Eso es secundario.\n\nEstás aprendiendo a construir libertad. A diseñar existencia.\n\nInhala esa visión expandida.\n\nPiensa en los arquitectos de catedrales medievales. Sabían que no verían la obra terminada.\n\nTrabajaban para algo más grande que ellos. Un legado. Una visión.\n\nTú también eres arquitecto. Pero no de piedra. De tu propia vida.\n\nCada trade disciplinado es un plano bien trazado. Cada racha negativa superada es un cimiento reforzado.\n\n¿Para qué quieres el éxito? ¿Para ostentar o para servir? ¿Para comprar o para ser?\n\nVisualiza tu catedral terminada. Una vida de paz, de abundancia y de propósito.\n\nAbre los ojos. Ve y construye con honor."
+  },
+  {
+    id: "proyeccion-4",
     titulo: "La Corona del Trader Completo",
     categoria: "VI. La Forja del Éxito",
     categoriaId: "proyeccion",
@@ -209,7 +263,7 @@ export const meditacionesPredefinidas: Meditacion[] = [
     duracion: "5 min",
     descripcion: "Responsabilidad total sobre tus decisiones y resultados.",
     audioUrl: noEsElMercadoAudio,
-    texto: "Hola, buenos días.\n\nAquí traigo nuestra taza de café.\n\nTe invito. La tuya y la mía.\n\n¿Sabes que no es el mercado, eres tú, verdad?\n\n¿Sabes cuál es la trampa más grande del trading?\n\nCulpar al mercado.\n\nNo es el mercado el que quema cuentas, eres tú.\n\nTu impaciencia, tu falta de plan, tus emociones desbordadas.\n\nYo lo digo siempre sin filtro, no es el mercado, eres tú.\n\nEl mercado no tiene intención de hacerte perder, simplemente se mueve.\n\nLo que hace perder es operar sin un plan, entrar sin contexto, cerrar por miedo, mover el stop por ansiedad.\n\n¿Te ha pasado, verdad?\n\nEl trader mediocre sobreopera porque no sabe esperar.\n\nEl trader disciplinado espera un momento como un francotirador, con calma, sin prisas y cuando dispara es porque sabe por qué lo hace.\n\nRecuerda que nosotros, con nuestro método no jugamos a adivinar nada.\n\nAquí no hay espacio para impulsos.\n\nHay un sistema, una gestión de riesgo clara, una mentalidad entrenada para soportar la presión porque va a venir,\n\nbecause la presión es parte de esto.\n\nBut recuerda, no es magia, es repitición,\n\nes dominio propio.\n\nY cuando entiendes eso, todo cambia, porque ya no buscas ganarle al mercado, ya no buscas tener la razón, buscas ganarte a ti mismo.\n\nNo necesitas adivinar el mercado, necesitas dominarte a ti.\n\nY créeme, esa es la verdadera victoria en el trading.\n\nSalud, rico café.Te espero mañana."
+    texto: "Hola, buenos días.\n\nAquí traigo nuestra taza de café.\n\nTe invito. La tuya y la mía.\n\n¿Sabes que no es el mercado, eres tú, verdad?\n\n¿Sabes cuál es la trampa más grande del trading?\n\nCulpar al mercado.\n\nNo es el mercado el que quema cuentas, eres tú.\n\nTu impaciencia, tu falta de plan, tus emociones desbordadas.\n\nYo lo digo siempre sin filtro, no es el mercado, eres tú.\n\nEl mercado no tiene intención de hacerte perder, simplemente se mueve.\n\nLo que hace perder es operar sin un plan, entrar sin contexto, cerrar por miedo, mover el stop por ansiedad.\n\n¿Te ha pasado, verdad?\n\nEl trader mediocre sobreopera porque no sabe esperar.\n\nEl trader disciplinado espera un momento como un francotirador, con calma, sin prisas y cuando dispara es porque sabe por qué lo hace.\n\nRecuerda que nosotros, con nuestro método no juega a adivinar nada.\n\nAquí no hay espacio para impulsos.\n\nHay un sistema, una gestión de riesgo clara, una mentalidad entrenada para soportar la presión porque va a venir,\n\nbecause la presión es parte de esto.\n\nBut recuerda, no es magia, es repitición,\n\nes dominio propio.\n\nY cuando entiendes eso, todo cambia, porque ya no buscas ganarle al mercado, ya no buscas tener la razón, buscas ganarte a ti mismo.\n\nNo necesitas adivinar el mercado, necesitas dominarte a ti.\n\nY créeme, esa es la verdadera victoria en el trading.\n\nSalud, rico café.Te espero mañana."
   },
   {
     id: "cafe-4",
@@ -229,7 +283,7 @@ export const meditacionesPredefinidas: Meditacion[] = [
     duracion: "5 min",
     descripcion: "Por qué conservar capital es más importante que buscar ganancias.",
     audioUrl: gestionRiesgoAudio,
-    texto: "Hola, buenos días.\n\nAquí estamos con tu cafe.\n\nRecuerda que te lo invito y hoy quería hacerte una pregunta.\n\n¿Qué pasa cuando te concentras solo en ganar?\n\n¿Sabes lo que pasa? Que pierdes de vista lo más importante.\n\n¿Cuánto estás dispuesto a perder sin hundirte?\n\nMuchos entran al mercado pensando en rentabilidad, pero ignoran la parte más poderosa de todo sistema,\n\nla gestión del riesgo.\n\nY yo lo tengo muy claro, gestionar el riesgo es el escudo del trader.\n\nWhy?\n\nMira, ganar una operación no significa nada si la siguiente te quema la cuenta. ¿Te ha pasado?\n\nNo, no estás aquí para hacerte rico en un día.\n\nRecuérdalo, estás aquí para perdurar, para mantenerte.\n\nPor eso, en el método, la prioridad que yo siempre les estoy diciendo no es cuánto ganas, es cuánto conservas, cuánto perduras, cuánto vas a poner en riesgo tu cifra.\n\nTienes que tenerlo muy claro.\n\nTu riesgo está definido antes de entrar.\n\nTe pregunto. Tu stop es coherente con tu capital, con lo que tienes.\n\n¿Has revisado con cuánto empiezas ese día?\n\nEs que si no puedes responder a estas dos preguntas, estás operando sin plan, porque en tu plan la gestión del riesgo es fundamental.\n\nY recuerda, los traders profesionales no arriesgan más cuando quieren ganar más.\n\nTe lo repito, los pros no arriesgan más cuando queremos ganar más.\n\nLo que hacemos es aumentar el tamaño de la disciplina.\n\nQuédate con eso.\n\nAumenta el tamaño, pero de tu disciplina.\n\nProtege tu cuenta como si fuera esos soldados que te están defendiendo, esos guardaespaldas que te están defendiendo como si fuera oxígeno.\n\nBecause si la pierdes se acabó el juego.\n\nY aquí en este juego, el único que sobrevive, recuerda,\n\nes el que sabe protegerse.\n\nGracias,\n\nte veo en el próximo café."
+    texto: "Hola, buenos días.\n\nAquí estamos con tu cafe.\n\nRecuerda que te lo invito y hoy quería hacerte una pregunta.\n\n¿Qué pasa cuando te concentras solo en ganar?\n\n¿Sabes lo que pasa? Que pierdes de vista lo más importante.\n\n¿Cuánto estás dispuesto a perder sin hundirte?\n\nMuchos entran al mercado pensando en rentabilidad, pero ignoran la parte más poderosa de todo sistema,\n\nla gestión del riesgo.\n\nY yo lo tengo muy claro, gestionar el riesgo es el escudo del trader.\n\nWhy?\n\nMira, ganar una operación no significa nada si la siguiente te quema la cuenta. ¿Te ha pasado?\n\nNo, no estás aquí para hacerte rico en un día.\n\nRecuérdalo, estás aquí para perdurar, para mantenerte.\n\nPor eso, en el método, la prioridad que yo siempre les estoy diciendo no es cuánto ganas, es cuánto conservas, cuánto perduras, cuánto vas a poner en riesgo tu cifra.\n\nTienes que tenerlo muy claro.\n\nTu riesgo está definido antes de entrar.\n\nTe pregunto. Tu stop es coherente con tu capital, con lo que tienes.\n\n¿Has revisado con cuánto empiezas ese día?\n\nEs que si no puedes responder a estas dos preguntas, estás operando sin plan, porque en tu plan la gestión del riesgo es fundamental.\n\nY recuerda, los traders profesionales no arriesgan más cuando quieren ganar más.\n\nTe lo repito, los pros no arriesgan más cuando queremos ganar más.\n\nLo que hacemos es aumentar el tamaño de la disciplina.\n\nQuédate con eso.\n\nAumenta el tamaño, pero de tu disciplina.\n\nProtege tu cuenta como si fuera esos soldados que te están defendiendo, esos guardaespaldas que te están defendiendo como si fuera oxígeno.\n\nBecause si la pierdes se acabó el juego.\n\nY aquí en este juego, el único que sobrevive, recuerda,\n\ es el que sabe protegerse.\n\nGracias,\n\nte veo en el próximo café."
   },
   {
     id: "cafe-7",
@@ -253,7 +307,7 @@ export const meditacionesPredefinidas: Meditacion[] = [
   },
   {
     id: "cafe-9",
-    titulo: "Trading y media. No puedes descuidar uno para cuidar el otro",
+    titulo: "Trading y vida. No puedes descuidar uno para cuidar el otro",
     categoria: "Café con Rafa",
     categoriaId: "cafe",
     duracion: "6 min",
@@ -277,6 +331,6 @@ export const meditacionesPredefinidas: Meditacion[] = [
     categoriaId: "cafe",
     duracion: "5 min",
     descripcion: "Comprende la verdadera naturaleza del dinero y el poder que tú le otorgas.",
-    texto: "Hola, buenos días.\n\nAquí estamos con tu cafe.\n\nRecuerda que te lo invito y hoy quería hacerte una pregunta.\n\n¿Qué es el dinero para ti?\n\n¿Es una meta o es una herramienta?\n\nMuchos traders fracasan porque le dan demasiado poder emocional al dinero.\n\nLo ven como su seguridad, como su valor personal.\n\nY cuando el mercado les quita un poco, sienten que les quita su identidad.\n\nYo te lo digo claro: el dinero es energía en movimiento.\n\nEn el trading, es simplemente el marcador del juego.\n\nSi le tienes miedo a perderlo, nunca podrás ganar de verdad.\n\nBecause el miedo bloquea tu visión, te hace dudar de tu sistema.\n\nEn nuestro método, aprendemos a desapegarnos del resultado monetario inmediato.\n\nNos enfocamos en la ejecución.\n\nSi ejecutas bien, el dinero vendrá como una consecuencia natural.\n\nNo persigas el dinero, persigue la maestría.\n\nPersigue ser el mejor trader que puedas ser hoy.\n\nY verás cómo, cuando dejas de darle ese poder absoluto sobre tu paz mental, el dinero empieza a fluir hacia ti con más facilidad.\n\nSalud, rico café. Te espero mañana."
+    texto: "Hola, buenos días.\n\nAquí estamos con tu cafe.\n\nRecuerda que te lo invito and hoy quería hacerte una pregunta.\n\n¿Qué es el dinero para ti?\n\n¿Es una meta o es una herramienta?\n\nMuchos traders fracasan porque le dan demasiado poder emocional al dinero.\n\nLo ven como su seguridad, como su valor personal.\n\nY cuando el mercado les quita un poco, sienten que les quita su identidad.\n\nYo te lo digo claro: el dinero es energía en movimiento.\n\nEn el trading, es simplemente el marcador del juego.\n\nSi le tienes miedo a perderlo, nunca podrás ganar de verdad.\n\nBecause el miedo bloquea tu visión, te hace dudar de tu sistema.\n\nEn nuestro método, aprendemos a desapegarnos del resultado monetario inmediato.\n\nNos enfocamos en la ejecución.\n\nSi ejecutas bien, el dinero vendrá como una consecuencia natural.\n\nNo persigas el dinero, persigue la maestría.\n\nPersigue ser el mejor trader que puedas ser hoy.\n\nY verás cómo, cuando dejas de darle ese poder absoluto sobre tu paz mental, el dinero empieza a fluir hacia ti con más facilidad.\n\nSalud, rico café. Te espero mañana."
   }
 ];
