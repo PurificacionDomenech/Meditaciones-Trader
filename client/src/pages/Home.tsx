@@ -721,28 +721,7 @@ export default function Home() {
     <div className="flex-1 overflow-y-auto pb-24 scrollbar-hide">
       <div className="sticky top-0 z-40 bg-black/80 backdrop-blur-md px-4 py-4 flex items-center justify-between border-b border-white/5">
         <h2 className="text-xl font-semibold text-white">Explorar</h2>
-        <Button 
-          size="icon" 
-          variant="ghost" 
-          className="text-amber-400/70"
-          onClick={() => setShowVoiceSettings(true)}
-        >
-          <Settings className="h-5 w-5" />
-        </Button>
       </div>
-      <VoiceControls
-        speed={speed}
-        pitch={pitch}
-        volume={volume}
-        pauseBetweenPhrases={pauseBetweenPhrases}
-        selectedVoice={selectedVoice}
-        onSpeedChange={setSpeed}
-        onPitchChange={setPitch}
-        onVolumeChange={setVolume}
-        onPauseChange={setPauseBetweenPhrases}
-        onVoiceChange={setSelectedVoice}
-        onRestartCurrentSegment={handleRestartCurrentSegment}
-      />
       <div className="p-4 space-y-6">
         {categorias.map(cat => {
           const meditations = getMeditationsByCategory(cat.id);
@@ -829,6 +808,48 @@ export default function Home() {
             </div>
           </div>
         )}
+
+        {/* Café con Rafa Section in Explore */}
+        <div className="space-y-4 pt-4 border-t border-white/5">
+          <div className="flex items-center gap-2 px-2">
+            <div className="p-1.5 rounded-lg bg-amber-500/10 text-amber-500">
+              <Coffee className="h-5 w-5" />
+            </div>
+            <h3 className="text-lg font-bold text-white/90 tracking-tight">Café con Rafa</h3>
+          </div>
+          <div className="grid grid-cols-1 gap-4">
+            {getMeditationsByCategory("cafe").map((meditation) => (
+              <button
+                key={meditation.id}
+                onClick={() => {
+                  handleSelectMeditation(meditation);
+                  setActiveTab("inicio");
+                }}
+                className="group relative flex items-center gap-4 p-3 rounded-2xl glass-dark hover:bg-white/5 transition-all text-left"
+              >
+                <div className="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 border border-white/10">
+                  <img 
+                    src={cafeConRafaImg} 
+                    alt={meditation.titulo} 
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h4 className="text-white font-semibold truncate">{meditation.titulo}</h4>
+                  <p className="text-white/40 text-xs mt-1 line-clamp-1">{meditation.descripcion}</p>
+                  <div className="flex items-center gap-3 mt-2">
+                    <span className="text-[10px] text-amber-400/60 font-medium px-2 py-0.5 rounded-full bg-amber-400/5 border border-amber-400/10">
+                      {meditation.duracion}
+                    </span>
+                  </div>
+                </div>
+                <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-amber-500 group-hover:text-black transition-colors">
+                  <Play className="h-4 w-4 fill-current ml-0.5" />
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -989,20 +1010,79 @@ export default function Home() {
       {activeTab === "misiones" && renderMisionesTab()}
       {activeTab === "perfil" && renderProfileTab()}
 
-      {activeTab !== "explorar" && (
-        <div className="fixed bottom-20 left-0 right-0 z-40 flex justify-center px-4 py-1 bg-black/90" data-testid="banner-trading-desde-cero">
-          <a 
-            href="https://www.skool.com/metodo-medina/about?ref=5410d87590444ff6a99c244493fe47cd"
-            target="_blank"
-            rel="noopener noreferrer"
+      <nav className="fixed bottom-0 left-0 right-0 bg-black/95 backdrop-blur-lg border-t border-amber-500/10 z-50">
+        <div className="flex items-center justify-around py-2">
+          <button
+            onClick={() => setActiveTab("inicio")}
+            className={`flex flex-col items-center gap-1 p-2 rounded-lg transition-colors ${
+              activeTab === "inicio" ? "text-amber-400" : "text-white/40"
+            }`}
+            data-testid="nav-inicio"
           >
-            <img 
-              src={tradingDesdeCeroImg} 
-              alt="Trading Desde Cero" 
-              className="h-10 object-contain rounded-md"
-            />
-          </a>
+            <HomeIcon className="h-6 w-6" />
+            <span className="text-xs">Inicio</span>
+          </button>
+          
+          <button
+            onClick={() => setActiveTab("explorar")}
+            className={`flex flex-col items-center gap-1 p-2 rounded-lg transition-colors ${
+              activeTab === "explorar" ? "text-amber-400" : "text-white/40"
+            }`}
+            data-testid="nav-explorar"
+          >
+            <Compass className="h-6 w-6" />
+            <span className="text-xs">Explorar</span>
+          </button>
+
+          <button
+            onClick={() => {
+              setEditingMeditation(null);
+              setDialogOpen(true);
+            }}
+            className="relative -top-4 w-14 h-14 rounded-full bg-amber-500 hover:bg-amber-400 flex items-center justify-center shadow-lg shadow-amber-500/30 border-4 border-black"
+            data-testid="nav-create"
+          >
+            <Plus className="h-7 w-7 text-black" />
+          </button>
+
+          <button
+            onClick={() => setActiveTab("misiones")}
+            className={`flex flex-col items-center gap-1 p-2 rounded-lg transition-colors ${
+              activeTab === "misiones" ? "text-amber-400" : "text-white/40"
+            }`}
+            data-testid="nav-misiones"
+          >
+            <Trophy className="h-6 w-6" />
+            <span className="text-xs">Misiones</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab("perfil")}
+            className={`flex flex-col items-center gap-1 p-2 rounded-lg transition-colors ${
+              activeTab === "perfil" ? "text-amber-400" : "text-white/40"
+            }`}
+            data-testid="nav-perfil"
+          >
+            <User className="h-6 w-6" />
+            <span className="text-xs">Perfil</span>
+          </button>
         </div>
+      </nav>
+
+      {activeTab !== "explorar" && (
+        <a 
+          href="https://www.skool.com/metodo-medina/about?ref=5410d87590444ff6a99c244493fe47cd"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="fixed bottom-20 left-0 right-0 z-40 flex justify-center px-4 py-1 bg-black/90"
+          data-testid="banner-trading-desde-cero"
+        >
+          <img 
+            src={tradingDesdeCeroImg} 
+            alt="Trading Desde Cero" 
+            className="h-10 object-contain rounded-md"
+          />
+        </a>
       )}
 
       <CreateMeditationDialog
