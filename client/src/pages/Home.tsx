@@ -989,78 +989,21 @@ export default function Home() {
       {activeTab === "misiones" && renderMisionesTab()}
       {activeTab === "perfil" && renderProfileTab()}
 
-      <nav className="fixed bottom-0 left-0 right-0 bg-black/95 backdrop-blur-lg border-t border-amber-500/10 z-50">
-        <div className="flex items-center justify-around py-2">
-          <button
-            onClick={() => setActiveTab("inicio")}
-            className={`flex flex-col items-center gap-1 p-2 rounded-lg transition-colors ${
-              activeTab === "inicio" ? "text-amber-400" : "text-white/40"
-            }`}
-            data-testid="nav-inicio"
+      {activeTab !== "explorar" && (
+        <div className="fixed bottom-20 left-0 right-0 z-40 flex justify-center px-4 py-1 bg-black/90" data-testid="banner-trading-desde-cero">
+          <a 
+            href="https://www.skool.com/metodo-medina/about?ref=5410d87590444ff6a99c244493fe47cd"
+            target="_blank"
+            rel="noopener noreferrer"
           >
-            <HomeIcon className="h-6 w-6" />
-            <span className="text-xs">Inicio</span>
-          </button>
-          
-          <button
-            onClick={() => setActiveTab("explorar")}
-            className={`flex flex-col items-center gap-1 p-2 rounded-lg transition-colors ${
-              activeTab === "explorar" ? "text-amber-400" : "text-white/40"
-            }`}
-            data-testid="nav-explorar"
-          >
-            <Compass className="h-6 w-6" />
-            <span className="text-xs">Explorar</span>
-          </button>
-
-          <button
-            onClick={() => {
-              setEditingMeditation(null);
-              setDialogOpen(true);
-            }}
-            className="relative -top-4 w-14 h-14 rounded-full bg-amber-500 hover:bg-amber-400 flex items-center justify-center shadow-lg shadow-amber-500/30 border-4 border-black"
-            data-testid="nav-create"
-          >
-            <Plus className="h-7 w-7 text-black" />
-          </button>
-
-          <button
-            onClick={() => setActiveTab("misiones")}
-            className={`flex flex-col items-center gap-1 p-2 rounded-lg transition-colors ${
-              activeTab === "misiones" ? "text-amber-400" : "text-white/40"
-            }`}
-            data-testid="nav-misiones"
-          >
-            <Trophy className="h-6 w-6" />
-            <span className="text-xs">Misiones</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab("perfil")}
-            className={`flex flex-col items-center gap-1 p-2 rounded-lg transition-colors ${
-              activeTab === "perfil" ? "text-amber-400" : "text-white/40"
-            }`}
-            data-testid="nav-perfil"
-          >
-            <User className="h-6 w-6" />
-            <span className="text-xs">Perfil</span>
-          </button>
+            <img 
+              src={tradingDesdeCeroImg} 
+              alt="Trading Desde Cero" 
+              className="h-10 object-contain rounded-md"
+            />
+          </a>
         </div>
-      </nav>
-
-      <a 
-        href="https://www.skool.com/metodo-medina/about?ref=5410d87590444ff6a99c244493fe47cd"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="fixed bottom-20 left-0 right-0 z-40 flex justify-center px-4 py-1 bg-black/90"
-        data-testid="banner-trading-desde-cero"
-      >
-        <img 
-          src={tradingDesdeCeroImg} 
-          alt="Trading Desde Cero" 
-          className="h-10 object-contain rounded-md"
-        />
-      </a>
+      )}
 
       <CreateMeditationDialog
         open={dialogOpen}
@@ -1069,8 +1012,8 @@ export default function Home() {
         editingMeditation={editingMeditation}
       />
 
-      <div className={cn("fixed inset-0 z-50 bg-black/80 flex items-end transition-opacity duration-300", showVoiceSettings ? "opacity-100" : "opacity-0 pointer-events-none")}>
-        <div className={cn("w-full max-h-[80vh] overflow-y-auto bg-neutral-900 border-t border-amber-500/20 rounded-t-3xl p-4 space-y-4 transition-transform duration-300 transform", showVoiceSettings ? "translate-y-0" : "translate-y-full")}>
+      <div className={cn("fixed inset-0 z-50 bg-black/80 flex items-end transition-opacity duration-300", showVoiceSettings && activeTab !== "explorar" ? "opacity-100" : "opacity-0 pointer-events-none")}>
+        <div className={cn("w-full max-h-[80vh] overflow-y-auto bg-neutral-900 border-t border-amber-500/20 rounded-t-3xl p-4 space-y-4 transition-transform duration-300 transform", showVoiceSettings && activeTab !== "explorar" ? "translate-y-0" : "translate-y-full")}>
           <div className="flex items-center justify-between mb-2">
             <h3 className="text-lg font-semibold text-white">Configuración de Voz</h3>
             <Button 
@@ -1098,8 +1041,8 @@ export default function Home() {
         </div>
       </div>
 
-      <div className={cn("fixed inset-0 z-50 bg-black/80 flex items-end transition-opacity duration-300", showAmbientSounds ? "opacity-100" : "opacity-0 pointer-events-none")}>
-        <div className={cn("w-full max-h-[80vh] overflow-y-auto bg-neutral-900 border-t border-amber-500/20 rounded-t-3xl p-4 space-y-4 transition-transform duration-300 transform", showAmbientSounds ? "translate-y-0" : "translate-y-full")}>
+      <div className={cn("fixed inset-0 z-50 bg-black/80 flex items-end transition-opacity duration-300", showAmbientSounds && activeTab !== "explorar" ? "opacity-100" : "opacity-0 pointer-events-none")}>
+        <div className={cn("w-full max-h-[80vh] overflow-y-auto bg-neutral-900 border-t border-amber-500/20 rounded-t-3xl p-4 space-y-4 transition-transform duration-300 transform", showAmbientSounds && activeTab !== "explorar" ? "translate-y-0" : "translate-y-full")}>
           <div className="flex items-center justify-between mb-2">
             <h3 className="text-lg font-semibold text-white">Sonidos Ambiente</h3>
             <Button 
