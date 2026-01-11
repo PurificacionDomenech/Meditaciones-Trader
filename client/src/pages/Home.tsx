@@ -95,9 +95,10 @@ export default function Home() {
       if (voices.length === 0) voices = window.speechSynthesis.getVoices();
       if (voices.length === 0) return;
       
+      const juanVoice = voices.find(v => v.name.toLowerCase().includes("juan") && v.lang.toLowerCase().includes("es"));
       const spanishVoice = voices.find(v => v.lang.toLowerCase().includes("es"));
       const googleSpanish = voices.find(v => v.name.includes("Google") && v.lang.includes("es"));
-      const finalVoice = googleSpanish || spanishVoice || voices[0];
+      const finalVoice = juanVoice || googleSpanish || spanishVoice || voices[0];
       
       if (finalVoice && !selectedVoice) {
         setSelectedVoice(finalVoice.voiceURI);
