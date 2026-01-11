@@ -666,7 +666,17 @@ export default function Home() {
             <div key={cat.id} className="space-y-3" data-testid={`category-section-${cat.id}`}>
               <div className="flex items-center justify-between">
                 <h3 className="font-semibold text-white">{cat.nombre.split('. ')[1] || cat.nombre}</h3>
-                <button className="text-sm text-amber-400/70 flex items-center gap-1">
+                <button 
+                  onClick={() => {
+                    setActiveTab("explorar");
+                    // Scroll to category in explore tab if needed
+                    setTimeout(() => {
+                      const element = document.getElementById(`explore-category-${cat.id}`);
+                      if (element) element.scrollIntoView({ behavior: 'smooth' });
+                    }, 100);
+                  }}
+                  className="text-sm text-amber-400/70 flex items-center gap-1 hover:text-amber-400 transition-colors"
+                >
                   Ver todo <ChevronRight className="h-4 w-4" />
                 </button>
               </div>
@@ -730,7 +740,7 @@ export default function Home() {
           if (meditations.length === 0) return null;
           
           return (
-            <div key={cat.id} className="space-y-3">
+            <div key={cat.id} id={`explore-category-${cat.id}`} className="space-y-3">
               <h3 className="font-semibold text-white">{cat.nombre}</h3>
               <div className="space-y-2">
                 {meditations.map(med => (
