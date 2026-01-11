@@ -1105,8 +1105,8 @@ export default function Home() {
       />
 
       <div className={cn("fixed inset-0 z-50 bg-black/80 flex items-end transition-opacity duration-300", showVoiceSettings && activeTab !== "explorar" ? "opacity-100" : "opacity-0 pointer-events-none")}>
-        <div className={cn("w-full max-h-[80vh] overflow-y-auto bg-neutral-900 border-t border-amber-500/20 rounded-t-3xl p-4 space-y-4 transition-transform duration-300 transform", showVoiceSettings && activeTab !== "explorar" ? "translate-y-0" : "translate-y-full")}>
-          <div className="flex items-center justify-between mb-2">
+        <div className={cn("w-full max-h-[80vh] bg-neutral-900 border-t border-amber-500/20 rounded-t-3xl transition-transform duration-300 transform flex flex-col", showVoiceSettings && activeTab !== "explorar" ? "translate-y-0" : "translate-y-full")}>
+          <div className="flex items-center justify-between p-4 border-b border-white/5 shrink-0">
             <h3 className="text-lg font-semibold text-white">Configuración de Voz</h3>
             <Button 
               size="icon" 
@@ -1117,25 +1117,27 @@ export default function Home() {
               <ChevronRight className="h-5 w-5 rotate-90" />
             </Button>
           </div>
-          <VoiceControls
-            speed={speed}
-            pitch={pitch}
-            volume={volume}
-            pauseBetweenPhrases={pauseBetweenPhrases}
-            selectedVoice={selectedVoice}
-            onSpeedChange={setSpeed}
-            onPitchChange={setPitch}
-            onVolumeChange={setVolume}
-            onPauseChange={setPauseBetweenPhrases}
-            onVoiceChange={setSelectedVoice}
-            onRestartCurrentSegment={handleRestartCurrentSegment}
-          />
+          <div className="overflow-y-auto scrollbar-hide p-4">
+            <VoiceControls
+              speed={speed}
+              pitch={pitch}
+              volume={volume}
+              pauseBetweenPhrases={pauseBetweenPhrases}
+              selectedVoice={selectedVoice}
+              onSpeedChange={setSpeed}
+              onPitchChange={setPitch}
+              onVolumeChange={setVolume}
+              onPauseChange={setPauseBetweenPhrases}
+              onVoiceChange={setSelectedVoice}
+              onRestartCurrentSegment={handleRestartCurrentSegment}
+            />
+          </div>
         </div>
       </div>
 
       <div className={cn("fixed inset-0 z-50 bg-black/80 flex items-end transition-opacity duration-300", showAmbientSounds && activeTab !== "explorar" ? "opacity-100" : "opacity-0 pointer-events-none")}>
-        <div className={cn("w-full max-h-[80vh] overflow-y-auto bg-neutral-900 border-t border-amber-500/20 rounded-t-3xl p-4 space-y-4 transition-transform duration-300 transform", showAmbientSounds && activeTab !== "explorar" ? "translate-y-0" : "translate-y-full")}>
-          <div className="flex items-center justify-between mb-2">
+        <div className={cn("w-full max-h-[80vh] bg-neutral-900 border-t border-amber-500/20 rounded-t-3xl transition-transform duration-300 transform flex flex-col", showAmbientSounds && activeTab !== "explorar" ? "translate-y-0" : "translate-y-full")}>
+          <div className="flex items-center justify-between p-4 border-b border-white/5 shrink-0">
             <h3 className="text-lg font-semibold text-white">Sonidos Ambiente</h3>
             <Button 
               size="icon" 
@@ -1146,7 +1148,9 @@ export default function Home() {
               <ChevronRight className="h-5 w-5 rotate-90" />
             </Button>
           </div>
-          <AmbientSounds ref={ambientSoundsRef} />
+          <div className="overflow-y-auto scrollbar-hide p-4">
+            <AmbientSounds ref={ambientSoundsRef} />
+          </div>
         </div>
       </div>
     </div>
