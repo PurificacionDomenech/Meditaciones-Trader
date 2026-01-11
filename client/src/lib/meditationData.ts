@@ -1,5 +1,12 @@
 import type { Meditacion } from "@shared/schema";
 import motivacionAudio from "../assets/motivacion-Constancia_1768043025655.mp3";
+import disciplinaAudio from "../assets/Sin plan no hay camino.mp3";
+import noEsElMercadoAudio from "../assets/Confía en el proceso, no en la emoción del momento.mp3";
+import silencioAudio from "../assets/ElSilencioDelTraderMaduro.mp3";
+import gestionRiesgoAudio from "../assets/No necesitas ganar todos los días.mp3";
+import menosOperacionesAudio from "../assets/Menos_operaciones_mas_resultados.mp3";
+import tradingVidaAudio from "../assets/Trading y vida. No puedes descuidar uno para cuidar el otro.mp3";
+import cuentaQuemadaAudio from "../assets/Una cuenta quemada una lección cara.mp3";
 
 export const categorias = [
   { id: "fundamento", nombre: "I. El Fundamento Inquebrantable", icon: "Anchor" },
@@ -101,6 +108,7 @@ export const meditacionesPredefinidas: Meditacion[] = [
     categoriaId: "cafe",
     duracion: "5 min",
     descripcion: "Reflexión sobre el verdadero coste de la libertad financiera.",
+    audioUrl: disciplinaAudio,
     texto: "Hola, café de hoy.\n\nYo invito.\n\nMira, todo el mundo quiere ganar.\n\nTodo el mundo sueña con la libertad, con la rentabilidad, con dejar su trabajo, todo eso.\n\nPero cuando les dices la verdad, cuando les dices que se necesita constancia, rutina, repetición diaria, cuando les hablas de eso, muchos se van porque quieren resultado, pero no quieren pagar el precio.\n\nY no te digo el precio económico, el precio se llama disciplina.\n\n¿Sabes que yo lo digo sin rodeo?\n\nQue el trader no nace, se construye, se forja y se construye en los días en los que no apetece, en los días en los que, bueno, podrías improvisar y tú eliges seguir tu plan.\n\nEn esos días en los que pierdes y aún así no pierdes la cabeza.\n\nPorque la disciplina es eso, hacer lo que toca, hacer eso incluso cuando no tienes ganas, entrenar tu mente para que no te sabotee. Por eso la entrenamos constantemente a diario.\n\n¿Sabes que en el método no celebramos solo los días verdes?\n\nDentro de nuestra comunidad celebramos los días en los que te fuiste leal, en los que fuiste leal a tu sistema, en los que lo cumpliste, porque ahí es donde crece tu base, ahí es donde te forjas.\n\nUn trader disciplinado no necesita suerte, créeme, no necesita suerte.\n\nNecesitas hacer lo que tienes que hacer.\n\nNo necesitas motivación, solo necesitas recordárselo a diario quién quieres llegar a ser y actuar como si ya fueras esa persona.\n\nTe lo digo constantemente, actúa como si ya fueses esa persona.\n\nAsí que hoy estás dudando.\n\nSi te pesa ese esfuerzo, recuerda, no te olvides nunca que la disciplina es incómoda.\n\nSí,\n\nes incómoda,\n\npero la frustración de no avanzar, eso, amigo mío, eso es mucho peor.\n\nGracias, gracias por tomarte ese cafe conmigo.\n\nCiao."
   },
   {
@@ -110,6 +118,7 @@ export const meditacionesPredefinidas: Meditacion[] = [
     categoriaId: "cafe",
     duracion: "5 min",
     descripcion: "Responsabilidad total sobre tus decisiones y resultados.",
+    audioUrl: noEsElMercadoAudio,
     texto: "Hola, buenos días.\n\nAquí traigo nuestra taza de café.\n\nTe invito. La tuya y la mía.\n\n¿Sabes que no es el mercado, eres tú, verdad?\n\n¿Sabes cuál es la trampa más grande del trading?\n\nCulpar al mercado.\n\nNo es el mercado el que quema cuentas, eres tú.\n\nTu impaciencia, tu falta de plan, tus emociones desbordadas.\n\nYo lo digo siempre sin filtro, no es el mercado, eres tú.\n\nEl mercado no tiene intención de hacerte perder, simplemente se mueve.\n\nLo que hace perder es operar sin un plan, entrar sin contexto, cerrar por miedo, mover el stop por ansiedad.\n\n¿Te ha pasado, verdad?\n\nEl trader mediocre sobreopera porque no sabe esperar.\n\nEl trader disciplinado espera un momento como un francotirador, con calma, sin prisas y cuando dispara es porque sabe por qué lo hace.\n\nRecuerda que nosotros, con nuestro método no jugamos a adivinar nada.\n\nAquí no hay espacio para impulsos.\n\nHay un sistema, una gestión de riesgo clara, una mentalidad entrenada para soportar la presión porque va a venir,\n\nbecause la presión es parte de esto.\n\nBut recuerda, no es magia, es repetición,\n\nes dominio propio.\n\nY cuando entiendes eso, todo cambia, porque ya no buscas ganarle al mercado, ya no buscas tener la razón, buscas ganarte a ti mismo.\n\nNo necesitas adivinar el mercado, necesitas dominarte a ti.\n\nY créeme, esa es la verdadera victoria en el trading.\n\nSalud, rico café.Te espero mañana."
   },
   {
@@ -119,6 +128,7 @@ export const meditacionesPredefinidas: Meditacion[] = [
     categoriaId: "cafe",
     duracion: "5 min",
     descripcion: "El valor del enfoque interior frente al ruido de las redes sociales.",
+    audioUrl: silencioAudio,
     texto: "Hola, buenos días.\n\n¿Qué tal? ¿Me acompañas con el cafe? Venga, que yo invito.\n\nMira, te hago una pregunta. ¿Sabes quién habla todo el día de trading? El que todavía no ha entendido que esto va de procesar en silencio.\n\nEse trader novato que todavía no lo ha entendido.\n\nEl trader maduro no presume, observa, no entra a las redes a presumir de todos los puntos que sacó en el mercado, de todos los euros que sacó en el mercado, de todos los dólares que hoy le arrebató al mercado.\n\nNo, no, no, no. Él está en su gráfico refinando su estrategia.\n\nTe lo digo claro, el trader más peligroso es el que opera en silencio y ejecuta con precisión.\n\nEse que pasa desapercibido.\n\nNosotros dentro de nuestro método valoramos mucho el proceso más que el show.\n\nNosotros no estamos por ahí dando esos shows, porque lo que te mantiene no son las rachas, son los hábitos.\n\nNo necesitas que el mundo sepa que ganaste.\n\nMétete eso en la cabeza.\n\nLo único que necesitas es saber que tú sepas por qué ganaste, qué hiciste bien.\n\nYo creo que en este oficio callar es una ventaja.\n\n¿Por qué? Porque el ruido está allá afuera, pero el foco está adentro, adentro de ti.\n\nNo te olvides nunca que el mercado no premia al que más habla, no, créeme que no.\n\nPremia al que más aguanta, al que perdura sin romperse.\n\nAsí que te invito a que desarrolles y disfrutes ese silencio del trader maduro.\n\nHoy estaba divino el café, ¿no?\n\nGracias, gracias por compartir este ratito conmigo.\n\nNos vemos en el próximo.\n\nGracias."
   },
   {
@@ -128,6 +138,7 @@ export const meditacionesPredefinidas: Meditacion[] = [
     categoriaId: "cafe",
     duracion: "5 min",
     descripcion: "Por qué conservar capital es más importante que buscar ganancias.",
+    audioUrl: gestionRiesgoAudio,
     texto: "Hola, buenos días.\n\nAquí estamos con tu cafe.\n\nRecuerda que te lo invito y hoy quería hacerte una pregunta.\n\n¿Qué pasa cuando te concentras solo en ganar?\n\n¿Sabes lo que pasa? Que pierdes de vista lo más importante.\n\n¿Cuánto estás dispuesto a perder sin hundirte?\n\nMuchos entran al mercado pensando en rentabilidad, pero ignoran la parte más poderosa de todo sistema,\n\nla gestión del riesgo.\n\nY yo lo tengo muy claro, gestionar el riesgo es el escudo del trader.\n\n¿Por qué?\n\nMira, ganar una operación no significa nada si la siguiente te quema la cuenta. ¿Te ha pasado?\n\nNo, no estás aquí para hacerte rico en un día.\n\nRecuérdalo, estás aquí para perdurar, para mantenerte.\n\nPor eso, en el método, la prioridad que yo siempre les estoy diciendo no es cuánto ganas, es cuánto conservas, cuánto perduras, cuánto vas a poner en riesgo tu cifra.\n\nTienes que tenerlo muy claro.\n\nTu riesgo está definido antes de entrar.\n\nTe pregunto. Tu stop es coherente con tu capital, con lo que tienes.\n\n¿Has revisado con cuánto empiezas ese día?\n\nEs que si no puedes responder a estas dos preguntas, estás operando sin plan, porque en tu plan la gestión del riesgo es fundamental.\n\nY recuerda, los traders profesionales no arriesgan más cuando quieren ganar más.\n\nTe lo repito, los pros no arriesgan más cuando queremos ganar más.\n\nLo que hacemos es aumentar el tamaño de la disciplina.\n\nQuédate con eso.\n\nAumenta el tamaño, pero de tu disciplina.\n\nProtege tu cuenta como si fuera esos soldados que te están defendiendo, esos guardaespaldas que te están defendiendo como si fuera oxígeno.\n\nPorque si la pierdes se acabó el juego.\n\nY aquí en este juego, el único que sobrevive, recuerda,\n\nes el que sabe protegerse.\n\nGracias,\n\nte veo en el próximo café."
   },
   {
@@ -146,6 +157,7 @@ export const meditacionesPredefinidas: Meditacion[] = [
     categoriaId: "cafe",
     duracion: "5 min",
     descripcion: "Transformando el fracaso en cimientos para el éxito futuro.",
+    audioUrl: cuentaQuemadaAudio,
     texto: "Hola, buenos días.\n\nNuestro cafe. Acudes a la cita.\n\nClaro, te lo invito.\n\nMira, te quiero hacer una reflexión. Quemar una cuenta. ¿Has quemado, no?\n\nBueno, pues quemar una cuenta no duele solo por el dinero.\n\nEstarás conmigo en eso. No duele por lo que representa esa ilusión rota, ese esfuerzo perdido, ese golpe al ego, ¿verdad?\n\nPero cada cuenta quemada es una lección. No te olvides de eso.\n\nY si no aprendes, se convierte en un patrón repetitivo.\n\nYo te lo digo sin rodeo. Una cuenta quemada es una factura emocional, pero también es una oportunidad de transformación.\n\n¿Cómo lo quieres ver?\n\nSi analizas por qué la quemaste, si te faltó gestión, si operaste sin plan, si el ego te dominó, entonces esa pérdida se convierte en cimientos, en bases.\n\nAquí dentro de nuestra comunidad, sabes que no nos enfocamos en que evites errores.\n\nNo se trata de eso. No se trata de evitar errores, sino de no repetirlos.\n\nSi estás en este camino, asume que vas a perder, pero también asume que vas a evolucionar, que te vas a transformar.\n\nCada vez que fallas tienes dos opciones: victimismo o crecimiento, pañalitis o evolución, llantina o crezco.\n\nLa cuenta puede haberse perdido, pero tú no.\n\nMientras tengas mentalidad, ganas de mejorar y disciplina para reconstruirte, sigues en el juego.\n\nY esta vez, créeme que vas a jugar distinto porque has aprendido y estás en proceso de mejora.\n\nAsí que recuerda que una cuenta quemada es una lección.\n\nEn ti está que esa lección sea una lección cara o por el contrario una oportunidad muy muy grande.\n\nRico el café, ¿no?\n\nGracias.\n\nTe veo en el próximo."
   },
   {
@@ -155,6 +167,7 @@ export const meditacionesPredefinidas: Meditacion[] = [
     categoriaId: "cafe",
     duracion: "5 min",
     descripcion: "La importancia de la precisión sobre la cantidad de trades.",
+    audioUrl: menosOperacionesAudio,
     texto: "Hola, buenos días.\n\nVamos a por nuestro cafe.\n\nVenga, que te lo invito.\n\nMira, ¿te ha pasado que estás al frente de la pantalla y no puedes estar sin operar?\n\n¿Te ha pasado, verdad?\n\n¿Sientes que si no haces nada estás perdiendo oportunidades, estás perdiendo el tiempo?\n\nPero te digo algo, en el trading más no es mejor\n\ny me lo has escuchado en muchas ocasiones, ¿verdad?\n\nEl trader que sobreopera se desgasta, se desespera\n\ny acaba tomando decisiones sin sentido.\n\nYo soy claro en esto.\n\nMenos operaciones, más resultados.\n\nTengo esa frase, ¿no?, que te digo mucho.\n\nDe menos es más,\n\nde más lento se llega más lejos y más rápido.\n\nEn nuestro método no se entra por impulso, se entra por confirmación,\n\npor probabilidad y por proceso.\n\nEse proceso evolutivo. Las mejores operaciones no son las que te dan adrenalina, sino las que nacen dentro del marco de tu sistema.\n\nSi operas mucho, para mí es que estás persiguiendo al mercado.\n\nPero en cambio, si operas poco, pero con precisión, es el mercado el que viene a ti."
   },
   {
@@ -164,6 +177,7 @@ export const meditacionesPredefinidas: Meditacion[] = [
     categoriaId: "cafe",
     duracion: "6 min",
     descripcion: "Equilibrio entre el foco en el mercado y la vida personal para la salud mental.",
+    audioUrl: tradingVidaAudio,
     texto: "Hola, cafe.\n\nVenga, vamos a por nuestro cafe.\n\nQue yo sé que te está gustando, ¿verdad?\n\n¿Sabes que el trading exige foco, tiempo, energía?\n\nPero cuidado, que no se lleve tu vida entera.\n\nVeo a muchos que se dejan la vida.\n\nHay traders que lo dan todo por el mercado y lo pierden todo fuera de él.\n\nRelaciones que se enfrían, cuerpos que se desgastan, mentes que se saturan.\n\nY entonces, ¿de qué sirve ganar si pierdes tu paz?\n\nLo tengo muy muy claro.\n\nNo puedes construir resultados sostenibles si tu vida personal está en ruinas.\n\nDesde nuestra comunidad, desde el método, no creemos en la obsesión.\n\nCreemos en la estructura, en el compromiso.\n\nEn una estructura que te permita ser trader sin dejar de ser persona.\n\nPlanifica tu día, bloquea tus horas de trading.\n\nPero también bloquea tiempo para ti, para moverte, para estar con los tuyos, para reconectar.\n\nPorque si tu cuerpo no descansa, tu mente se quiebra, se rompe.\n\nY una mente rota no puede tomar buenas decisiones.\n\nEl equilibrio no es debilidad, como te quieren hacer ver allá afuera.\n\nEs estrategia.\n\nTe pregunto: ¿sabes cuál es el trader más fuerte?\n\nEl que puede apagar la pantalla y, aún así, apagando la pantalla, sigue sintiéndose en control.\n\nEse es el que no necesita operar todo el día para sentirse valioso.\n\nAsí que si hoy te sientes absorbido, para.\n\nRespira,\n\n calibra,\n\n ajusta.\n\nPorque si quieres que esto dure, tu vida personal tiene que estar dentro del plan.\n\nNo puedes descuidar uno para cuidar el otro.\n\nPorque sin balance no hay evolución.\n\n¿Te quedó claro?\n\nNos vemos en el siguiente.\n\nDivino este café.\n\nAmén."
   },
   {
