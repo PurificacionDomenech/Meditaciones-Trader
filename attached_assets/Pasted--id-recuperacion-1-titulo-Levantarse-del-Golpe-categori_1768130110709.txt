@@ -1,0 +1,36 @@
+{
+  id: "recuperacion-1",
+  titulo: "Levantarse del Golpe",
+  categoria: "V. El Arte de la Recuperación",
+  categoriaId: "recuperacion",
+  duracion: "9-11 min",
+  descripcion: "Reconstruye tu mentalidad después de una pérdida significativa.",
+  texto: "Cierra los ojos. Respira, aunque duela.\n\nHoy estás aquí porque perdiste. Quizás mucho. Quizás duele.\n\nY está bien sentir ese dolor.\n\nNo lo niegues. No finjas fortaleza que no sientes. El dolor es real.\n\nInhala profundamente. Siente el peso en tu pecho.\n\nPero ahora escucha esto: Una pérdida no te define. Un mal día no borra tu camino.\n\nExhala lentamente. Suelta la vergüenza.\n\nTodos los grandes traders han estado donde estás ahora. Todos.\n\nLa diferencia no está en no caer. Está en cómo te levantas.\n\nRespira con esa verdad.\n\nTu pérdida fue una lección cara. Pero fue una lección.\n\n¿Qué falló? ¿Violaste tu plan? ¿Aumentaste el size en caliente? ¿Operaste por venganza?\n\nObserva sin juzgarte. Analiza sin destruirte.\n\nVisualiza ese trade. Ese momento donde todo se torció.\n\nAhora visualiza qué hubieras hecho diferente con la mente clara que tienes ahora.\n\nGuarda esa imagen. Ese será tu nuevo patrón.\n\nInhala determinación. No venganza. Determinación de aprender.\n\nEl mercado seguirá ahí mañana. Más trades vendrán.\n\nPero hoy, descansa. Recupera. No operes desde la herida.\n\nAbre los ojos. Te caíste. Ahora te levantas. Más sabio."
+},
+{
+  id: "recuperacion-2",
+  titulo: "Romper el Ciclo de Venganza",
+  categoria: "V. El Arte de la Recuperación",
+  categoriaId: "recuperacion",
+  duracion: "8-10 min",
+  descripcion: "Detén el impulso destructivo de recuperar pérdidas inmediatamente.",
+  texto: "Encuentra tu postura. Cierra los ojos.\n\nSientes la urgencia. El fuego en el pecho. La necesidad de recuperar.\n\nAhora. Ya. El siguiente trade.\n\nDetente. Respira.\n\nEse impulso te va a destruir.\n\nInhala claridad. Exhala venganza.\n\nEl mercado no te quitó nada. No es tu enemigo. No te debe nada.\n\nTú tomaste una decisión. El mercado respondió. Eso es todo.\n\nPero tu ego está herido. Y el ego herido es peligroso.\n\nQuiere recuperar. Quiere tener razón. Quiere demostrar.\n\nY así es como un mal trade se convierte en cinco. En diez.\n\nRespira esa urgencia. Siéntela. No actúes sobre ella.\n\nVisualízate a punto de abrir otro trade. Solo para 'recuperar'.\n\nDetente. Pregunta: ¿Es este mi setup? ¿O es mi dolor?\n\nEl trading de venganza nunca, nunca funciona.\n\nExhala la ilusión de que puedes arreglarlo hoy.\n\nNo necesitas recuperar en un día lo que perdiste. Tienes tiempo.\n\nEl trader profesional pierde y para. Analiza. Descansa.\n\nEl amateur pierde y persigue. Y pierde más.\n\nInhala paciencia. La paciencia de quien entiende que mañana es otro día.\n\nAbre los ojos. Cierra la plataforma. Ve a caminar. Recuperarás, pero no hoy."
+},
+{
+  id: "recuperacion-3",
+  titulo: "El Reset Mental",
+  categoria: "V. El Arte de la Recuperación",
+  categoriaId: "recuperacion",
+  duracion: "10-12 min",
+  descripcion: "Limpia tu mente de la racha negativa y vuelve al estado neutral.",
+  texto: "Cierra los ojos. Respira profundo.\n\nHoy borramos. Limpiamos. Reseteamos.\n\nLlevas días, quizás semanas, perdiendo. La confianza está rota.\n\nCada trade nuevo lo inicias esperando perder.\n\nY así, lo haces realidad.\n\nInhala profundamente. Exhala esa carga.\n\nTu sistema no cambió. El mercado no cambió. Tú cambiaste.\n\nTe dejaste infectar por la racha.\n\nPero una racha perdedora es solo estadística. Ruido. Parte del juego.\n\nRespira esa perspectiva.\n\nCada trade es independiente. Tu próximo trade no sabe que perdiste los últimos cinco.\n\nTiene las mismas probabilidades que siempre.\n\nVisualiza un papel en blanco. Limpio. Nuevo.\n\nEse es tu estado mental ideal.\n\nNi confianza excesiva ni miedo paralizante. Neutral.\n\nExhala el pasado. Los trades perdedores ya no existen. Solo existen en tu mente si los dejas.\n\nAhora visualiza tu próximo setup perfecto. Lo ves aparecer.\n\nTe ves ejecutando con calma. Sin duda. Sin miedo residual.\n\nSolo tú y tu proceso.\n\nInhala confianza renovada. No ciega. Basada en tu sistema, no en resultados recientes.\n\nTu edge sigue ahí. Siempre estuvo ahí.\n\nSolo necesitas volver a ejecutar con la mente limpia.\n\nAbre los ojos. Nuevo día. Nuevo comienzo. Página en blanco."
+},
+{
+  id: "recuperacion-4",
+  titulo: "La Fortaleza en la Adversidad",
+  categoria: "V. El Arte de la Recuperación",
+  categoriaId: "recuperacion",
+  duracion: "8-10 min",
+  descripcion: "Encuentra la fuerza interna que te permitirá convertir el fracaso en combustible.",
+  texto: "Respira. Encuentra tu centro.\n\nCierra los ojos. Hoy honramos algo poderoso: tu resistencia.\n\nHas llegado hasta aquí. A pesar de las pérdidas. A pesar del dolor.\n\nSigues aquí. Eso dice todo.\n\nInhala esa verdad. Exhala la autocompasión destructiva.\n\nLa adversidad no te rompe. Te revela.\n\nRevela si eres un turista buscando dinero fácil o un profesional construyendo un oficio.\n\nLos turistas huyen al primer drawdown. Los profesionales se adaptan.\n\nRespira con esa identidad.\n\nCada gran trader tiene una historia de casi rendirse. Todos.\n\nLa diferencia es que no lo hicieron.\n\nVisualízate en seis meses. Un año. Mirando hacia atrás a este momento.\n\nVes que este dolor fue necesario. Que esta lección te hizo mejor.\n\nQue sin este fracaso, no hubieras alcanzado el éxito que viene.\n\nExhala la duda. La pregunta de '¿podré?'.\n\nPuedes. Lo estás haciendo ahora mismo.\n\nEl simple hecho de estar aquí, buscando recuperarte, ya es victoria.\n\nInhala determinación. No motivación barata. Determinación profunda.\n\nLa decisión inquebrantable de que esto no te detiene.\n\nEres más fuerte de lo que crees. Más resistente de lo que imaginas.\n\nAbre los ojos. El fracaso es temporal. Tu compromiso es permanente."
+}
