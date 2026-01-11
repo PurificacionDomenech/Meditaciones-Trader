@@ -30,6 +30,8 @@ import { useToast } from "@/hooks/use-toast";
 import { meditacionesPredefinidas, categorias } from "@/lib/meditationData";
 import type { Meditacion, MeditacionPersonalizada, InsertMeditacion } from "@shared/schema";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Card, CardHeader, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
 import { TraderMissions } from "@/components/TraderMissions";
