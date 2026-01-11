@@ -188,5 +188,23 @@ export const meditacionesPredefinidas: Meditacion[] = [
     duracion: "5 min",
     descripcion: "Comprende la verdadera naturaleza del dinero y el poder que tú le otorgas.",
     texto: "Hola, buenos días.\n\nAquí estamos con tu cafe.\n\nRecuerda que te lo invito y hoy quería hacerte una pregunta.\n\n¿Qué es el dinero para ti?\n\n¿Es una meta o es una herramienta?\n\nMuchos traders fracasan porque le dan demasiado poder emocional al dinero.\n\nLo ven como su seguridad, como su valor personal.\n\nY cuando el mercado les quita un poco, sienten que les quita su identidad.\n\nYo te lo digo claro: el dinero es energía en movimiento.\n\nEn el trading, es simplemente el marcador del juego.\n\nSi le tienes miedo a perderlo, nunca podrás ganar de verdad.\n\nPorque el miedo bloquea tu visión, te hace dudar de tu sistema.\n\nEn nuestro método, aprendemos a desapegarnos del resultado monetario inmediato.\n\nNos enfocamos en la ejecución.\n\nSi ejecutas bien, el dinero vendrá como una consecuencia natural.\n\nNo persigas el dinero, persigue la maestría.\n\nPersigue ser el mejor trader que puedas ser hoy.\n\nY verás cómo, cuando dejas de darle ese poder absoluto sobre tu paz mental, el dinero empieza a fluir hacia ti con más facilidad.\n\nSalud, rico café. Te espero mañana."
+  },
+  {
+    id: "vision-1",
+    titulo: "La Mente en Blanco",
+    categoria: "III. La Visión Clara del Mercado",
+    categoriaId: "vision",
+    duracion: "5 min",
+    descripcion: "Limpia tus sesgos antes de analizar el mercado.",
+    texto: "Siéntate derecho. Respira.\n\nTu mente está llena de gráficos pasados, de deseos de lo que el precio 'debería' hacer. Suéltalo.\n\nEl mercado es nuevo en cada segundo. No le importa lo que tú pienses.\n\nVisualiza una pizarra blanca. Con cada exhalación, borra un sesgo. Borra el deseo de ganar. Borra el miedo a perder.\n\nAhora, abre los ojos a la realidad de lo que ves, no de lo que esperas."
+  },
+  {
+    id: "maestria-1",
+    titulo: "Maestría Emocional",
+    categoria: "IV. La Maestría Emocional",
+    categoriaId: "maestria",
+    duracion: "5 min",
+    descripcion: "Controla tus impulsos en momentos de alta tensión.",
+    texto: "Siente la emoción en tu cuerpo. ¿Dónde está? ¿En el pecho? ¿En el estómago?\n\nObsérvala como un científico. No eres tú. Es solo una señal química.\n\nNo tienes que obedecerla. Eres el capitán de tu barco.\n\nRespira hacia esa emoción y deja que se disuelva. Tu estrategia es tu guía, no tu miedo."
   }
 ];
