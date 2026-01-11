@@ -909,8 +909,28 @@ export default function Home() {
 
         <div className="p-4 space-y-6">
           <div className="bg-black/40 backdrop-blur-md p-4 rounded-2xl border border-white/5">
-            <h3 className="text-xl font-bold text-white uppercase tracking-tighter">Purificación Santana</h3>
+            <h3 className="text-xl font-bold text-white uppercase tracking-tighter">Trader Disciplinado</h3>
             <p className="text-amber-500/80 text-sm font-medium mt-1">Nivel: Guardián del Capital</p>
+          </div>
+
+          <div className="space-y-2 pt-2">
+            <h3 className="text-xs font-bold text-white/40 uppercase tracking-widest px-2">Ajustes</h3>
+            <div className="glass-dark rounded-xl overflow-hidden">
+              <button className="w-full p-4 flex items-center justify-between text-white hover:bg-white/5 transition-colors" onClick={() => setShowVoiceSettings(true)}>
+                <div className="flex items-center gap-3">
+                  <Mic className="h-5 w-5 text-amber-400" />
+                  <span className="text-sm">Voz y Narración</span>
+                </div>
+                <ChevronRight className="h-4 w-4 text-white/30" />
+              </button>
+              <button className="w-full p-4 flex items-center justify-between text-white hover:bg-white/5 transition-colors border-t border-white/5" onClick={() => setShowAmbientSounds(true)}>
+                <div className="flex items-center gap-3">
+                  <Volume2 className="h-5 w-5 text-amber-400" />
+                  <span className="text-sm">Sonidos de Fondo</span>
+                </div>
+                <ChevronRight className="h-4 w-4 text-white/30" />
+              </button>
+            </div>
           </div>
 
           <Card className="glass-card border-white/5 bg-black/40 overflow-hidden">
@@ -945,67 +965,6 @@ export default function Home() {
               </div>
             </CardContent>
           </Card>
-
-          <div className="grid grid-cols-3 gap-3">
-            <div className="glass-dark p-3 rounded-xl text-center">
-              <p className="text-2xl font-bold text-amber-400">{completedDays}</p>
-              <p className="text-[10px] text-white/40 uppercase tracking-widest">Días</p>
-            </div>
-            <div className="glass-dark p-3 rounded-xl text-center">
-              <p className="text-2xl font-bold text-amber-400">{Math.floor(completedDays / 7)}</p>
-              <p className="text-[10px] text-white/40 uppercase tracking-widest">Semanas</p>
-            </div>
-            <div className="glass-dark p-3 rounded-xl text-center">
-              <p className="text-2xl font-bold text-amber-400">{Math.floor(completedDays / 30)}</p>
-              <p className="text-[10px] text-white/40 uppercase tracking-widest">Meses</p>
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            <h3 className="text-xs font-bold text-white/40 uppercase tracking-widest px-2">Tus Trofeos</h3>
-            <div className="grid grid-cols-4 gap-3">
-              <div className={cn("aspect-square rounded-2xl flex flex-col items-center justify-center gap-1 border transition-all", 
-                trophies.bronze ? "bg-orange-900/20 border-orange-500/40" : "bg-white/5 border-white/5 opacity-30 grayscale")}>
-                <Trophy className={cn("h-6 w-6", trophies.bronze ? "text-orange-500" : "text-white/20")} />
-                <span className="text-[8px] font-bold uppercase">Bronce</span>
-              </div>
-              <div className={cn("aspect-square rounded-2xl flex flex-col items-center justify-center gap-1 border transition-all", 
-                trophies.silver ? "bg-slate-400/20 border-slate-300/40" : "bg-white/5 border-white/5 opacity-30 grayscale")}>
-                <Trophy className={cn("h-6 w-6", trophies.silver ? "text-slate-300" : "text-white/20")} />
-                <span className="text-[8px] font-bold uppercase">Plata</span>
-              </div>
-              <div className={cn("aspect-square rounded-2xl flex flex-col items-center justify-center gap-1 border transition-all", 
-                trophies.gold ? "bg-amber-500/20 border-amber-400/40" : "bg-white/5 border-white/5 opacity-30 grayscale")}>
-                <Trophy className={cn("h-6 w-6", trophies.gold ? "text-amber-400" : "text-white/20")} />
-                <span className="text-[8px] font-bold uppercase">Oro</span>
-              </div>
-              <div className={cn("aspect-square rounded-2xl flex flex-col items-center justify-center gap-1 border transition-all", 
-                trophies.platinum ? "bg-blue-400/20 border-blue-300/40" : "bg-white/5 border-white/5 opacity-30 grayscale")}>
-                <Trophy className={cn("h-6 w-6", trophies.platinum ? "text-blue-300" : "text-white/20")} />
-                <span className="text-[8px] font-bold uppercase">Platino</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="space-y-2 pt-2">
-            <h3 className="text-xs font-bold text-white/40 uppercase tracking-widest px-2">Ajustes</h3>
-            <div className="glass-dark rounded-xl overflow-hidden">
-              <button className="w-full p-4 flex items-center justify-between text-white hover:bg-white/5 transition-colors" onClick={() => setShowVoiceSettings(true)}>
-                <div className="flex items-center gap-3">
-                  <Mic className="h-5 w-5 text-amber-400" />
-                  <span className="text-sm">Voz y Narración</span>
-                </div>
-                <ChevronRight className="h-4 w-4 text-white/30" />
-              </button>
-              <button className="w-full p-4 flex items-center justify-between text-white hover:bg-white/5 transition-colors border-t border-white/5" onClick={() => setShowAmbientSounds(true)}>
-                <div className="flex items-center gap-3">
-                  <Volume2 className="h-5 w-5 text-amber-400" />
-                  <span className="text-sm">Sonidos de Fondo</span>
-                </div>
-                <ChevronRight className="h-4 w-4 text-white/30" />
-              </button>
-            </div>
-          </div>
         </div>
       </div>
     );
