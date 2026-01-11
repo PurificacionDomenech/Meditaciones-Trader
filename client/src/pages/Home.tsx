@@ -640,7 +640,7 @@ export default function Home() {
               <Sparkles className="h-5 w-5 text-amber-400" />
             </div>
             <h4 className="font-semibold text-white">Crear Nueva</h4>
-            <p className="text-xs text-white/50 mt-0.5">Con IA Personalizada</p>
+            <p className="text-xs text-white/50 mt-0.5">Crear nueva meditación</p>
           </button>
 
           <button

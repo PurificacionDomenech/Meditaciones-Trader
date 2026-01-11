@@ -104,30 +104,10 @@ export function CreateMeditationDialog({
 
             <FormField
               control={form.control}
-              name="descripcion"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm text-muted-foreground">Descripción</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder="Breve descripción de la meditación..."
-                      {...field}
-                      rows={2}
-                      data-testid="input-meditation-description"
-                      className="bg-background/50 resize-none"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
               name="duracion"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm text-muted-foreground">Duración estimada</FormLabel>
+                  <FormLabel className="text-sm text-muted-foreground">Duración estimada (opcional)</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="Ej: 5-10 min"
@@ -146,14 +126,21 @@ export function CreateMeditationDialog({
               name="texto"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm text-muted-foreground">
-                    Texto de la meditación
-                  </FormLabel>
+                  <div className="space-y-1 mb-2">
+                    <FormLabel className="text-sm text-muted-foreground">
+                      Texto de la meditación
+                    </FormLabel>
+                    <p className="text-[10px] text-amber-500/60 leading-relaxed italic">
+                      Usa puntos suspensivos (...) para pausas cortas, 
+                      puntos seguidos para pausas medias, y puntos aparte 
+                      para pausas más largas entre frases.
+                    </p>
+                  </div>
                   <FormControl>
                     <Textarea
-                      placeholder="Escribe aquí el texto completo de tu meditación guiada..."
+                      placeholder="Escribe aquí el texto completo..."
                       {...field}
-                      rows={8}
+                      rows={10}
                       data-testid="input-meditation-text"
                       className="bg-background/50 resize-none"
                     />
