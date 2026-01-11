@@ -75,6 +75,31 @@ export function TraderMissions({ onSelectMeditation, onPlay }: TraderMissionsPro
     }
   };
 
+  const resetAllMissions = () => {
+    if (confirm("¿Estás seguro de que quieres poner a cero todo tu progreso? Esta acción no se puede deshacer.")) {
+      setEntries([]);
+      localStorage.removeItem("traderEntries");
+      setCurrentDay(1);
+      setView('mission');
+      setContent("");
+    }
+  };
+
+  const undoLastMission = () => {
+    if (entries.length === 0) return;
+    if (confirm("¿Quieres volver a la misión anterior y borrar el último registro?")) {
+      const updated = [...entries];
+      const removed = updated.pop();
+      setEntries(updated);
+      localStorage.setItem("traderEntries", JSON.stringify(updated));
+      if (removed) {
+        setCurrentDay(removed.missionDay);
+        setContent(removed.content);
+        setView('mission');
+      }
+    }
+  };
+
   const getEntryByDay = (day: number): MissionEntry | undefined => {
     return entries.find(e => e.missionDay === day || e.missionId === String(day));
   };
@@ -125,7 +150,7 @@ export function TraderMissions({ onSelectMeditation, onPlay }: TraderMissionsPro
         </CardHeader>
       </Card>
 
-      <div className="flex gap-2 justify-center mb-4">
+      <div className="flex gap-2 justify-center mb-4 flex-wrap">
         <Button 
           variant={view === 'mission' ? 'default' : 'ghost'} 
           onClick={() => setView('mission')}
@@ -140,6 +165,25 @@ export function TraderMissions({ onSelectMeditation, onPlay }: TraderMissionsPro
         >
           Calendario
         </Button>
+        <div className="flex gap-2">
+          <Button 
+            variant="outline" 
+            size="sm"
+            onClick={undoLastMission}
+            disabled={entries.length === 0}
+            className="border-amber-500/30 text-amber-500 hover:bg-amber-500/10"
+          >
+            Volver al anterior
+          </Button>
+          <Button 
+            variant="destructive" 
+            size="sm"
+            onClick={resetAllMissions}
+            className="bg-red-900/40 border-red-500/30 text-red-400 hover:bg-red-900/60"
+          >
+            Poner a cero
+          </Button>
+        </div>
       </div>
 
       {view === 'mission' ? (
